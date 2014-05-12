@@ -1,0 +1,132 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{german}
+\usepackage{color}
+
+\newcommand{\defn}[1]{\textbf{#1}\index{#1}}
+\newcommand{\vect}[3]{\ensuremath{\begin{pmatrix}	#1 \\ #2 \\ #3	\end{pmatrix}}}
+\title{Checking correctness}
+\author{Boris Prochnau}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section*{Introduction}
+To validate that the program works correctly I have made a suite of tests. Some of the test try to verify the correctness of the algorithm and therefore could be interesting for you.
+Most of the calculations work with the same instance and every tests resets its result before the next test starts. The intention is to make them as independent as possible. For making calculations and changes to the population only the implemented functions of the program were used. The testing functions themselves do not effect the population in any sense. 
+
+\section{Verify correct rates}
+The first tests work with this instance:
+\begin{align*}
+\textnormal{Mutation probability = 0.1}
+&&\textnormal{Amount of traits = 3}
+\end{align*}
+\[\textnormal{Competition rates =} 
+\begin{pmatrix}	2 & 1 & 0 \\ 0 & 2 & 0.5  \\ 0 & 2 & 2 \end{pmatrix}\]
+\begin{align*}
+	Members = \begin{pmatrix}	100 \\ 100 \\ 100	\end{pmatrix} && Brithrates = \begin{pmatrix}	10 \\ 10 \\ 10	\end{pmatrix} && Deathrates = \begin{pmatrix}	5 \\ 5 \\ 5	\end{pmatrix}
+\end{align*}
+
+\subsection{calculate intrinsic death rates}
+Testresult: \textbf{intrinsic death rates = } \vect{500}{500}{500}\\
+To verify the result we consider:
+\[\textnormal{Deathrate*Members}= 5 \cdot 100 = 500\]
+\subsection{competition death rates}
+Testresult: \textbf{competition death rates = } \vect{30000}{25000}{40000}\\
+To verify the result we consider a calculation for the trait "`2"':
+\begin{align*}
+&\textnormal{Members(2)} \cdot \sum_{j}{\textnormal{Competitiondeathrate(2,j)*Members(j)}}\\
+&= 100 \cdot (2 \cdot 100 + 0.5 \cdot 100) = 25000
+\end{align*}
+
+\subsection{calculate total deathrates}
+Testresult: \textbf{intrinsic death rates = } 
+\vect{30500}{25500}{40500} = \vect{500}{500}{500} + \vect{30000}{25000}{40000}\\
+This result is not surprising after the previous results and will not be explained further.
+
+\subsection{calculate total birthrates}
+Testresult: \textbf{total death rates = } \vect{1050}{1100}{1050}\\
+To verify the result we consider a calculation for one trait "`2"':
+\begin{align*}
+&\textnormal{Births(2)*Members(2) + mutation*(Births(1)*Members(1)+Births(3)*Members(3))}\\
+&= 10 \cdot 100 + 0.1 \cdot (10 * 100 + 10 * 100) = 1000 + 0.1 \cdot 2000 = 1000 + 100
+\end{align*}
+For "`i = 1"' and "`i = 3"' we consider that the mutation happens only for the one existing neighbor what explains the loss of 50.
+
+\subsection{calculate total trait rates}
+Testresult: 
+\vect{31550}{26600}{41550} = \vect{1050}{1100}{1050} + \vect{30500}{25500}{40500}\\
+This result is also not surprising after the previous results and consists of birth and deathrates.
+
+\subsection{calculate total event rate}
+Testresult: \textbf{total event rate =} 99700 = 31550 + 26600 + 41550
+This is just the summation over the total trait rates.
+
+\section{sampling of event time}
+Here is only one test mentionable where I verified that many samples from the same total event rate don't repeat and their average converges to the mean of the corresponding exponential distribution $\frac{1}{99700}$.
+
+\section{changing a trait}
+Here we will test whether the trait is chosen correctly and the correct event will be executed correctly on it. In order to chose traits and events, i.e. to extract the first ringing clock, we use superposition of the Poisson Point Process. For doing so the results of section 1 (the rates) are used.
+\subsection{choose a trait}
+To verify that the traits are chosen like planed, I choose 100000 traits with the same rates and verify their correct distribution among each other.\\
+Testresult: \textbf{approximation = } \vect{0.31633}{0.26867}{0.415} and \textbf{expected = } \vect{0.316449}{0.266800}{0.416750}\\
+The approximation was calculated through a histogram of the occurrence of the chosen traits divided by the number of iterations. The expected value was calculated through 
+\[\frac{\textnormal{total trait rate of trait i}}{\textnormal{total event rate}} = \frac{1}{99700} \cdot \vect{31550}{26600}{41550}\]
+
+\subsection{chose event type}
+To verify that the events are chosen correctly I summed 100000 birth events and a chosen trait and compared it with the expected distribution.\\
+Testresult: \textbf{approx. births = } \vect{0.03346}{0.04057}{0.02562} and \textbf{expected births = } \vect{0.0332805}{0.0413534}{0.0252708}\\
+The approximation was calculated through the number of births for trait "`i"' divided by the number of iterations. The expected value was calculated through
+\[\frac{\textnormal{total birth rate of i}}{\textnormal{total trait rate of i}} = \vect{1050/31550}{1100/26600}{1050/41550}\]
+
+\subsection{executing event type on trait}
+To verify that the chosen trait was changed like the chosen event told it to, I simply checked if a birth/death has been occurred after using the corresponding function. The chosen trait has changed its members by 1 so everything works fine here.
+
+\subsection{changing a trait}
+This tests simply executes the "`changing a trait"' function and verifies that the chosen trait has been changed. It simply ensures the collaboration of the previous steps.
+
+\section{convergence tests}
+I know how to calculate the convergence of populations without mutations and in competition to each other, up to 2 different traits. I made 3 different tests. One tests the convergence of 3 independent (no competition or mutation) traits and the other two tests 2 Traits in competition to each other with no mutation. The last one only differ in the evaluation technique.
+
+\subsection{Monomorphic population}
+I used the following input:
+\begin{align*}
+\textnormal{Mutation probability = 0}
+&&\textnormal{Amount of traits = 3}
+\end{align*}
+\[\textnormal{Competition rates =} 
+\begin{pmatrix}	1 & 0 & 0 \\ 0 & 1 & 0  \\ 0 & 0 & 1 \end{pmatrix}\]
+\begin{align*}
+	Members = \begin{pmatrix}	110 \\ 110 \\ 110	\end{pmatrix} && Brithrates = \begin{pmatrix}	100 \\ 120 \\ 140	\end{pmatrix} && Deathrates = \begin{pmatrix}	10 \\ 10 \\ 10	\end{pmatrix}
+\end{align*}
+To verify the convergence I made 10 000 000 iterations. I created an array that sums the changed members for each trait separately and calculated their average.\\
+Testresult:\\
+\textbf{average members = } \vect{89.8175}{110.337}{130.398} and \textbf{expected members = } \vect{90}{110}{130}\\
+My observations where that the computed average is usually slightly higher than the expected and does not improve much with more iterations. One of the next goals would be to figure out where this behavior comes from. Besides that the actual average is calculated with a summation of changed members like described above. After the summation the results got divided by the number of changes for each trait individually. The expected is just
+\[\frac{birthrate(i) - deathrate(i)}{competitionrate(i)}\] 
+
+\newpage
+\subsection{Dimorphic population}
+I used the following input:
+\begin{align*}
+\textnormal{Mutation probability = 0}
+&&\textnormal{Amount of traits = 2}
+\end{align*}
+\[\textnormal{Competition rates =} 
+\begin{pmatrix}	2 & 0.5 \\ 1 & 1.5 \end{pmatrix}\]
+\begin{align*}
+	Members = \begin{pmatrix}	100 \\ 100	\end{pmatrix} && Brithrates = \begin{pmatrix}	170 \\ 150	\end{pmatrix} && Deathrates = \begin{pmatrix}	15 \\ 5	\end{pmatrix}
+\end{align*}
+To verify the convergence I made 10 000 000 iterations. todo\\
+Testresult:\\
+\textbf{average members = } \vect{64.7513}{55.8959} and \textbf{expected members = } \vect{64}{54}\\
+My observations for the dimorphic case are the same as for the monomorphic. \\
+But when I used another method of calculating the average I got this result:\\
+\textbf{average members = } \vect{63.7036}{53.904} and \textbf{expected members = } \vect{64}{54}\\
+These results are usually slightly lower(!) and their precision is better. I will bring this topic up in the next meeting on the 06.05 because this issue could disappear with the usage of an smoothing "`K"' value.
+
+
+\end{document}

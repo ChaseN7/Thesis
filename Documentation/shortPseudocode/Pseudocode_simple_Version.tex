@@ -1,0 +1,206 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{german}
+\usepackage{color}
+\title{Small Summery}
+\author{Boris Prochnau}
+\begin{document}
+\maketitle
+
+\section{Pseudocode}
+One thing to mention is that the Pseudocode snippets are marked as "`Algorithm"', but in fact they are just functions and I don’t know yet how to change the name in this particular LaTeX environment. Also I use a "`="' instead of "`$\leftarrow$"' because I think it provides better readability.\\
+I separated this section in 3 parts, each one is dedicated to one of the functions used in EvolutionStep() below. It is possible to read \\
+We will encounter 2 classes called "`Trait"' and "`Events"'.\\
+
+\begin{minipage}[t]{0.5\textwidth}
+Attributes in a Trait Object:\\
+	\textcolor[rgb]{0,0,0.55}{
+	\textbf{class Trait}
+	\begin{itemize}
+		\item Members
+		\item BirthRate
+		\item DeathRate
+		\item TotalBirthRate
+		\item TotalDeathRate
+		\item TotalTraitRate
+		\item TotalEventRate - [static]
+		\item CompDeathRate[i][j] - [static]
+		\item Mutation - [static]
+	\end{itemize}
+	}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+Attributes in a Events Object:\\
+	\textcolor[rgb]{0,0,0.55}{\textbf{class Events}
+	\begin{itemize}
+		\item EventTimes[i]
+		\item ChosenTrait[i]
+		\item isBirth[i]
+	\end{itemize}
+	}
+\end{minipage}
+
+
+\begin{algorithm}[H]
+	\caption{EvolutionStep()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{A full evolution Step happened}
+		\STATE calculateEventRates();
+		\STATE sampleEventTime();
+		\STATE changeATrait();
+	\end{algorithmic}
+\end{algorithm}
+This function does a full evolution step.
+
+\subsection{Calculating total-event rates}
+
+\begin{algorithm}[H]
+	\caption{calculateEventRates()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{All (total)Rates will be set}
+		\FOR{i=0 \TO n-1}
+			\STATE calculateTotalDeathRateOf(i)
+		\ENDFOR
+		\STATE calculateTotalBirthRates(0);
+		\STATE calculateTotalEventRate();
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{calculateTotalDeathRateOf(TraitIndex: i)}
+	\begin{algorithmic}[1]
+		\REQUIRE int i
+		\ENSURE{Total deathrate of Trait "`i"' will be set}
+		\STATE Trait[i].TotalDeathRate = 0;
+		\STATE addTotalIntrinsicDeathRateOf(i);
+		\STATE addTotalCompetitionDeathRateOf(i);
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{addTotalIntrinsicDeathRateOf(TraitIndex: i)}
+	\begin{algorithmic}[1]
+		\STATE Trait[i].TotalDeathRate = (Trait[i].DeathRate) $\cdot$ (Trait[i].Members)
+	\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[H]
+	\caption{addTotalCompetitionDeathRateOf(TraitIndex: i)}
+	\begin{algorithmic}[1]
+		\STATE double externalDeath = 0;
+		\FOR{j=0 \TO n-1}
+			\STATE externalDeath += (Trait.CompDeathRate[i,j])$\cdot$(Trait[j].Members);
+		\ENDFOR
+		\STATE externalDeath *= Trait[i].Members;
+		\STATE Trait[i].TotalDeathRate += externalDeath;
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{calculateTotalBirthRates(StartIndex: i)}
+	\begin{algorithmic}[1]
+		\REQUIRE int i
+		\ENSURE{Total birthrate of Trait "`i"' will be set (recursively)}
+		\STATE Trait[i].TotalBirthRate = (Trait[i].Members)$\cdot$(Trait[i].BirthRate)
+		\IF{$i < n-1$}
+			\STATE calculateTotalBirthRates(i+1)
+			\STATE Trait[i].TotalBirthRate += $\frac{Trait.Mutation}{2}\cdot Trait[i+1].BirthRate \cdot Members $
+		\ENDIF
+		\IF{$i > 0$}
+			\STATE Trait[i].TotalBirthRate += $\frac{Trait.Mutation}{2}\cdot Trait[i-1].BirthRate \cdot Members $
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+In Algorithm 6 in line 3 is used recursion, because this improves the calculation speed a lot, although it slightly makes code less intuitive.
+
+\begin{algorithm}[H]
+	\caption{calculateTotalEventRate()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Current Totaleventrate is set}
+		\STATE Trait.TotalEventRate = 0;
+		\FOR{i=0 \TO n-1}
+			\STATE Trait[i].TotalTraitRate = Trait[i].TotalBirthRate \\ 
+			\noindent\hspace*{36mm}+ Trait[i].TotalDeathRate;
+			\STATE Trait.TotalEventRate += Trait[i].TotalTraitRate;
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Sampling the next event-time}
+Here will appear a, not yet mentioned, object that will not be explained further, called Dice. The Dice Object will provide a uniform or exponential random Variable.\\
+\begin{algorithm}[H]
+	\caption{sampleEventTime()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{First ringing Eventclock has been sampled}
+		\STATE double Parameter = Trait.TotalEventRate;
+		\STATE double newEvent = this.Dice.RollExpDice(Parameter);
+		\STATE Events.EventTimes.push(newEvent);
+	\end{algorithmic}
+\end{algorithm}
+Here we use Dice.RollExpDice($\lambda$) to get $X\sim exp(\lambda)$. The same is possible for  Dice.RollUnifDice($\lambda$) to get $X\sim Unif[0,\lambda]$.\\
+
+\subsection{Changing a trait}
+
+\begin{algorithm}[H]
+	\caption{changeATrait()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{make a change to the Population with current Parameters}
+		\STATE choseTraitToChange();
+		\STATE choseEventType();
+		\STATE executeEventTypeOnTrait();
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{choseTraitToChange()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Trait is chosen for changing}
+		\STATE double Parameter = Trait.TotalEventRate;
+		\STATE double HittenTrait = Dice.rollUnif(Parameter);
+		\FOR{i = 0 \TO n-1}
+			\IF{HittenTrait $\le$ Trait[i].TotalTraitRate}
+				\STATE Events.ChosenTrait.push(i);
+				\STATE break;
+			\ENDIF
+			\STATE HittenTrait -= Trait[i].TotalTraitRate;
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{choseEventType()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Decision for Birth or Death is made}
+		\STATE int i = Events.ChosenTrait.lastentry();
+		\STATE double EventType = Dice.rollUnif(Trait[i].TotalTraitRate);
+		\IF{EventType $\le$ Trait[i].TotalBirthRate}
+			\STATE Events.isBirth.push(true);
+		\ELSE
+			\STATE Events.isBirth.push(false);
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{executeEventTypeOnTrait()}
+	\begin{algorithmic}[1]
+		\REQUIRE 2 other alg (later)
+		\ENSURE{Chosen event will occur on chosen trait}
+		\IF{isBirth.lastentry}
+			\STATE Trait[Event.ChosenTrait.lastentry()].Members += 1;
+		\ELSE
+			\STATE Trait[Event.ChosenTrait.lastentry()].Members -= 1;
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+\listofalgorithms
+\end{document}

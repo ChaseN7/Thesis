@@ -1,0 +1,244 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{german}
+\usepackage{color}
+\title{Small summery}
+\author{Boris Prochnau}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{First meeting (14.04): Model of interest}
+These are some main points of the model we are using for the simulation. They are the product of the first meeting with Loren Coquille and Martina Baar.
+\begin{itemize}
+	\item We have N traints and ($X_{i=1,...,N}$) are the amount of members of the traits. 
+	\item We use a constant mutation rate that does not depend on the traits $\mu$.
+	\item but the other rates are depending on traits and change with time (by as the amount of traitmembers rises)
+		\begin{itemize}
+			\item $b_i$, [intrinsic birth-rate]
+			\item $d_i$, [intrinsic death-rate]
+			\item $\left(\sum_{j=1}^N \frac{c_{\cdot,j}}{K}x_j\right)_i$, [competition death]
+			\item $\mu\left(\frac{b_{i-1} + b_{i+1}}{2}\right)$, [extrinsic birth-rate]
+		\end{itemize}
+	\item We use 3 groups of PPP's where every group represents an event. 
+		
+		\begin{itemize}
+			\item $N_t^{b_i}$
+			\item $N_t^{d_i}$
+			\item $N_t^{\bar{c}_i}$
+		\end{itemize}
+	where $\bar{c} = \left(\sum_{j=1}^N \frac{c_{\cdot,j}}{K}x_j\right)_i$. Therefore we get 3N processes running that compete about the first one occurring with each one triggering an death/birth for an trait.
+	\item With respect to the fact that the distribution of the $N_t$ changes with the size of the population we can think of an reset of the parameters of $N_t$ due to the fact that the increments are exponentially distributed and therefore are memoryless (markov property)
+	\item The use of coloring one trait was (only $\to$ ask later) to explain the superposition of the PPP associated with the simulation to extract the occured event from the PPP's \\
+	\[\to N_t^{total_{i}} = N_t^{b_i + d_i + \bar{c}_i} = N_t^{b_i} + N_t^{d_i} + N_t^{\bar{c}_i}\]
+Therefore we would decide:
+\begin{equation}
+	X_i^{total} = 
+	\begin{cases}
+		\textrm{coloring d} & \textrm{with prob. p}\\
+		\textrm{coloring b} & \textrm{with prob. q} \\
+		\textrm{coloring }\bar{c} & \textrm{with prob. 1-p-q}  
+	\end{cases}
+\end{equation}
+with:
+\begin{align*}
+	p = \frac{d_i}{d_i + b_i + \bar{c}_i} && q = \frac{b_i}{d_i + b_i + \bar{c}_i} && 1-p-q = \frac{\bar{c}_i}{d_i + b_i + \bar{c}_i}
+\end{align*}
+\end{itemize}
+
+\section{Second meeting (22.04): Pseudocode}
+First thing to mention is that the Pseudocode snippets are marked as "`Algorithm"', but in fact they are just functions and I don’t know yet how to change the name in this particular LaTeX environment. Also I use a "`="' instead of "`$\leftarrow$"' because I think it provides better readability.\\
+The following Pseudocode will contain many function-calls. Every function can be identified as a verb, and objects or local variables are nouns. There will also be one Boolean "`isBorn"' which is an adjective.\\
+Generally the functions have no return values because in this situation we tell functions to do something (not ask). Means we pass a task to them. There will be no requests for return values.\\
+One other thing to mention is that the function names can get long, but they will (or should) always say what the function does. Not more or less.\\
+The function-body should always follow a rule called "`pretty much what you expected"'. Some functions do violent this rule slightly. They are usually more than 6 lines and will be changed later.\\
+First we start with the main Step of the Algorithm and continue with further explaining of the used functions. When a new function appear, it will be explained directly below it. Also we seperate this section in 3 parts, each one is dedicated to one of the functions used in this following EvolutionStep():
+\begin{algorithm}[H]
+	\caption{EvolutionStep()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{A full evolution Step happened}
+		\STATE calculateEventRates();
+		\STATE sampleEventTime();
+		\STATE changeATrait();
+	\end{algorithmic}
+\end{algorithm}
+This function does a full evolution step. First thing to do is to calculate the Event rates with "`calculateEventRates"', than we sample an exponential time with our current rate parameters with "`sampleEventTime"' and finish the Step with changing a Trait with "`changeATrait"'. \\
+Most functions-calls should not need to be explained, that’s why I leave this explanations out in following comments.\\
+This function will be improved later with not calculating the Rates in every new step, rather than updating them with the previous changes. \\
+	
+\subsection{Calculating total-event rates}
+We will encounter 2 classes called "`Trait"' and "`Events"'. They are so called Data Classes and usually mainly store data.\\
+They are visible at all time and can be used like global variables. \\
+In this first part of calculating total-event rates we only need to introduce the "`Trait"' class which will be used as an array of traits "`Trait[$i\le n$]"' with n beeing the maximum number of traits. An Trait Object has attributes that can be accessed through a dot operator like "`Trait[i].Members"' what would be "`the Members of Trait i"'.\\
+This is a listing of all attributes in one Trait Object:\\
+\textcolor[rgb]{0,0,0.55}{\textbf{class Trait}
+\begin{itemize}
+	\item BirthRate
+	\item TotalBirthRate
+	\item DeathRate
+	\item TotalDeathRate
+	\item TotalTraitRate
+	\item TotalEventRate - [static]
+	\item CompDeathRate[i][j] - [static]
+\end{itemize}
+}
+
+Here is much work with Superposition of the PPP included. We summarize the sum of birth-rates from members within a trait to the "`TotalBirthRate"' (mutation included), same for "`TotalDeathRate"' (competition included). \\
+The "`TotalTraitRate"' is the summed  "'TotalBirthRate"' and "`TotalDeathRate"' and means the total rate of events for a specific trait. \\
+"`TotalEventRate"' and "`CompDeathRate"' are static, this means that they are the same for all initialized Trait objects. They (all items from the array) access the same variable for this. "`TotalEventRate"' is the same as usual and "`CompDeathRate"' is the competition-matrix with according rates.\\	
+\begin{algorithm}[H]
+	\caption{calculateEventRates()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{All (total)Rates will be set}
+		\FOR{i=0 \TO n-1}
+			\STATE calculateTotalDeathRateOf(i)
+		\ENDFOR
+		\STATE calculateTotalBirthRates(0);
+		\STATE calculateTotalEventRate();
+	\end{algorithmic}
+\end{algorithm}
+In the next function we will manipulate attributes of the Trait Objects. The mutation will be accessed without and Traitindex: "`Trait.Mutation"' because it is static and therefore the same for all Objects.
+\begin{algorithm}[H]
+	\caption{calculateTotalBirthRates(StartIndex: i)}
+	\begin{algorithmic}[1]
+		\REQUIRE int i
+		\ENSURE{Total birthrate of Trait "`i"' will be set (recursively)}
+		\STATE Trait[i].TotalBirthRate = (Trait[i].Members)$\cdot$(Trait[i].BirthRate)
+		\IF{$i < n-1$}
+			\STATE calculateTotalBirthRates(i+1)
+			\STATE Trait[i].TotalBirthRate += $\frac{Trait.Mutation}{2}\cdot Trait[i+1].TotalBirthRate $
+		\ENDIF
+		\IF{$i > 0$}
+			\STATE Trait[i].TotalBirthRate += $\frac{Trait.Mutation}{2}\cdot Trait[i-1].TotalBirthRate $
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+In Algorithm 3 in line 3 is used recursion, because this improves the calculation speed a lot, although it slightly makes code less intuitive.
+
+\begin{algorithm}[H][H]
+	\caption{calculateTotalDeathRateOf(TraitIndex: i)}
+	\begin{algorithmic}[1]
+		\REQUIRE int i
+		\ENSURE{Total deathrate of Trait "`i"' will be set}
+		\STATE Trait[i].TotalDeathRate = 0;
+		\STATE addTotalIntrinsicDeathRateOf(i);
+		\STATE addTotCompetitionDeathRateOf(i);
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{addTotalIntrinsicDeathRateOf(TraitIndex: i)}
+	\begin{algorithmic}[1]
+		\STATE Trait[i].TotalDeathRate = (Trait[i].DeathRate) $\cdot$ (Trait[i].Members)
+	\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[H]
+	\caption{addTotalCompetitionDeathRateOf(TraitIndex: i)}
+	\begin{algorithmic}[1]
+		\FOR{j=0 \TO n-1}
+			\STATE Trait[i].TotalDeathRate += (Trait.CompDeathRate[i,j])$\cdot$(Trait[j].Members);
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{calculateTotalEventRate()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Current Totaleventrate is set}
+		\FOR{i=0 \TO n-1}
+			\STATE Trait[i].TotalTraitRate = Trait[i].TotalBirthRate \\ 
+			\noindent\hspace*{36mm}+ Trait[i].TotalDeathRate;
+			\STATE Trait.TotalEventRate += Trait[i].TotalTraitRate;
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Sampling the next event-time}
+Here will appear a, not yet mentioned, object that will not be explained further, called Dice. The Dice Object will provide a uniform or exponential random Variable.\\
+\begin{algorithm}[H]
+	\caption{sampleEventTime()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{First ringing Eventclock has been sampled}
+		\STATE double Parameter = Trait.TotalEventRate;
+		\STATE double newEvent = this.Dice.RollExpDice(Parameter);
+		\STATE Events.EventTimes.push(newEvent);
+	\end{algorithmic}
+\end{algorithm}
+Here we use Dice.RollExpDice($\lambda$) to get $X\sim exp(\lambda)$. The same is possible for  Dice.RollUnifDice($\lambda$) to get $X\sim Unif[0,\lambda]$.\\
+
+\subsection{Changing a trait}
+Here we will work with the actual Events taking place. For this purpose i introduce the Events class like before the Trait class:\\
+\textcolor[rgb]{0,0,0.55}{\textbf{class Events}
+\begin{itemize}
+	\item Dice
+	\item EventTimes[i]
+	\item ChosenTrait[i]
+	\item isBirth[]
+\end{itemize}
+}
+The EventTime, ChosenTrait and isBirth are so called vectors. They are dynamic containers and we need to push an item into them to append it to the last entry.
+\begin{algorithm}[H]
+	\caption{changeATrait()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{make a change to the Population with current Parameters}
+		\STATE choseTraitToChange();
+		\STATE choseEventType();
+		\STATE executeEventTypeOnTrait();
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{choseTraitToChange()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Trait is chosen for changing}
+		\STATE double Parameter = Trait.TotalEventRate;
+		\STATE double HittenTrait = Dice.rollUnif(Parameter);
+		\FOR{i = 1 \TO n-1}
+			\IF{HittenTrait $\le$ Trait[i].TotalEvent}
+				\STATE this.ChosenTrait.push(i);
+				\STATE break;
+			\ENDIF
+			\STATE HittenTrait -= Trait[i].TotalEvent;
+		\ENDFOR
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{choseEventType()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Decision for Birth or Death is made}
+		\STATE int i = Events.ChosenTrait.lastentry();
+		\STATE double EventType = Dice.rollUnif(Trait[i].TotalTraitRate);
+		\IF{EventType $\le$ Trait[i].TotalBirthRate}
+			\STATE Events.isBirth.push(true);
+		\ELSE
+			\STATE Events.isBirth.push(false);
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\caption{executeEventTypeOnTrait()}
+	\begin{algorithmic}[1]
+		\REQUIRE -
+		\ENSURE{Chosen event will occur on chosen trait}
+		\IF{isBirth}
+			\STATE Trait[ChosenTrait.lastentry()] += 1;
+		\ELSE
+			\IF{ChosenTrait.Members $>$ 0}
+			\STATE Trait[ChosenTrait.lastentry()] -= 1;
+			\ENDIF
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+\listofalgorithms
+\end{document}
