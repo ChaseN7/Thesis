@@ -7,29 +7,33 @@
 class GraphClass
 {
 public:
-    GraphClass(QString FName);
+    GraphClass(QString FName, bool rangeChecked);
 
-    void generateEvolution(int max_It);
-    bool isNear();
+    int generateEvolution(int max_It);
+    bool isNear() const;
 
-    double getMaxMembers();
-    double getMaxTime();
-    double getExpectedOf(int i);
-    QVector<double> getTimesOf(int i);
-    QVector<double> getTraitHistOf(int i);
+    double getMaxMembers() const;
+    double getMaxTime() const;
+    double getExpectedOf(int i) const;
+    QVector<double> getTimesOf(const int i) const;
+    QVector<double> getTraitHistOf(const int i) const;
+    QVector<double> getExpectedVectorOf(const int i) const;
+    QVector<double> getXBorders() const;
 
     TraitEventManager Manager;
-    void makeIterations(int & maxIt);
+    int makeIterations(const int maxIt);
+    void iterateGraphPoint(double &Time, int &Chosen);
 private:
     void makeJumpedEvSteps(int &Chosen, double &Time);
     void calcJumpedSteps(int &maxIt);
-    void reserveSize(int maxIt);
+    void reserveSize(const int maxIt);
 
     QVector<QVector<double> > TimeLine;
     QVector<QVector<double> > TraitHistory;
     QVector<double> Expected;
     double maxMembers, maxTime;
     int jumpedSteps;
+    bool isRangeControled;
 };
 
 #endif // GRAPHCLASS_H

@@ -155,7 +155,7 @@ double TraitEventManager::getKMembers(int TraitIndex)
     return Trait[TraitIndex].Members / TraitClass::K;
 }
 
-double TraitEventManager::retStableDimorphOf(int i)
+double TraitEventManager::retStableDimorphOf(int i) const
 {
     int j;
     if(i > 0)
@@ -179,7 +179,7 @@ double TraitEventManager::retStableDimorphOf(int i)
     return expected/TraitClass::K;
 }
 
-QVector<double> TraitEventManager::retStableDimorphVector()
+QVector<double> TraitEventManager::retStableDimorphVector() const
 {
     QVector<double> expVals(TraitClass::Size);
     for(int i = 0; i < TraitClass::Size; ++i)

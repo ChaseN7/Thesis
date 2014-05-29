@@ -30,8 +30,8 @@ public:
     void clearData();
     bool initWithFile(QString FName);
     double getKMembers(int TraitIndex);
-    double retStableDimorphOf(int i);
-    QVector<double> retStableDimorphVector();
+    double retStableDimorphOf(int i) const;
+    QVector<double> retStableDimorphVector() const;
     double getStableMonoStateOf(int i);
     bool isNear(QVector<double> &Expected);
 

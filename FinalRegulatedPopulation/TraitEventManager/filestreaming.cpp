@@ -12,7 +12,6 @@ FileStreaming::FileStreaming(QString FName):File(FName)
 {
     if(!File.open(QFile::WriteOnly | QFile::Text | QIODevice::Truncate))
         qDebug() << "Datei konnte nicht geoffnet werden :(";
-
 }
 
 FileStreaming::~FileStreaming()
@@ -53,6 +52,7 @@ void FileStreaming::readSize_Mutation_K(QTextStream & in, std::vector<TraitClass
     in>>TraitClass::K;
     if(TraitClass::K == 0) TraitClass::K = 1;
     in>>TraitClass::Mutation;
+    TraitClass::Mutation = TraitClass::Mutation/TraitClass::K;
 }
 
 void FileStreaming::readMembersBirthsDeaths(QTextStream &in, std::vector<TraitClass> & Traits)

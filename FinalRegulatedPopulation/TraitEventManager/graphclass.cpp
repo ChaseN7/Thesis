@@ -1,21 +1,33 @@
 #include "graphclass.h"
 #include <cmath>
 
-GraphClass::GraphClass(QString FName) : Manager(FName)
+GraphClass::GraphClass(QString FName, bool rangeChecked) : Manager(FName)
 {
     TimeLine.resize(TraitClass::Size);
     TraitHistory.resize(TraitClass::Size);
     Expected.resize(TraitClass::Size);
     Expected = Manager.retStableDimorphVector();
     maxMembers = 0;
+    maxTime = 0;
     jumpedSteps = 1;
+    isRangeControled = rangeChecked;
     for(int i = 0; i < TraitClass::Size; ++i){
         TimeLine[i].push_back(0);
         TraitHistory[i].push_back(Manager.getKMembers(i));
     }
 }
 
-void GraphClass::reserveSize(int maxIt)
+bool GraphClass::isNear() const
+{
+    for(int i = 0; i < TraitClass::Size; ++i){
+        double diff = TraitHistory[i].back() - Expected[i];
+        if(diff > 5./sqrt(TraitClass::K) || diff < -5./sqrt(TraitClass::K))
+            return false;
+    }
+    return true;
+}
+
+void GraphClass::reserveSize(const int maxIt)
 {
     for(int i = 0; i < TraitClass::Size; ++i){
         TimeLine[i].reserve(maxIt);
@@ -44,43 +56,43 @@ void GraphClass::calcJumpedSteps(int & maxIt)
     }
 }
 
-void GraphClass::makeIterations(int & maxIt)
+void GraphClass::iterateGraphPoint(double & Time, int & Chosen)
+{
+    makeJumpedEvSteps(Chosen, Time);
+    TimeLine[Chosen].push_back(Time);
+    TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
+    maxMembers = maxMembers < Manager.getKMembers(Chosen) ? Manager.getKMembers(Chosen) : maxMembers;
+}
+
+int GraphClass::makeIterations(const int maxIt)
 {
     int Chosen;
     double Time = 0;
     for(int i = 0; i < maxIt; i++){
-        makeJumpedEvSteps(Chosen, Time);
-        TimeLine[Chosen].push_back(Time);
-        TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
-        maxMembers = maxMembers < Manager.getKMembers(Chosen) ? Manager.getKMembers(Chosen) : maxMembers;
-        if(isNear())
-            break;
+        iterateGraphPoint(Time, Chosen);
+        if(isRangeControled)
+            if(isNear()){
+                for(int j = 0; j < std::min(i/3, maxIt-i); ++j)
+                    iterateGraphPoint(Time, Chosen);
+                return i + std::min(i/3, maxIt-i);
+            }
     }
+    return maxIt;
 }
 
-void GraphClass::generateEvolution(int maxIt)
+int GraphClass::generateEvolution(int maxIt)
 {
     calcJumpedSteps(maxIt);
     reserveSize(maxIt);
-    makeIterations(maxIt);
+    return makeIterations(maxIt);
 }
 
-bool GraphClass::isNear()
-{
-    for(int i = 0; i < TraitClass::Size; ++i){
-        double diff = TraitHistory[i].back() - Expected[i];
-        if(diff > 15./sqrt(TraitClass::K) || diff < -15./sqrt(TraitClass::K))
-            return false;
-    }
-    return true;
-}
-
-double GraphClass::getMaxMembers()
+double GraphClass::getMaxMembers() const
 {
     return maxMembers;
 }
 
-double GraphClass::getMaxTime()
+double GraphClass::getMaxTime() const
 {
     double max = 0;
     for(int i = 0; i < TraitClass::Size; ++i)
@@ -89,17 +101,33 @@ double GraphClass::getMaxTime()
     return max;
 }
 
-QVector<double> GraphClass::getTimesOf(int i)
+QVector<double> GraphClass::getTimesOf(const int i) const
 {
     return TimeLine.at(i);
 }
 
-QVector<double> GraphClass::getTraitHistOf(int i)
+QVector<double> GraphClass::getTraitHistOf(const int i) const
 {
     return TraitHistory.at(i);
 }
 
-double GraphClass::getExpectedOf(int i)
+QVector<double> GraphClass::getExpectedVectorOf(const int i) const
+{
+    QVector<double> ExpV;
+    ExpV.push_back(Expected[i]);
+    ExpV.push_back(Expected[i]);
+    return ExpV;
+}
+
+QVector<double> GraphClass::getXBorders() const
+{
+    QVector<double> XBorders;
+    XBorders.push_back(0.);
+    XBorders.push_back(getMaxTime());
+    return XBorders;
+}
+
+double GraphClass::getExpectedOf(int i) const
 {
     return Expected.at(i);
 }
