@@ -5,7 +5,7 @@
 
 bool isNear(double Value, double Expected, double K){
     double diff = Value - Expected;
-    if( diff < 5./K && diff > -5./K)
+    if( diff < 10./K && diff > -10./K)
         return true;
     return false;
 }

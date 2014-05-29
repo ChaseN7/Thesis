@@ -134,12 +134,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->pushButton_plot->setEnabled(true);
-    connect(this,SIGNAL(destroyed()),Plot,SLOT(deleteLater()));
+    /// connect the the signal clicked() from Button"plot" to the SLOT
+    /// show() from the Plot Window
     connect(ui->pushButton_plot, SIGNAL(clicked()),Plot,SLOT(show()));
-
-    connect(Plot,SIGNAL(graphDrawn()),
-            this,SLOT(enablePlotButton()));
-
+    connect(Plot,SIGNAL(graphDrawn()),this,SLOT(enablePlotButton()));
 }
 
 MainWindow::~MainWindow()
