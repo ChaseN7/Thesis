@@ -20,7 +20,8 @@ SOURCES += tst_traiteventmanagertest.cpp \
     traiteventmanager.cpp \
     eventclass.cpp \
     traitclass.cpp \
-    filestreaming.cpp
+    filestreaming.cpp \
+    graphclass.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
@@ -28,6 +29,7 @@ HEADERS += \
     traiteventmanager.h \
     eventclass.h \
     traitclass.h \
-    filestreaming.h
+    filestreaming.h \
+    graphclass.h
 
 QMAKE_CXXFLAGS += -std=c++11

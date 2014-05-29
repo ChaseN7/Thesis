@@ -4,11 +4,7 @@
 RandomDice::RandomDice():generator(time(0)){
 //    generator.seed(time(0));
 }
-double RandomDice::computeAverage(int Loops){
-    double Average = 0;
-    for(int i = 0; i < Loops; i++) Average += rollExpDist()/(double)Loops;
-    return Average;
-}
+
 double RandomDice::rollExpDist(){
     static std::exponential_distribution<double> distribution(1.);
     return distribution(generator);

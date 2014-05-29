@@ -5,12 +5,13 @@
 #include "eventclass.h"
 #include "randomdice.h"
 #include "filestreaming.h"
+#include <QVector>
 
 class TraitEventManager
 {
 public:
     TraitEventManager();
-    TraitEventManager(QString FileName, std::vector<TraitClass> &Traits);
+    TraitEventManager(QString FileName);
     TraitEventManager(int n);
     void addTotalCompDeathRateOf(int TraitIndex);
     void addTotalIntrisicDeathRateOf(int TraitIndex);
@@ -27,16 +28,17 @@ public:
 
     // Utilities
     void clearData();
+    bool initWithFile(QString FName);
     double getKMembers(int TraitIndex);
-    double getStableDimorphStateOf(int i);
+    double retStableDimorphOf(int i);
+    QVector<double> retStableDimorphVector();
     double getStableMonoStateOf(int i);
-    std::vector<double> getAmoutOfTraitChanges();
+    bool isNear(QVector<double> &Expected);
 
 public:
     RandomDice Dice;
     std::vector<TraitClass> Trait;
     EventClass Events;
-    FileStreaming Stream;
 };
 
 #endif // TRAITEVENTMANAGER_H

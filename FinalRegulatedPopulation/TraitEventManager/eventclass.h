@@ -10,9 +10,9 @@ public:
     void clearEvents();
 
 public:
-    std::vector<double> EventTimes;
-    std::vector<double> ChosenTrait;
-    std::vector<double> isBirth;
+    double EventTimes;
+    double ChosenTrait;
+    bool isBirth;
 };
 
 #endif // EVENTS_H

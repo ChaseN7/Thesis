@@ -15,7 +15,6 @@ public:
     double rollContUnifDist(double);
 
     // TESTING
-    double computeAverage(int Loops);
     double rollExpDist();
 
 private:

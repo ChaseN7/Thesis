@@ -7,8 +7,7 @@
 TraitEventManager::TraitEventManager():
     Dice(),
     Trait(),
-    Events(),
-    Stream()
+    Events()
 {
 
 }
@@ -16,19 +15,17 @@ TraitEventManager::TraitEventManager():
 TraitEventManager::TraitEventManager(int n):
     Dice(),
     Trait(),
-    Events(),
-    Stream()
+    Events()
 {
     Trait.assign(n,TraitClass());
     TraitClass::setTraitSize(n);
 }
-TraitEventManager::TraitEventManager(QString FileName, std::vector<TraitClass> & Traits):
+TraitEventManager::TraitEventManager(QString FileName):
     Dice(),
     Trait(),
-    Events(),
-    Stream()
+    Events()
 {
-    Stream.initializeWithFile(FileName, Traits);
+    initWithFile(FileName);
 }
 
 
@@ -90,7 +87,7 @@ void TraitEventManager::sampleEventTime()
 {
     double Parameter = TraitClass::TotalEventRate;
     double newEvent = Dice.rollExpDist(Parameter);
-    Events.EventTimes.push_back(newEvent);
+    Events.EventTimes = newEvent;
 }
 
 void TraitEventManager::choseTraitToChange()
@@ -99,7 +96,7 @@ void TraitEventManager::choseTraitToChange()
     double HittenTrait = Dice.rollContUnifDist(Parameter);
     for(int i = 0; i < TraitClass::Size; i++){
         if(HittenTrait <= Trait[i].TotalTraitRate){
-            Events.ChosenTrait.push_back(i);
+            Events.ChosenTrait = i;
             return;
         }
         HittenTrait -= Trait[i].TotalTraitRate;
@@ -108,18 +105,18 @@ void TraitEventManager::choseTraitToChange()
 
 void TraitEventManager::choseEventType()
 {
-    int i = Events.ChosenTrait.back();
+    int i = Events.ChosenTrait;
     double EventType = Dice.rollContUnifDist(Trait[i].TotalTraitRate);
     if(EventType < Trait[i].TotalBirthRate)
-        Events.isBirth.push_back(true);
+        Events.isBirth = true;
     else
-        Events.isBirth.push_back(false);
+        Events.isBirth = false;
 }
 
 void TraitEventManager::executeEventTypeOnTrait()
 {
-    int ChosenTrait = Events.ChosenTrait.back();
-    if(Events.isBirth.back()){
+    int ChosenTrait = Events.ChosenTrait;
+    if(Events.isBirth){
         Trait[ChosenTrait].Members += 1.;
     }
     else if(Trait[ChosenTrait].Members > 0)
@@ -147,17 +144,22 @@ void TraitEventManager::clearData()
     Trait.clear();
 }
 
+bool TraitEventManager::initWithFile(QString FName)
+{
+    FileStreaming Stream;
+    return Stream.initializeWithFile(FName, Trait);
+}
+
 double TraitEventManager::getKMembers(int TraitIndex)
 {
     return Trait[TraitIndex].Members / TraitClass::K;
 }
 
-double TraitEventManager::getStableDimorphStateOf(int i)
+double TraitEventManager::retStableDimorphOf(int i)
 {
     int j;
-    if(i > 0){
+    if(i > 0)
         j = 0;
-    }
     else
         j = 1;
     double expected;
@@ -177,6 +179,14 @@ double TraitEventManager::getStableDimorphStateOf(int i)
     return expected/TraitClass::K;
 }
 
+QVector<double> TraitEventManager::retStableDimorphVector()
+{
+    QVector<double> expVals(TraitClass::Size);
+    for(int i = 0; i < TraitClass::Size; ++i)
+        expVals[i] = retStableDimorphOf(i);
+    return expVals;
+}
+
 double TraitEventManager::getStableMonoStateOf(int i)
 {
     double expected = Trait[i].BirthRate - Trait[i].DeathRate;
@@ -188,14 +198,15 @@ double TraitEventManager::getStableMonoStateOf(int i)
     return -1;
 }
 
-std::vector<double> TraitEventManager::getAmoutOfTraitChanges()
+bool TraitEventManager::isNear(QVector<double> &Expected)
 {
-    std::vector<double> Histogramm;
-    Histogramm.assign(TraitClass::Size, 0);
-    for(unsigned i = 0; i < Events.ChosenTrait.size(); i++){
-        Histogramm[Events.ChosenTrait[i]]++;
+    bool close = true;
+    double diff;
+    for(int i = 0; i < TraitClass::Size; i++){
+        diff = getKMembers(i) - Expected[i];
+        close = close && diff < 15./sqrt(TraitClass::K) && diff > -15./sqrt(TraitClass::K);
     }
-    return Histogramm;
+    return close;
 }
 
 

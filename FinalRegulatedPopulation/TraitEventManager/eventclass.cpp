@@ -1,15 +1,18 @@
 #include "eventclass.h"
 
-EventClass::EventClass():
+EventClass::EventClass()/*:
     EventTimes(),
     ChosenTrait(),
-    isBirth()
+    isBirth()*/
 {
+//    EventTimes.assign(1,0.);
+//    ChosenTrait.assign(1,0.);
+//    isBirth.assign(1,0.);
 }
 
 void EventClass::clearEvents()
 {
-    EventTimes.clear();
-    ChosenTrait.clear();
-    isBirth.clear();
+    EventTimes = 0;
+    ChosenTrait = 0;
+    isBirth = false;
 }
