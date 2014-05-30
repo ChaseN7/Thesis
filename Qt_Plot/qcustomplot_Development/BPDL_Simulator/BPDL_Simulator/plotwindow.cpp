@@ -43,7 +43,7 @@ PlotWindow::PlotWindow(QWidget *parent) :
     ui(new Ui::PlotWindow)
 {
     ui->setupUi(this);
-    ui->customPlot->xAxis->setLabel("Milliseconds");
+    ui->customPlot->xAxis->setLabel("Time");
     ui->customPlot->yAxis->setLabel("Population");
 
     PlotRenderer * plotter = new PlotRenderer;
@@ -75,6 +75,7 @@ void PlotWindow::addGraphWithName(QString GName, QPen graphPen)
 {
     ui->customPlot->addGraph();
     ui->customPlot->graph()->setName(GName);
+    ui->customPlot->graph()->setLineStyle(QCPGraph::lsStepLeft);
     ui->customPlot->graph()->setPen(graphPen);
 }
 
@@ -84,6 +85,7 @@ void PlotWindow::createTraitGraphs(QVector<double> Exp)
     for(int currentTrait = 0; currentTrait < TraitClass::Size; currentTrait++){
         graphPen[currentTrait].setColor(QColor(rand()%245+10, rand()%245+10, rand()%245+10));
         addGraphWithName(QString::number(currentTrait+1) + ". Trait", graphPen[currentTrait]);
+        graphPen[currentTrait].setStyle(Qt::DashDotLine);
         addGraphWithName(QString::number(currentTrait+1) + ". Exp: " + QString::number(Exp.at(currentTrait)), graphPen[currentTrait]);
     }
     ui->customPlot->legend->setVisible(true);

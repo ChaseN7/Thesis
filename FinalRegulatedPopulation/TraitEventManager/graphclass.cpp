@@ -39,7 +39,7 @@ void GraphClass::makeJumpedEvSteps(int & Chosen, double & Time)
 {
     for(int i = 0; i < jumpedSteps; ++i){
         Manager.EvolutionStep();
-        Time += Manager.Events.EventTimes * 1000;
+        Time += Manager.Events.EventTimes * 1;   //FIXME: make right convert into milliseconds
         Chosen = Manager.Events.ChosenTrait;
     }
 }
@@ -66,18 +66,18 @@ void GraphClass::iterateGraphPoint(double & Time, int & Chosen)
 
 int GraphClass::makeIterations(const int maxIt)
 {
-    int Chosen;
-    double Time = 0;
+    int chosen;
+    double time = 0;
     for(int i = 0; i < maxIt; i++){
-        iterateGraphPoint(Time, Chosen);
+        iterateGraphPoint(time, chosen);
         if(isRangeControled)
             if(isNear()){
                 for(int j = 0; j < std::min(i/3, maxIt-i); ++j)
-                    iterateGraphPoint(Time, Chosen);
-                return i + std::min(i/3, maxIt-i);
+                    iterateGraphPoint(time, chosen);
+                return i*jumpedSteps + std::min(i/3, maxIt-i)*jumpedSteps;
             }
     }
-    return maxIt;
+    return maxIt*jumpedSteps;
 }
 
 int GraphClass::generateEvolution(int maxIt)

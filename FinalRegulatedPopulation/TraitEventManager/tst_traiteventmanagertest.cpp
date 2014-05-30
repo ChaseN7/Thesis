@@ -357,24 +357,15 @@ void TraitEventManagerTest::testDataStorage()
 
 void TraitEventManagerTest::testResizeDataVector()
 {
-    GraphClass Graph("TestInit_stable");
-    qDebug() << "Generate Graph Points";
-    time_t start = clock();
-    Graph.generateEvolution(1000000);
-    qDebug() << "elapsed time:" << (clock() - start)/1000. << "s";
-    qDebug() << "Trait changes:";
-    int sum = 0;
+    GraphClass Graph("TestInit_stable", true);
+    qDebug() << "Make sure 100000000 iterations can be made...";
+    int maxIt = 100000000;
+    Graph.calcJumpedSteps(maxIt);
+    Graph.reserveSize(maxIt);
     for(int i = 0; i < TraitClass::Size; ++i){
-        sum += Graph.getTraitHistOf(i).size();
-        qDebug() << Graph.getTraitHistOf(i).size();
+        QCOMPARE(Graph.getTimesOf(i).capacity(),1000000);
+        QCOMPARE(Graph.getTraitHistOf(i).capacity(),1000000);
     }
-    int Chosen = Graph.Manager.Events.ChosenTrait;
-    for(int i = 0; i < TraitClass::Size; ++i){
-        QCOMPARE(Graph.getTraitHistOf(i).back(), Graph.Manager.getKMembers(i));
-        qDebug() << Graph.getTimesOf(i).back();
-    }
-    qDebug() << Graph.Manager.Events.EventTimes;
-    QCOMPARE(sum,1000000);
 }
 
 QTEST_APPLESS_MAIN(TraitEventManagerTest)

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <QTextStream>
 #include <QDebug>
+#include <cmath>
+
 
 FileStreaming::FileStreaming()
 {
@@ -52,7 +54,7 @@ void FileStreaming::readSize_Mutation_K(QTextStream & in, std::vector<TraitClass
     in>>TraitClass::K;
     if(TraitClass::K == 0) TraitClass::K = 1;
     in>>TraitClass::Mutation;
-    TraitClass::Mutation = TraitClass::Mutation/TraitClass::K;
+    TraitClass::Mutation = TraitClass::Mutation/(TraitClass::K * sqrt(TraitClass::K));
 }
 
 void FileStreaming::readMembersBirthsDeaths(QTextStream &in, std::vector<TraitClass> & Traits)

@@ -2,13 +2,14 @@
 #include "ui_mainwindow.h"
 #include "filestreaming.h"
 #include <thread>
+#include <cmath>
 
 void MainWindow::addTreePopulationProperties()
 {
     addRootItem("Population Properties");
     addChildItem(ui->treeWidget_parameters->itemAt(0,0) ,"Size: " + QString::number(TraitClass::Size));
     addChildItem(ui->treeWidget_parameters->itemAt(0,0) ,"K:    " + QString::number(TraitClass::K));
-    addChildItem(ui->treeWidget_parameters->itemAt(0,0) ,"Mutation (K ingored): " + QString::number(TraitClass::Mutation * TraitClass::K));
+    addChildItem(ui->treeWidget_parameters->itemAt(0,0) ,"Mutation (K ingored): " + QString::number(TraitClass::Mutation * (TraitClass::K * sqrt(TraitClass::K))));
     addChildItem(ui->treeWidget_parameters->itemAt(0,0) ,"Competition (K ingored)");
     for(int i = 0; i < TraitClass::Size; i++){
         QString row("");
