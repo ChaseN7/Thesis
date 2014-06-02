@@ -34,7 +34,7 @@ void MainWindow::addTreeTraitProperties(TraitEventManager Parameters)
     }
 }
 
-void MainWindow::setFileInput(/*QString Filename, */TraitEventManager Parameters, bool isFound)
+void MainWindow::displayTraitData(/*QString Filename, */TraitEventManager Parameters, bool isFound)
 {
     ui->treeWidget_parameters->clear();
     ui->treeWidget_parameters->setEnabled(isFound);
@@ -45,6 +45,26 @@ void MainWindow::setFileInput(/*QString Filename, */TraitEventManager Parameters
     }
     else
         addRootItem("file not found!");
+
+    ui->tableWidget_Fitness->clear();
+    ui->tableWidget_Fitness->setColumnCount(TraitClass::Size);
+    ui->tableWidget_Fitness->setRowCount(TraitClass::Size);
+    // set the default size, here i've set it to 20px by 20x
+    ui->tableWidget_Fitness->horizontalHeader()->setDefaultSectionSize(40);
+    ui->tableWidget_Fitness->verticalHeader()->setDefaultSectionSize(40);
+    for(int i = 0; i < TraitClass::Size; ++i){
+        for(int j = 0; j < TraitClass::Size; ++j){
+            ui->tableWidget_Fitness->setItem(i,j, new QTableWidgetItem(QString::number(TraitClass::Fitness[i][j])));
+            if(TraitClass::Fitness[i][j]*TraitClass::Fitness[j][i] > 0 && i != j)
+                ui->tableWidget_Fitness->item(i,j)->setBackgroundColor(QColor(Qt::red));
+        }
+    }
+//    QColor color( Qt::red );
+
+//    for(int i = 0; i < TraitClass::Size; ++i){
+//        if(TraitClass::Fitness[i][j]*TraitClass::Fitness[i][j] > 0)
+//            ui->tableWidget_Fitness->item(0,0)->setBackgroundColor(QColor(Qt::red));
+//    }
 }
 
 void MainWindow::iterateMembers(QString StepName, int size)
@@ -111,7 +131,7 @@ bool MainWindow::iterateTraitProperties(QString StepName, int size)
 void MainWindow::readFileContent(QString Filename){
     TraitEventManager Parameters;
     bool isFound = Parameters.initWithFile(Filename);
-    setFileInput(/*Filename, */Parameters, isFound);
+    displayTraitData(/*Filename, */Parameters, isFound);
 }
 
 void MainWindow::addRootItem(QString value)
@@ -143,6 +163,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete Plot;
     delete ui;
 }
 

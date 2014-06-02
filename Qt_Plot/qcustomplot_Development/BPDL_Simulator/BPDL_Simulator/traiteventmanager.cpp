@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include "traiteventmanager.h"
 #include <QFile>
 #include <vector>
+#include <cmath>
+#include "traiteventmanager.h"
 
 TraitEventManager::TraitEventManager():
     Dice(),
@@ -26,6 +27,7 @@ TraitEventManager::TraitEventManager(QString FileName):
     Events()
 {
     initWithFile(FileName);
+    calculateEventRates();
 }
 
 
@@ -137,6 +139,48 @@ void TraitEventManager::EvolutionStep()
     changeATrait();
 }
 
+void TraitEventManager::ImprovedEvolutionStep()
+{
+    sampleEventTime();
+    changeATrait();
+    adjustNewEventRates();
+}
+
+// ------------------ Performence Improvement start -----------------
+
+void TraitEventManager::adjustNewEventRates()
+{
+    int currentTrait = Events.ChosenTrait;
+    int sgn;
+    if(Events.isBirth)
+        sgn = 1;
+    else
+        sgn = -1;
+
+    // Intrinsic Deathrates
+    Trait[currentTrait].TotalDeathRate += sgn*Trait[currentTrait].DeathRate;
+    // Extrinsic Deathrate
+    for(int i = 0; i < TraitClass::Size; ++i)
+        Trait[currentTrait].TotalDeathRate += sgn*TraitClass::CompDeathRate.at(i).at(currentTrait);
+    // Birthrates and TraitRates
+    Trait[currentTrait].TotalBirthRate += sgn*Trait[currentTrait].BirthRate;
+    Trait[currentTrait].TotalTraitRate = Trait[currentTrait].TotalBirthRate + Trait[currentTrait].TotalDeathRate;
+    if(currentTrait > 0){
+        Trait[currentTrait-1].TotalBirthRate += sgn*TraitClass::Mutation*Trait[currentTrait].BirthRate*0.5;
+        Trait[currentTrait-1].TotalTraitRate = Trait[currentTrait-1].TotalBirthRate + Trait[currentTrait-1].TotalDeathRate;
+    }
+    if(currentTrait < TraitClass::Size -1){
+        Trait[currentTrait+1].TotalBirthRate += sgn*TraitClass::Mutation*Trait[currentTrait].BirthRate*0.5;
+        Trait[currentTrait+1].TotalTraitRate = Trait[currentTrait+1].TotalBirthRate + Trait[currentTrait+1].TotalDeathRate;
+    }
+    TraitClass::TotalEventRate = 0;
+    for(int i = 0; i < TraitClass::Size; ++i)
+        TraitClass::TotalEventRate += Trait[i].TotalTraitRate;
+
+}
+
+// ------------------ Performence Improvement end -----------------
+
 void TraitEventManager::clearData()
 {
     TraitClass::setTraitSize(0);
@@ -147,7 +191,9 @@ void TraitEventManager::clearData()
 bool TraitEventManager::initWithFile(QString FName)
 {
     FileStreaming Stream;
-    return Stream.initializeWithFile(FName, Trait);
+    bool success = Stream.initializeWithFile(FName, Trait);
+    calcFitness();
+    return success;
 }
 
 double TraitEventManager::getKMembers(int TraitIndex)
@@ -187,7 +233,7 @@ QVector<double> TraitEventManager::retStableDimorphVector() const
     return expVals;
 }
 
-double TraitEventManager::getStableMonoStateOf(int i)
+double TraitEventManager::retStableMonoStateOf(int i)
 {
     double expected = Trait[i].BirthRate - Trait[i].DeathRate;
     double divisor = TraitClass::CompDeathRate[i][i];
@@ -207,6 +253,16 @@ bool TraitEventManager::isNear(QVector<double> &Expected)
         close = close && diff < 15./sqrt(TraitClass::K) && diff > -15./sqrt(TraitClass::K);
     }
     return close;
+}
+
+void TraitEventManager::calcFitness()
+{
+    for(int i = 0; i < TraitClass::Size; ++i){
+        for(int j = 0; j < TraitClass::Size; ++j){
+            double tmp = Trait[j].BirthRate - Trait[i].DeathRate - TraitClass::CompDeathRate[i][j] * retStableMonoStateOf(i);
+            TraitClass::Fitness[i][j] = round(tmp*pow(10,14))/pow(10,14);
+        }
+    }
 }
 
 

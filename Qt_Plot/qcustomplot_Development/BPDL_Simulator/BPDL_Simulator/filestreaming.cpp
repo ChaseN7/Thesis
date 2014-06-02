@@ -98,7 +98,7 @@ bool FileStreaming::writeLimitedData(TraitEventManager Manager)
     if(File.isOpen())
     {
         QTextStream out(&File);
-        out<<Manager.Events.EventTimes*1000<<" ";
+        out<<Manager.Events.EventTimes<<" ";
         for(int i = 0; i < TraitClass::Size; i++)
             out<<Manager.getKMembers(i)<<" ";
         out<<endl;
@@ -109,7 +109,7 @@ bool FileStreaming::writeLimitedData(TraitEventManager Manager)
 
 void FileStreaming::copyEvolutionIntoData(TraitEventManager& Manager, QTextStream& in, double& ElapsedTime)
 {
-    ElapsedTime +=Manager.Events.EventTimes*1000;
+    ElapsedTime +=Manager.Events.EventTimes;
     in<<ElapsedTime<<" ";
     for(int i = 0; i < TraitClass::Size; i++)
         in<<Manager.getKMembers(i)<<" ";

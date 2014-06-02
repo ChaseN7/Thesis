@@ -5,7 +5,7 @@ double TraitClass::TotalEventRate = 0;
 double TraitClass::Size = 0;
 double TraitClass::K = 0;
 std::vector<std::vector<double>> TraitClass::CompDeathRate;
-//double** TraitClass::CompDeathVector;
+std::vector<std::vector<double>> TraitClass::Fitness;
 
 
 TraitClass::TraitClass()
@@ -28,11 +28,13 @@ void TraitClass::setTraitSize(int size)
     TraitClass::Size = size;
     TraitClass::CompDeathRate.clear();
     TraitClass::TotalEventRate = 0;
-    for(int i = 0; i < size; i++){
-        std::vector<double> tmp;
-        tmp.assign(size,0);
-        TraitClass::CompDeathRate.push_back(tmp);
-    }
+    std::vector<double> tmp(size,0);
+    TraitClass::CompDeathRate.resize(size, tmp);
+    TraitClass::Fitness.resize(size, tmp);
+//    for(int i = 0; i < size; i++){
+//        tmp.assign(size,0);
+//        TraitClass::CompDeathRate.push_back(tmp);
+    //    }
 }
 
 //int TraitClass::getMembers()

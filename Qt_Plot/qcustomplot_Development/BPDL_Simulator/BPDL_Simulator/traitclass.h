@@ -18,14 +18,17 @@ public:
     double DeathRate;
     double TotalDeathRate;
     double TotalTraitRate;
+
+    /// FIXME: Move most static's to TraitEventManager
     static double Mutation;
     static double TotalEventRate;
-    static std::vector<std::vector<double>> CompDeathRate;
     static double Size;
     static double K;
+    static std::vector<std::vector<double>> CompDeathRate;
+    static std::vector<std::vector<double>> Fitness;
 
 private:
-
+    /// FIXME: Make getters and setters after moving the statics
 };
 
 #endif // TRAIT_H

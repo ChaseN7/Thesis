@@ -13,6 +13,7 @@ public:
     TraitEventManager();
     TraitEventManager(QString FileName);
     TraitEventManager(int n);
+    /// All Methods below should be private after testing is over.
     void addTotalCompDeathRateOf(int TraitIndex);
     void addTotalIntrisicDeathRateOf(int TraitIndex);
     void calculateTotalDeathRateOf(int TraitIndex);
@@ -24,17 +25,25 @@ public:
     void choseEventType();
     void executeEventTypeOnTrait();
     void changeATrait();
-    void EvolutionStep();
 
-    // Utilities
-    void clearData();
+    void EvolutionStep();
+    void ImprovedEvolutionStep();
+
+    /// Performence increasing Method
+    /// FIXME: not clean coded, but selfexplaining and simple
+    void adjustNewEventRates();
+
+    /// Utilities
     bool initWithFile(QString FName);
     double getKMembers(int TraitIndex);
     double retStableDimorphOf(int i) const;
+    double retStableMonoStateOf(int i);
     QVector<double> retStableDimorphVector() const;
-    double getStableMonoStateOf(int i);
     bool isNear(QVector<double> &Expected);
+    void calcFitness();
 
+    /// Testing
+    void clearData();
 public:
     RandomDice Dice;
     std::vector<TraitClass> Trait;

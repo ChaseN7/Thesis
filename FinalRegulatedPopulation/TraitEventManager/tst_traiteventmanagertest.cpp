@@ -37,6 +37,7 @@ private Q_SLOTS:
     void finalTestDimorph2();
     void testDataStorage();
     void testResizeDataVector();
+    void testFitnessCalculation();
 
 private:
     TraitEventManager Manager;
@@ -339,7 +340,7 @@ void TraitEventManagerTest::testDataStorage()
     FileStreaming stream;
     time_t start = clock();
     Manager.initWithFile("TestInstanceK10000.txt");
-    int lengh = stream.storeEvolution(Manager,1000000);
+    int lengh = stream.storeEvolution(Manager,10000000);
     QFile Storage("Storage.txt");
     QTextStream out(&Storage);
     if(!Storage.open(QFile::ReadOnly | QFile::Text))
@@ -365,6 +366,25 @@ void TraitEventManagerTest::testResizeDataVector()
     for(int i = 0; i < TraitClass::Size; ++i){
         QCOMPARE(Graph.getTimesOf(i).capacity(),1000000);
         QCOMPARE(Graph.getTraitHistOf(i).capacity(),1000000);
+    }
+}
+
+void TraitEventManagerTest::testFitnessCalculation()
+{
+    GraphClass Graph1("ValidateFitness.txt", true);
+    QCOMPARE(TraitClass::Fitness[0][0],0.);
+    QCOMPARE(TraitClass::Fitness[0][1],5.);
+    QCOMPARE(TraitClass::Fitness[1][0],5.);
+    QCOMPARE(TraitClass::Fitness[1][1],0.);
+
+    GraphClass Graph("ValidateTests.txt", true);
+    double expected;
+    for(int i = 0; i < TraitClass::Size; ++i){
+        for(int j = 0; j < TraitClass::Size; ++j){
+            expected = Graph.Manager.Trait[j].BirthRate - Graph.Manager.Trait[i].DeathRate
+                    - TraitClass::CompDeathRate[i][j] * Graph.Manager.retStableMonoStateOf(i);
+            QCOMPARE(TraitClass::Fitness[i][j],expected);
+        }
     }
 }
 

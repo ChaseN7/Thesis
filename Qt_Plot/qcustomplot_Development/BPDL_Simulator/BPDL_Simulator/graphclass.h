@@ -7,6 +7,8 @@
 class GraphClass
 {
 public:
+    TraitEventManager Manager;
+
     GraphClass(QString FName, bool rangeChecked);
 
     int generateEvolution(int max_It);
@@ -20,13 +22,15 @@ public:
     QVector<double> getExpectedVectorOf(const int i) const;
     QVector<double> getXBorders() const;
 
-    TraitEventManager Manager;
     int makeIterations(const int maxIt);
     void iterateGraphPoint(double &Time, int &Chosen);
-private:
-    void makeJumpedEvSteps(int &Chosen, double &Time);
+
+    /// private!
+    /// Its only public for testing purpose!
     void calcJumpedSteps(int &maxIt);
     void reserveSize(const int maxIt);
+private:
+    void makeJumpedEvSteps(int &Chosen, double &Time);
 
     QVector<QVector<double> > TimeLine;
     QVector<QVector<double> > TraitHistory;

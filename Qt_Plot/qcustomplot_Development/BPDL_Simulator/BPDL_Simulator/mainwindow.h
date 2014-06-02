@@ -25,7 +25,7 @@ public:
 
     void addTreePopulationProperties();
     void addTreeTraitProperties(TraitEventManager Parameters);
-    void setFileInput(/*QString Filename, */TraitEventManager Parameters, bool isFound);
+    void displayTraitData(/*QString Filename, */TraitEventManager Parameters, bool isFound);
     void iterateInputParameter();
     bool iterateTraitProperties(QString StepName, int size);
     void iterateMembers(QString StepName, int size);

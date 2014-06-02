@@ -7,6 +7,8 @@
 class GraphClass
 {
 public:
+    TraitEventManager Manager;
+
     GraphClass(QString FName, bool rangeChecked);
 
     int generateEvolution(int max_It);
@@ -20,7 +22,6 @@ public:
     QVector<double> getExpectedVectorOf(const int i) const;
     QVector<double> getXBorders() const;
 
-    TraitEventManager Manager;
     int makeIterations(const int maxIt);
     void iterateGraphPoint(double &Time, int &Chosen);
 
