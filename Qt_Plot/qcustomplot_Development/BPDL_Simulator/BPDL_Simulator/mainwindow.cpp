@@ -55,7 +55,7 @@ void MainWindow::displayTraitData(/*QString Filename, */TraitEventManager Parame
     for(int i = 0; i < TraitClass::Size; ++i){
         for(int j = 0; j < TraitClass::Size; ++j){
             ui->tableWidget_Fitness->setItem(i,j, new QTableWidgetItem(QString::number(TraitClass::Fitness[i][j])));
-            if(TraitClass::Fitness[i][j]*TraitClass::Fitness[j][i] > 0 && i != j)
+            if(TraitClass::Fitness[i][j]*TraitClass::Fitness[j][i] >= 0 && i != j)
                 ui->tableWidget_Fitness->item(i,j)->setBackgroundColor(QColor(Qt::red));
         }
     }
