@@ -121,7 +121,7 @@ int FileStreaming::storeEvolution(TraitEventManager Manager, int max_it)
     QFile Storage("Storage.txt");
     Storage.open(QFile::WriteOnly | QFile::Text | QIODevice::Truncate);
     QTextStream in(&Storage);
-    QVector<double> expected = Manager.retStableDimorphVector();
+    QVector<double> expected = Manager.retStableDimorphKVector();
     double ElapsedTime = 0;
     for (int iterator=0; iterator< max_it; ++iterator)
     {

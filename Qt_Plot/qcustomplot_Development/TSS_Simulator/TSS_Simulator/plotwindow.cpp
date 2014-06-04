@@ -65,7 +65,7 @@ PlotWindow::PlotWindow(QWidget *parent) :
 void PlotWindow::drawGraph(const GraphClass * Graph, int iterations){
     ui->customPlot->clearGraphs();
     ui->label_iterations->setText("Iterations: " + QString::number(iterations));
-    createTraitGraphs(Graph->Manager.retStableDimorphVector());
+    createTraitGraphs(Graph->Manager.retStableDimorphKVector());
     drawGraphsWithClass(Graph);
 
     emit graphDrawn();
@@ -96,7 +96,7 @@ void PlotWindow::drawGraphsWithClass(const GraphClass * Graph)
 {
     for(int i = 0; i < TraitClass::Size; ++i){
         ui->customPlot->graph(i*2)->setData(Graph->getTimesOf(i),Graph->getTraitHistOf(i));
-        ui->customPlot->graph(i*2+1)->setData(Graph->getXBorders(),Graph->getExpectedVectorOf(i));
+        ui->customPlot->graph(i*2+1)->setData(Graph->getXBorders(),Graph->getExpectedMonomorphOf(i));
     }
     ui->customPlot->yAxis->setRange(0,Graph->getMaxMembers());
     ui->customPlot->xAxis->setRange(0,Graph->getMaxTime());

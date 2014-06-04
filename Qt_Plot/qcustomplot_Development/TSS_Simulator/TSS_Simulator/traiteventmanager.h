@@ -38,8 +38,8 @@ public:
     double getKMembers(int TraitIndex);
     double retStableDimorphOf(int i) const;
     double retStableMonoStateOf(int i);
-    QVector<double> retStableDimorphVector() const;
-    QVector<double> retStableMonoVector();
+    QVector<double> retStableDimorphKVector() const;
+    QVector<double> retStableMonoKVector();
     bool isNear(QVector<double> &Expected);
     void calcFitness();
 

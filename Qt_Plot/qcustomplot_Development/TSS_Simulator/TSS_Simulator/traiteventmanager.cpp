@@ -225,19 +225,19 @@ double TraitEventManager::retStableDimorphOf(int i) const
     return expected/TraitClass::K;
 }
 
-QVector<double> TraitEventManager::retStableDimorphVector() const
+QVector<double> TraitEventManager::retStableDimorphKVector() const
 {
     QVector<double> expVals(TraitClass::Size);
     for(int i = 0; i < TraitClass::Size; ++i)
-        expVals[i] = retStableDimorphOf(i);
+        expVals[i] = retStableDimorphOf(i)/TraitClass::K;
     return expVals;
 }
 
-QVector<double> TraitEventManager::retStableMonoVector()
+QVector<double> TraitEventManager::retStableMonoKVector()
 {
     QVector<double> expVals(TraitClass::Size);
     for(int i = 0; i < TraitClass::Size; ++i)
-        expVals[i] = retStableMonoStateOf(i);
+        expVals[i] = retStableMonoStateOf(i)/TraitClass::K;
     return expVals;
 }
 

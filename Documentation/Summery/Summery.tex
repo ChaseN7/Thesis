@@ -244,6 +244,22 @@ The EventTime, ChosenTrait and isBirth are so called vectors. They are dynamic c
 \listofalgorithms
 
 \newpage
+\section{Thrid and Fourth meeting (Di 20.05 and 13.05): Graphical plans - afterwards}
+Zunächst habe nicht meine bisherigen Fortschritte präsentiert. Dazu gehörte ...\\
+Außerdem haben wir die graphischen Ansprüche an das Programm besprochen.
+Dabei wurden folgende Ergebnisse erzielt:
+\begin{itemize}
+\item Man sollte eine gute Möglichkeit haben die Parameter im Programm einsehen zu können und auch eine gute Möglichkeit Daten zu laden.
+\item Was besonders wertvoll ist, wäre eine Möglichkeit neue Instanzen zu generieren. Dabei hat sich jedoch das Problem gestellt dass es keine einfache Konsole mit simplem einseitigen Output und Input gibt, da man während einer Instanzgenerierung auch weiterhin mit dem Hauptfenster interagieren könnte. Das Problem wurde etwas umständlich über eine kontrollierte Deaktivierung der anderen Interfaceelemente gelöst.
+\end{itemize}
+Zur Darstellung des Graphen wurde folgendes gesagt:
+\begin{itemize}
+\item Es ist keine "{}Filmfunktion"{} gewünscht. Stattdessen sollte man einen Plot generieren und in diesen hereinzoomen und mit der Maus ziehen können.
+\item Außerdem ist eine Legende gewünscht die eine Übersicht über alle Graphen bietet. 
+\item Um die Graphen später vergleichen zu können sollte es eine Möglichkeit geben den Graph zu speichern.
+\end{itemize}
+
+\newpage
 \section{Fifth meeting (Fr 30.05): Improvements - afterwards}
 An diesem Tag habe bloß einige Änderungen vorgestellt und sichergestellt dass alle Funktionen ordnungsgemäß laufen:
 \subsection{Graphische Änderungen}
@@ -259,7 +275,7 @@ Zu diesem Zeitpunkt ist $\epsilon = \frac{5}{\sqrt{K}}$.
 
 \subsection{Interne Änderungen}
 \begin{itemize}
-\item Ich habe mehrere Arten der Datenspeicherung ausprobiert. Zunächst habe ich die Daten alle nacheinander in eine "{}Storate"{} Datei geschrieben um schließlich einzeln die Daten mit "{}addData"{} zum Graphen hinzuzufügen. Das schien mir jedoch an der "{}addData"{} Stelle und am Datastream zu aufwendig.  
+\item Ich habe mehrere Arten der Datenspeicherung ausprobiert. Zunächst habe ich die Daten alle nacheinander in eine "{}Storage"{} Datei geschrieben um schließlich einzeln die Daten mit "{}addData"{} zum Graphen hinzuzufügen. Das schien mir jedoch an der "{}addData"{} Stelle und am Datastream zu aufwendig.  
 Danach bin ich auf eine alternative mit "{}Jumped Steps"{} umgestiegen. Die Jumped Steps basieren darauf das maximal 10.000.000 Punkte gespeichert werden und auch wenn viel mehr Iterationen gemacht werden, so werden nur Äquidistante 10 mio Stützstellen geplottet. Der Gedanke dahinter war die nicht Unterscheidbarkeit des Graphen für das menschliche Auge.
 \item Ich habe eine "{}GraphClass"{} hinzugefügt die alle Daten für das "{}PlotWindow"{} vorbereitet, so dass das Fenster nur noch darauf zugreifen muss. Damit habe ich eine Brücke zwischen den Fenstern und dem Plot geschlagen.
 \item Eine der wichtigsten Änderungen ist das Hinzufügen des QThreads. Dieser gewährleistet dass der Plot die Fenster nicht einfrieren lässt. Die Berechnung kann für mehr als 1mio Punkte bereits merkliche Zeit (>3s) beanspruchen.
@@ -273,13 +289,54 @@ Es gibt hier noch einen Bug der mit der Beschriftung der x-Achse zu tun hat. Ich
 \section{Sixth meeting (03.06): Introducing TSS}
 Einführung in TSS
 \begin{itemize}
-\item Das erste wäre das Einfügen einer Tabelle oder Grafik die einen guten Überblick über die Fitness der Population bietet. Diese gibt Aufschluss darüber ob TSS ordnungsgemäßes Verhalten zeigen wird. Allgemein ist es aber auch gut zu sehen welche Population wie stark auf eine andere wirkt, daher vielleicht schon ohne TSS sinnvoll.
-Dieses Feature wird in beiden Programmen vorhanden sein.
-\item Wenn das geschafft ist sollte ein umfassenderes Wissen über TSS angeeignet werden. Dazu wurde mir aus [2] S.1135 empfohlen.
-\item Anschließend wird alles notwendige organisiert und hier nachgetragen was notwendig ist um eine erste TSS Simulation laufen zu lassen.
-\item Wenn es nicht schon im Schritt darüber passiert ist, so sollte jetzt entschieden werden ob und wie man die x-Achse skaliert (logscale).
-\item Wenn ein ordentliches Bild produziert wird dann sollte anschließend eine gute Möglichkeit geboten werden Daten und Schranken für TSS Prozess Parameter zu setzten.
+\item Das erste war das Einfügen einer Tabelle oder Grafik die einen guten Überblick über die Fitness der Population bietet. Diese gibt Aufschluss darüber ob TSS ordnungsgemäßes Verhalten zeigen wird. Allgemein ist es aber auch gut zu sehen welche Population wie stark auf eine andere wirkt, daher vielleicht schon ohne TSS sinnvoll.\\
+Um eine bessere Übersicht von ungewünschtem Verhalten zu zeigen werden Coexistenzen rot markiert. Später wird noch eine weitere grünliche Färbung angezeigt die eine Verdrängungswahrscheinlichkeit darstellt.
+Dieses Feature wird in beiden Programmen vorhanden sein.\\
+Die verwendete Formel zur Berechnung der Fitness war \[ f_{x,y} = b_x - d_x - c_{x,y}\cdot \bar{n_x}\]
+mit:
+\[ \bar{n_x} = \frac{b_x - d_x}{c_{x,x}}\]
+Demnach wird auf der Diagonale stets eine Null erwartet. Bei dieser Rechnung tritt jedoch eine Subtraktion auf die Auslöschung verursacht. Zu diesem Zweck habe ich die dargestellte Zahl auf 14 stellen runden lassen.
+\item Ein besseres Verständnis von TSS wäre nützlich. Dazu wurde mir aus [2] S.1135 empfohlen. Leider habe ich es bisher noch nicht geschafft es durchzuarbeiten. Es wird auf den nächsten Wochenplan kommen.
+\item Außerdem wurde die Skalierung der Mutationswahrscheinlichkeit mit K angepasst so dass TSS realistisch laufen kann. Dabei wurde der Faktor $\frac{1}{K^{1.5}}$ gewählt weil es den notwendigen Schranken die in [2] S.1135 beschrieben werden genügt. Ein weiterer Punkt den man optimieren kann wäre es eine Option zur Eingabe eines eigenen Exponenten für K wäre eine mögliche Erweiterung.
+\item In diesem Zustand ist es bereits Möglich einen TSS plot zu erzeugen. Jedoch wird die Zeit im Equilibrium tatsächlich berechnet was viel unnötige Rechenarbeit impliziert. Später solle eine lineare Interpolation bis zur ersten Mutation gemacht werden sobald das Equilibrium erreicht wird.  
+\subsection{Bekannte Bugs}
+Es ist ein Bug bisher übrig. Bisher kenne ich noch nicht den Ursprung, aber er äußert sich (meistens) durch einen Programmabsturz nachdem ich eine kleinere Instanz lade und anschließend TSS1 bzw eine größere Instanz lade. Der Plot wurde dabei noch nicht ausgeführt.
 \end{itemize}
+  
+\newpage
+\section{Seventh meeting (10.06): Bug fixing and interpolation of Equilibrium}
+Geplant ist:
+\begin{itemize}
+\item Beheben eines Fehlers beim Laden der Instanzen. Dieser wurde im letzten Kapitel beschrieben.
+\item Eine lineare Interpolation der Population im Equilibrium. Die Funktion dazu wurde bereits geschrieben.
+\item Punkte an denen eine Mutation stattgefunden hat sollen idealerweise hervorgehoben werden. Z.B. durch kreuze oder ähnliches.
+\item Am Besten wäre noch eine Skalierung der Zeitachse während des Equilibriums. 
+\item Die Fitnessmatrix sollte bisher eine Bandmatrix sein weil es nur Mutationen zum Nachbarn gibt.
+\end{itemize}
+
+Konkret:
+\begin{itemize}
+\item Bisher habe ich eine Neudefinition der "{}isNear()"{} Funktion gemacht. Diese gibt es nur als "{}isNearDimorph()"{}, "{}isNearMonomorph()"{} und "{}isNearTSS()"{}. Diese tun was man vom Namen her erwartet, wobei "{}isNearTSS()"{} prüft die Nähe zum Equilibrium bzw. es prüft ob die Population bereits auf das Equilibrium getroffen ist (mit Rücksicht auf Auslöschung bis zu einer Genauigkeit von $10^{-10}$) und ob die Population zur Zeit die einzig aktive ist. 
+\item Weiterhin existiert eine neue Version der "{}iterateGraphPoint()"{} Methode. Sie heißt "{}iterateMutationPoint()"{} und soll den Zeitpunkt der nächsten Mutation der Nachbarn berechnen. Anschließend soll dieser Zeitpunkt in der Zeitlinie gespeichert werden und dort eine Mutation auf der Population ausgeführt werden.
+\item Diese "{}iterateMutationPoint()"{} Funktion soll anschließend von einer neuen Funktion "{}makeTSSIterations()"{} nur dann ausgeführt werden, wenn die neue "{}isNearTSS()"{} eine Bestätigung liefert.
+All diese Änderungen wurden in der GraphClass gemacht und werden in "{}generateEvolution()"{} verwendet.
+\item Eine sehr wichtige Änderung sollte die Berechnung des monomorphen stabilen Zustands gelten. Wenn eine positive Mutationswahrscheinlichkeit vorliegt, so sinkt die Arteigene Geburtenrate um die Mutationswahrscheinlichkeit. Diese Änderung wurde noch nicht implementiert.
+\end{itemize}
+todo
+\begin{itemize}
+ \item Es sollten direkte getter und setter auf die Trait und Event Members ausgeführt werden satt sie temporär zu speichern wie in generateEvolution. 
+ \item 
+\end{itemize}
+\subsection{Bekannte Bugs}
+\begin{itemize}
+ \item Es gibt ein Problem mit der korrekten Anzeige des expected Trait Graphen.
+ \item Der letzte Punkt des Graphen wurde nicht gespeichert. Außerdem sollte der Graph auch wenn nichts mehr für ihn passiert, trotzdem bis zum ende fortgesetzt werden. Dazu sollte der letzte Zeitpunkt nocheinmal mit dem Endzustand abgespeichert werden. 
+ \item Exp in der Legende sollte gesondert geändert werden.
+ \item Problem mit K-member K-expected und Darstellung beider.
+\end{itemize}
+
+\section{2nd Bachelor Seminar}
+
   
 
 \end{document}

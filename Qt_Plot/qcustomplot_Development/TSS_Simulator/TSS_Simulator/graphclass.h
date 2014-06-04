@@ -12,17 +12,20 @@ public:
     GraphClass(QString FName, bool rangeChecked);
 
     int generateEvolution(int max_It);
-    bool isNearDimorph() const;
-    bool isNearMonomorph() const;
-    bool isNearTSS() const;
 
     double getMaxMembers() const;
     double getMaxTime() const;
     double getExpectedOf(int i) const;
     QVector<double> getTimesOf(const int i) const;
     QVector<double> getTraitHistOf(const int i) const;
-    QVector<double> getExpectedVectorOf(const int i) const;
+    QVector<double> getExpectedDimorphOf(const int i) const;
+    QVector<double> getExpectedMonomorphOf(const int i) const;
     QVector<double> getXBorders() const;
+
+private:
+    bool isNearDimorph() const;
+    bool isNearMonomorph() const;
+    bool isNearTSS() const;
 
     int makeIterations(const int maxIt);
     int makeTSSIterations(const int maxIt);
