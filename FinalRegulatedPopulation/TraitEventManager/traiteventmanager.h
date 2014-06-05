@@ -17,7 +17,7 @@ public:
     void addTotalCompDeathRateOf(int TraitIndex);
     void addTotalIntrisicDeathRateOf(int TraitIndex);
     void calculateTotalDeathRateOf(int TraitIndex);
-    void calculateTotalBirthRates(int StartRecursion);
+    void calculateTotalBirthRates(int i);
     void calculateTotalEventRate();
     void calculateEventRates();
     void sampleEventTime();

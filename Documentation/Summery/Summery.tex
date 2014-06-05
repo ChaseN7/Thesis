@@ -316,11 +316,14 @@ Geplant ist:
 
 Konkret:
 \begin{itemize}
-\item Bisher habe ich eine Neudefinition der "{}isNear()"{} Funktion gemacht. Diese gibt es nur als "{}isNearDimorph()"{}, "{}isNearMonomorph()"{} und "{}isNearTSS()"{}. Diese tun was man vom Namen her erwartet, wobei "{}isNearTSS()"{} prüft die Nähe zum Equilibrium bzw. es prüft ob die Population bereits auf das Equilibrium getroffen ist (mit Rücksicht auf Auslöschung bis zu einer Genauigkeit von $10^{-10}$) und ob die Population zur Zeit die einzig aktive ist. 
+\item Bisher habe ich eine Neudefinition der "{}isNear()"{} Funktion gemacht. Diese gibt es nun als "{}isNearDimorph()"{}, "{}isNearMonomorph()"{} und "{}isNearTSS()"{}. Diese tun was man vom Namen her erwartet, wobei "{}isNearTSS()"{} prüft die Nähe zum Equilibrium bzw. es prüft ob die Population bereits auf das Equilibrium getroffen ist (mit Rücksicht auf Auslöschung bis zu einer Genauigkeit von $10^{-10}$) und ob die Population zur Zeit die einzig aktive ist. 
 \item Weiterhin existiert eine neue Version der "{}iterateGraphPoint()"{} Methode. Sie heißt "{}iterateMutationPoint()"{} und soll den Zeitpunkt der nächsten Mutation der Nachbarn berechnen. Anschließend soll dieser Zeitpunkt in der Zeitlinie gespeichert werden und dort eine Mutation auf der Population ausgeführt werden.
 \item Diese "{}iterateMutationPoint()"{} Funktion soll anschließend von einer neuen Funktion "{}makeTSSIterations()"{} nur dann ausgeführt werden, wenn die neue "{}isNearTSS()"{} eine Bestätigung liefert.
 All diese Änderungen wurden in der GraphClass gemacht und werden in "{}generateEvolution()"{} verwendet.
-\item Eine sehr wichtige Änderung sollte die Berechnung des monomorphen stabilen Zustands gelten. Wenn eine positive Mutationswahrscheinlichkeit vorliegt, so sinkt die Arteigene Geburtenrate um die Mutationswahrscheinlichkeit. Diese Änderung wurde noch nicht implementiert.
+\item Ein wichtiger Zusatz für die Berechnung der Geburtenrate wurde getroffen. Dabei wurde jetzt nicht mehr zu beginn $b(i)\cdot N(i) + MutationFromNeighbors$ gerechnet, sondern $b(i)\cdot N(i) \cdot (1-\mu) + MutationFromNeighbors$. Das ist bisher nicht aufgefallen weil $\mu$ für gewöhnliche dimorphe Prozesse immer Null war.
+\item Eine sehr wichtige Änderung sollte die Berechnung des monomorphen stabilen Zustands gelten. Wenn eine positive Mutationswahrscheinlichkeit vorliegt, so sinkt die Arteigene Geburtenrate um die Mutationswahrscheinlichkeit. Somit berechnet sich das Equilibrium im TSS durch \[\frac{b(x)\cdot (1-\mu) - d(x)}{c_{x,x}}\]
+\item NearTSS wurden die Grenzen geändert, so dass es jetzt eine Umgebung von 1/K um das Equilibrium gibt statt dem genauen Treffer. Das ist notwendig, weil es sein kann dass unser Equilibrium kein Vielfaches von 1/K ist, gewährleistet aber trotzdem die gröst mögliche Nähe zum Equilibrium.
+\item Es hat sich ein Bug ergeben der die Zeit falsch (bzw immer mit der ersten Rate) berechnet hat. Das wurde durch ein veraltetes "{}static"{} beim Ziehen der Würfelergebnisse verursacht.
 \end{itemize}
 todo
 \begin{itemize}

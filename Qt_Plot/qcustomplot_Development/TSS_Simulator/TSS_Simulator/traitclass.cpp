@@ -28,13 +28,10 @@ void TraitClass::setTraitSize(int size)
     TraitClass::Size = size;
     TraitClass::CompDeathRate.clear();
     TraitClass::TotalEventRate = 0;
-    std::vector<double> tmp(size,0);
+        std::vector<double> tmp(size,0);
     TraitClass::CompDeathRate.resize(size, tmp);
     TraitClass::Fitness.resize(size, tmp);
-//    for(int i = 0; i < size; i++){
-//        tmp.assign(size,0);
-//        TraitClass::CompDeathRate.push_back(tmp);
-    //    }
+
 }
 
 //int TraitClass::getMembers()

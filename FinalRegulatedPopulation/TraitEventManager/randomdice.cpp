@@ -6,11 +6,11 @@ RandomDice::RandomDice():generator(time(0)){
 }
 
 double RandomDice::rollExpDist(){
-    static std::exponential_distribution<double> distribution(1.);
+    std::exponential_distribution<double> distribution(1.);
     return distribution(generator);
 }
 double RandomDice::rollExpDist(double Lambda){
-    static std::exponential_distribution<double> distribution(Lambda);
+    std::exponential_distribution<double> distribution(Lambda);
     return distribution(generator);
 }
 

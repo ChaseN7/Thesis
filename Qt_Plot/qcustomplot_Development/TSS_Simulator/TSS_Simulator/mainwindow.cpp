@@ -59,12 +59,6 @@ void MainWindow::displayTraitData(/*QString Filename, */TraitEventManager Parame
                 ui->tableWidget_Fitness->item(i,j)->setBackgroundColor(QColor(Qt::red));
         }
     }
-//    QColor color( Qt::red );
-
-//    for(int i = 0; i < TraitClass::Size; ++i){
-//        if(TraitClass::Fitness[i][j]*TraitClass::Fitness[i][j] > 0)
-//            ui->tableWidget_Fitness->item(0,0)->setBackgroundColor(QColor(Qt::red));
-//    }
 }
 
 void MainWindow::iterateMembers(QString StepName, int size)

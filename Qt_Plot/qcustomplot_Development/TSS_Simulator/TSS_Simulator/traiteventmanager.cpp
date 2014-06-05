@@ -54,7 +54,7 @@ void TraitEventManager::calculateTotalDeathRateOf(int TraitIndex)
 
 void TraitEventManager::calculateTotalBirthRates(int i)
 {
-    Trait[i].TotalBirthRate = (Trait[i].Members)*(Trait[i].BirthRate);
+    Trait[i].TotalBirthRate = (Trait[i].Members) * (Trait[i].BirthRate);
     if(i < TraitClass::Size - 1){
         calculateTotalBirthRates(i+1);
         Trait[i].TotalBirthRate += TraitClass::Mutation*0.5
@@ -233,7 +233,7 @@ QVector<double> TraitEventManager::retStableDimorphKVector() const
     return expVals;
 }
 
-QVector<double> TraitEventManager::retStableMonoKVector()
+QVector<double> TraitEventManager::retStableMonoKVector() const
 {
     QVector<double> expVals(TraitClass::Size);
     for(int i = 0; i < TraitClass::Size; ++i)
@@ -241,9 +241,9 @@ QVector<double> TraitEventManager::retStableMonoKVector()
     return expVals;
 }
 
-double TraitEventManager::retStableMonoStateOf(int i)
+double TraitEventManager::retStableMonoStateOf(int i) const
 {
-    double expected = Trait[i].BirthRate - Trait[i].DeathRate;
+    double expected = Trait[i].BirthRate /** (1-TraitClass::Mutation)*/ - Trait[i].DeathRate;
     double divisor = TraitClass::CompDeathRate[i][i];
     if(divisor > 0){
         expected /= TraitClass::CompDeathRate[i][i];

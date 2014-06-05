@@ -65,7 +65,7 @@ PlotWindow::PlotWindow(QWidget *parent) :
 void PlotWindow::drawGraph(const GraphClass * Graph, int iterations){
     ui->customPlot->clearGraphs();
     ui->label_iterations->setText("Iterations: " + QString::number(iterations));
-    createTraitGraphs(Graph->Manager.retStableDimorphKVector());
+    createTraitGraphs(Graph->Manager.retStableMonoKVector());
     drawGraphsWithClass(Graph);
 
     emit graphDrawn();

@@ -41,6 +41,7 @@ bool GraphClass::isNearMonomorph() const
 bool GraphClass::isNearTSS() const
 {
     /// Check that there is only one surviver and store him in "activeTrait"
+    /// FIXME: effektivere Schleife?
     int activeTrait = -1;
     for(int i = 0; i < TraitClass::Size; ++i){
         if(activeTrait * TraitHistory[i].back() < 0)
@@ -50,7 +51,7 @@ bool GraphClass::isNearTSS() const
     }
     /// Check if active Trait is close enough to its equilibrium
     double diff = TraitHistory[activeTrait].back() - ExpectedMonomorph[activeTrait];
-    if(diff > pow(10,-10) || diff < -pow(10,-10))
+    if(diff > 1./TraitClass::K || diff < -1./TraitClass::K)
         return false;
     return true;
 }
@@ -96,9 +97,15 @@ void GraphClass::iterateGraphPoint(double & Time, int & Chosen)
 void GraphClass::iterateMutationPoint(double &Time, int &Chosen)
 {
     RandomDice Dice;
-    double MutationTime;
+    double MutationTime = 0;
+//    double TotalMutationRate = Manager.Trait[Chosen].TotalBirthRate
+//    double tmp = Manager.Trait[Chosen+1].TotalBirthRate;
+//    tmp = Manager.Trait[Chosen-1].TotalBirthRate;
+//    tmp = Manager.Trait[Chosen].TotalBirthRate;
     if(Chosen == 0){
-        MutationTime = Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate);
+        double tmp = Manager.Trait[Chosen+1].TotalBirthRate;
+        MutationTime = Dice.rollExpDist(tmp);
+        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate);
         Chosen = Chosen+1;
     }
     else if(Chosen == TraitClass::Size-1){
@@ -109,12 +116,21 @@ void GraphClass::iterateMutationPoint(double &Time, int &Chosen)
         MutationTime = Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
         Chosen = Chosen-1 + Dice.rollDiscrUnifDist(0,1)*2;
     }
+    TimeLine[Manager.Events.ChosenTrait].push_back(MutationTime);
+    TraitHistory[Manager.Events.ChosenTrait].push_back(ExpectedMonomorph[Manager.Events.ChosenTrait]);
+
+//    int LastIndex = TraitHistory[Manager.Events.ChosenTrait].size();
+//    tmp = TraitHistory[Manager.Events.ChosenTrait].at(LastIndex-1);
+//    tmp = TraitHistory[Manager.Events.ChosenTrait].at(LastIndex-2);
+//    tmp = TraitHistory[Manager.Events.ChosenTrait].at(LastIndex-3);
+
     Manager.Events.EventTimes = MutationTime;
     Manager.Events.ChosenTrait = Chosen;
     Manager.Events.isBirth = true;
     Time += MutationTime;
     TimeLine[Chosen].push_back(Time);
     Manager.executeEventTypeOnTrait();
+    TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
 }
 
 int GraphClass::makeIterations(const int maxIt)
@@ -141,7 +157,7 @@ int GraphClass::makeTSSIterations(const int maxIt)
         iterateGraphPoint(time, chosen);
         if(isNearTSS()){
             iterateMutationPoint(time, chosen);
-            return maxIt*jumpedSteps + 1;
+            return (i+1)*jumpedSteps;
         }
     }
     return maxIt*jumpedSteps;

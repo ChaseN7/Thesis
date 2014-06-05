@@ -114,11 +114,10 @@ void TraitEventManagerTest::verifyTotalDeathRate()
 void TraitEventManagerTest::verifyTotalBirthRate()
 {
     Manager.initWithFile("ValidateTests.txt");
-    for(int i = 0; i < TraitClass::Size; ++i){
-        Manager.calculateTotalBirthRates(i);
-    }
+    Manager.calculateTotalBirthRates(0);
+    Manager.calculateTotalBirthRates(0);
     QVERIFY(TraitClass::Size == 3);
-    qDebug()<<"verify total death rates ...";
+    qDebug()<<"verify total birth rates ...";
     QCOMPARE(Manager.Trait[0].TotalBirthRate, 1050.);
     qDebug()<<"trait"<<0<<"total birth rate:"<<1050.<<"verified";
     QCOMPARE(Manager.Trait[1].TotalBirthRate, 1100.);
@@ -265,15 +264,25 @@ void TraitEventManagerTest::randomDicesTesting()
         double DiceParameter = 1000;
         double LowerBound = 800;
         double compaire = LowerBound/DiceParameter;
-        for(int i = 0; i < 10000; i++){
+        for(int i = 0; i < 1000000; i++){
             DiceResult = Manager.Dice.rollContUnifDist(DiceParameter);
             if(DiceResult <= LowerBound)
                 sum += 1;
         }
-        sum/= 10000; //
-
+        sum/= 1000000; //
         bool test = (sum < compaire +0.03) && (sum > compaire -0.03);
         QVERIFY(test);//QCOMPARE(sum, compaire);
+
+        sum = 0;
+        double lambda = 0.0379;
+        for(int i = 0; i < 10000; i++){
+            DiceResult = Manager.Dice.rollExpDist(lambda);
+            sum += DiceResult;
+        }
+        sum/= 10000; //
+        test = (sum < (1/lambda)*1.05) && (sum > -(1/lambda)*0.95);
+        QVERIFY(test);
+//        QCOMPARE(sum, 1/lambda);
 }
 
 void TraitEventManagerTest::finalTestMono()

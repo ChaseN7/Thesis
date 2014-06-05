@@ -53,6 +53,19 @@ void TraitEventManager::calculateTotalDeathRateOf(int TraitIndex)
 
 void TraitEventManager::calculateTotalBirthRates(int i)
 {
+//    for(int k = 0; k < TraitClass::Size; ++k){
+//        Trait[k].TotalBirthRate = (Trait[k].Members)*(Trait[k].BirthRate)/**(1-TraitClass::Mutation)*/;
+//        if(k > 0 && k < TraitClass::Size - 1){
+//            Trait[k].TotalBirthRate += 0.5*(Trait[k-1].Members)*(Trait[k-1].BirthRate)*(TraitClass::Mutation);
+//            Trait[k].TotalBirthRate += 0.5*(Trait[k+1].Members)*(Trait[k+1].BirthRate)*(TraitClass::Mutation);
+//        }
+//        else if(k == 0)
+//            Trait[k].TotalBirthRate += 0.5*(Trait[k+1].Members)*(Trait[k+1].BirthRate)*(TraitClass::Mutation);
+//        else if(k == TraitClass::Size-1)
+//            Trait[k].TotalBirthRate += 0.5*(Trait[k-1].Members)*(Trait[k-1].BirthRate)*(TraitClass::Mutation);
+//    }
+
+
     Trait[i].TotalBirthRate = (Trait[i].Members)*(Trait[i].BirthRate);
     if(i < TraitClass::Size - 1){
         calculateTotalBirthRates(i+1);

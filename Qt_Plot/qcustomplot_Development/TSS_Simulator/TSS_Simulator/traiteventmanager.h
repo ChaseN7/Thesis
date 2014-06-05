@@ -37,9 +37,9 @@ public:
     bool initWithFile(QString FName);
     double getKMembers(int TraitIndex);
     double retStableDimorphOf(int i) const;
-    double retStableMonoStateOf(int i);
+    double retStableMonoStateOf(int i) const;
     QVector<double> retStableDimorphKVector() const;
-    QVector<double> retStableMonoKVector();
+    QVector<double> retStableMonoKVector() const;
     bool isNear(QVector<double> &Expected);
     void calcFitness();
 
