@@ -25,7 +25,7 @@ public:
 private:
     bool isNearDimorph() const;
     bool isNearMonomorph() const;
-    bool isNearTSS() const;
+    bool isNearTSS(const int &chosen) const;
 
     int makeIterations(const int maxIt);
     int makeTSSIterations(const int maxIt);

@@ -305,41 +305,50 @@ Es ist ein Bug bisher übrig. Bisher kenne ich noch nicht den Ursprung, aber er 
   
 \newpage
 \section{Seventh meeting (10.06): Bug fixing and interpolation of Equilibrium}
+\subsection{Was ist geplant?}
 Geplant ist:
 \begin{itemize}
-\item Beheben eines Fehlers beim Laden der Instanzen. Dieser wurde im letzten Kapitel beschrieben.
-\item Eine lineare Interpolation der Population im Equilibrium. Die Funktion dazu wurde bereits geschrieben.
-\item Punkte an denen eine Mutation stattgefunden hat sollen idealerweise hervorgehoben werden. Z.B. durch kreuze oder ähnliches.
-\item Am Besten wäre noch eine Skalierung der Zeitachse während des Equilibriums. 
-\item Die Fitnessmatrix sollte bisher eine Bandmatrix sein weil es nur Mutationen zum Nachbarn gibt.
+	\item Beheben eines Fehlers beim Laden der Instanzen. Dieser wurde im letzten Kapitel beschrieben.
+	\item Eine lineare Interpolation der Population im Equilibrium. Die Funktion dazu wurde bereits geschrieben.
+	\item Korrekte Ausarbeitung eines geeigneten Abbruchkriteriums für TSS Prozesse.
+	\item Punkte an denen eine Mutation stattgefunden hat sollen idealerweise hervorgehoben werden. Z.B. durch kreuze oder ähnliches.
+	\item Am Besten wäre noch eine Skalierung der Zeitachse während des Equilibriums. 
+	\item Die Fitnessmatrix sollte bisher eine Bandmatrix sein weil es nur Mutationen zum Nachbarn gibt.
 \end{itemize}
 
+\subsection{Was habe ich gemacht?}
 Konkret:
 \begin{itemize}
-\item Bisher habe ich eine Neudefinition der "{}isNear()"{} Funktion gemacht. Diese gibt es nun als "{}isNearDimorph()"{}, "{}isNearMonomorph()"{} und "{}isNearTSS()"{}. Diese tun was man vom Namen her erwartet, wobei "{}isNearTSS()"{} prüft die Nähe zum Equilibrium bzw. es prüft ob die Population bereits auf das Equilibrium getroffen ist (mit Rücksicht auf Auslöschung bis zu einer Genauigkeit von $10^{-10}$) und ob die Population zur Zeit die einzig aktive ist. 
-\item Weiterhin existiert eine neue Version der "{}iterateGraphPoint()"{} Methode. Sie heißt "{}iterateMutationPoint()"{} und soll den Zeitpunkt der nächsten Mutation der Nachbarn berechnen. Anschließend soll dieser Zeitpunkt in der Zeitlinie gespeichert werden und dort eine Mutation auf der Population ausgeführt werden.
-\item Diese "{}iterateMutationPoint()"{} Funktion soll anschließend von einer neuen Funktion "{}makeTSSIterations()"{} nur dann ausgeführt werden, wenn die neue "{}isNearTSS()"{} eine Bestätigung liefert.
-All diese Änderungen wurden in der GraphClass gemacht und werden in "{}generateEvolution()"{} verwendet.
-\item Ein wichtiger Zusatz für die Berechnung der Geburtenrate wurde getroffen. Dabei wurde jetzt nicht mehr zu beginn $b(i)\cdot N(i) + MutationFromNeighbors$ gerechnet, sondern $b(i)\cdot N(i) \cdot (1-\mu) + MutationFromNeighbors$. Das ist bisher nicht aufgefallen weil $\mu$ für gewöhnliche dimorphe Prozesse immer Null war.
-\item Eine sehr wichtige Änderung sollte die Berechnung des monomorphen stabilen Zustands gelten. Wenn eine positive Mutationswahrscheinlichkeit vorliegt, so sinkt die Arteigene Geburtenrate um die Mutationswahrscheinlichkeit. Somit berechnet sich das Equilibrium im TSS durch \[\frac{b(x)\cdot (1-\mu) - d(x)}{c_{x,x}}\]
-\item NearTSS wurden die Grenzen geändert, so dass es jetzt eine Umgebung von 1/K um das Equilibrium gibt statt dem genauen Treffer. Das ist notwendig, weil es sein kann dass unser Equilibrium kein Vielfaches von 1/K ist, gewährleistet aber trotzdem die gröst mögliche Nähe zum Equilibrium.
-\item Es hat sich ein Bug ergeben der die Zeit falsch (bzw immer mit der ersten Rate) berechnet hat. Das wurde durch ein veraltetes "{}static"{} beim Ziehen der Würfelergebnisse verursacht.
+	\item Bisher habe ich eine Neudefinition der "{}isNear()"{} Funktion gemacht. Diese gibt es nun als "{}isNearDimorph()"{}, "{}isNearMonomorph()"{} und "{}isNearTSS()"{}. Diese tun was man vom Namen her erwartet, wobei "{}isNearTSS()"{} prüft die Nähe zum Equilibrium bzw. es prüft ob die Population bereits auf das Equilibrium getroffen ist (mit Rücksicht auf Auslöschung bis zu einer Genauigkeit von $10^{-10}$) und ob die Population zur Zeit die einzig aktive ist. 
+	\item Weiterhin existiert eine neue Version der "{}iterateGraphPoint()"{} Methode. Sie heißt "{}iterateMutationPoint()"{} und soll den Zeitpunkt der nächsten Mutation der Nachbarn berechnen. Anschließend soll dieser Zeitpunkt in der Zeitlinie gespeichert werden und dort eine Mutation auf der Population ausgeführt werden.
+	\item Diese "{}iterateMutationPoint()"{} Funktion soll anschließend von einer neuen Funktion "{}makeTSSIterations()"{} nur dann ausgeführt werden, wenn die neue "{}isNearTSS()"{} eine Bestätigung liefert.
+	All diese Änderungen wurden in der GraphClass gemacht und werden in "{}generateEvolution()"{} verwendet.
+	\item Ein wichtiger Zusatz für die Berechnung der Geburtenrate wurde getroffen. Dabei wurde jetzt nicht mehr zu beginn $b(i)\cdot N(i) + MutationFromNeighbors$ gerechnet, sondern $b(i)\cdot N(i) \cdot (1-\mu) + MutationFromNeighbors$. Das ist bisher nicht aufgefallen weil $\mu$ für gewöhnliche dimorphe Prozesse immer Null war.
+	\item Eine sehr wichtige Änderung sollte die Berechnung des monomorphen stabilen Zustands gelten. Wenn eine positive Mutationswahrscheinlichkeit vorliegt, so sinkt die Arteigene Geburtenrate um die Mutationswahrscheinlichkeit. Somit berechnet sich das Equilibrium im TSS durch \[\frac{b(x)\cdot (1-\mu) - d(x)}{c_{x,x}}\]
+	\item NearTSS wurden die Grenzen geändert, so dass es jetzt eine Umgebung von 1/K um das Equilibrium gibt statt dem genauen Treffer. Das ist notwendig, weil es sein kann dass unser Equilibrium kein Vielfaches von 1/K ist, gewährleistet aber trotzdem die gröst mögliche Nähe zum Equilibrium.
+	\item Es hat sich ein Bug ergeben der die Zeit falsch (bzw immer mit der ersten Rate) berechnet hat. Das wurde durch ein veraltetes "{}static"{} beim Ziehen der Würfelergebnisse verursacht.
+	\item Ein weiteres Problem wurde behoben nach dem zufolge es noch keine ordentlich Anzeige für ein TSS gab, nachdem ein Trait zum ersten mal ausgestorben ist. Die Ursache lag in der "{}isNearTSS()"{} Funktion, daher wurde diese Überarbeitet.
+	\item Es gab ein Problem weshalb der angezeigte stabile Zustand nicht bis zum Mutationspunkt durchgezogen wurde, sondern bereits sichtbar davor stoppte. Die Ursache war dass nur die Zeit bis zur nächsten Mutation als neuer Zeitpunkt gespeichert wurde, nicht aber die iterierte Zeit.
+	\item Ich habe einen Bug behoben der das Programm manchmal zum Absturz brachte. Dabei handelte es sich wahrscheinlich um einen Speicherfehler, die genaue Ursache kenne ich nicht, aber ich konnte den Fehler beheben indem ich die Fitness Matrix "{}gecleart()"{} habe bevor sie erneut "{}resize()"{} aufruft.
 \end{itemize}
 todo
 \begin{itemize}
- \item Es sollten direkte getter und setter auf die Trait und Event Members ausgeführt werden satt sie temporär zu speichern wie in generateEvolution. 
- \item 
+ \item Es sollten direkte getter und setter auf die Trait und Event Members ausgeführt werden satt sie temporär zu speichern wie in "{}generateEvolution()"{}. 
 \end{itemize}
 \subsection{Bekannte Bugs}
 \begin{itemize}
- \item Es gibt ein Problem mit der korrekten Anzeige des expected Trait Graphen.
- \item Der letzte Punkt des Graphen wurde nicht gespeichert. Außerdem sollte der Graph auch wenn nichts mehr für ihn passiert, trotzdem bis zum ende fortgesetzt werden. Dazu sollte der letzte Zeitpunkt nocheinmal mit dem Endzustand abgespeichert werden. 
- \item Exp in der Legende sollte gesondert geändert werden.
- \item Problem mit K-member K-expected und Darstellung beider.
+	 \item Der letzte Punkt des Graphen wurde nicht gespeichert. Außerdem sollte der Graph auch wenn nichts mehr für ihn passiert, trotzdem bis zum ende fortgesetzt werden. Dazu sollte der letzte Zeitpunkt nocheinmal mit dem Endzustand abgespeichert werden. 
+	 \item Exp in der Legende sollte gesondert geändert werden.
+	 \item Problem mit K-member K-expected und Darstellung beider.
 \end{itemize}
 
 \section{2nd Bachelor Seminar}
-
+	\subsection{Warum ist es vielleicht schwierig simple Mechanik einzupflegen?}
+	Wie man sich vielleicht denken kann sind viele kleine Features an und für sich sehr simpel.
+	Unglücklicherweise gibt es viele kleine solche Features und Daten die mit dem Programm verbunden wären. 
   
+\section{sceduled Features}
+\subsection{Mehr Optionen}
+	Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
 
 \end{document}

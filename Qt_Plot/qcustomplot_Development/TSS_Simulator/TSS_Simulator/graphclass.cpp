@@ -38,19 +38,23 @@ bool GraphClass::isNearMonomorph() const
     return true;
 }
 
-bool GraphClass::isNearTSS() const
+bool GraphClass::isNearTSS(const int & chosen) const
 {
     /// Check that there is only one surviver and store him in "activeTrait"
-    /// FIXME: effektivere Schleife?
-    int activeTrait = -1;
+    /// FIXME: effektivere Schleife? Speichere vielleicht zusätzlich nur das dominante Trait?
     for(int i = 0; i < TraitClass::Size; ++i){
-        if(activeTrait * TraitHistory[i].back() < 0)
-            activeTrait = i;
-        if(activeTrait * TraitHistory[i].back() > 0)
+        if(i != chosen && Manager.getKMembers(i) > 0)
             return false;
     }
+//    int activeTrait = -1;
+//    for(int i = 0; i < TraitClass::Size; ++i){
+//        if(activeTrait * TraitHistory[i].back() < 0)
+//            activeTrait = i;
+//        if(activeTrait * TraitHistory[i].back() > 0)
+//            return false;
+//    }
     /// Check if active Trait is close enough to its equilibrium
-    double diff = TraitHistory[activeTrait].back() - ExpectedMonomorph[activeTrait];
+    double diff = TraitHistory[chosen].back() - ExpectedMonomorph[chosen];
     if(diff > 1./TraitClass::K || diff < -1./TraitClass::K)
         return false;
     return true;
@@ -116,7 +120,7 @@ void GraphClass::iterateMutationPoint(double &Time, int &Chosen)
         MutationTime = Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
         Chosen = Chosen-1 + Dice.rollDiscrUnifDist(0,1)*2;
     }
-    TimeLine[Manager.Events.ChosenTrait].push_back(MutationTime);
+    TimeLine[Manager.Events.ChosenTrait].push_back( Time + MutationTime);
     TraitHistory[Manager.Events.ChosenTrait].push_back(ExpectedMonomorph[Manager.Events.ChosenTrait]);
 
 //    int LastIndex = TraitHistory[Manager.Events.ChosenTrait].size();
@@ -155,10 +159,12 @@ int GraphClass::makeTSSIterations(const int maxIt)
     double time = 0;
     for(int i = 0; i < maxIt; i++){
         iterateGraphPoint(time, chosen);
-        if(isNearTSS()){
+        if(isNearTSS(chosen)){
             iterateMutationPoint(time, chosen);
-            return (i+1)*jumpedSteps;
+            ++i;
         }
+        if(Manager.getKMembers(2) > ExpectedMonomorph[2])
+            return i*jumpedSteps;
     }
     return maxIt*jumpedSteps;
 }

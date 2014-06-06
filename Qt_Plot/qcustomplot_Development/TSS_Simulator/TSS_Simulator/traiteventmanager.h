@@ -35,7 +35,7 @@ public:
 
     /// Utilities
     bool initWithFile(QString FName);
-    double getKMembers(int TraitIndex);
+    double getKMembers(int TraitIndex) const;
     double retStableDimorphOf(int i) const;
     double retStableMonoStateOf(int i) const;
     QVector<double> retStableDimorphKVector() const;

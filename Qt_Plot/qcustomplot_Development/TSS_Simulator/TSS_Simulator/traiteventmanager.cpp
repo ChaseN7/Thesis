@@ -196,7 +196,7 @@ bool TraitEventManager::initWithFile(QString FName)
     return success;
 }
 
-double TraitEventManager::getKMembers(int TraitIndex)
+double TraitEventManager::getKMembers(int TraitIndex) const
 {
     return Trait[TraitIndex].Members / TraitClass::K;
 }

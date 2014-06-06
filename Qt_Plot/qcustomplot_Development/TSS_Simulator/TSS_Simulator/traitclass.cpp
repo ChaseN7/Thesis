@@ -27,6 +27,7 @@ void TraitClass::setTraitSize(int size)
 {
     TraitClass::Size = size;
     TraitClass::CompDeathRate.clear();
+    TraitClass::Fitness.clear();
     TraitClass::TotalEventRate = 0;
         std::vector<double> tmp(size,0);
     TraitClass::CompDeathRate.resize(size, tmp);
