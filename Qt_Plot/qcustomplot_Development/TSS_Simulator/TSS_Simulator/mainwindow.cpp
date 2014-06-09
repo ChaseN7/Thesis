@@ -54,9 +54,23 @@ void MainWindow::displayTraitData(/*QString Filename, */TraitEventManager Parame
     ui->tableWidget_Fitness->verticalHeader()->setDefaultSectionSize(40);
     for(int i = 0; i < TraitClass::Size; ++i){
         for(int j = 0; j < TraitClass::Size; ++j){
-            ui->tableWidget_Fitness->setItem(i,j, new QTableWidgetItem(QString::number(TraitClass::Fitness[i][j])));
-            if(TraitClass::Fitness[i][j]*TraitClass::Fitness[j][i] >= 0 && i != j)
+            if(std::abs(i-j) <= 1)
+                ui->tableWidget_Fitness->setItem(i,j, new QTableWidgetItem(QString::number(TraitClass::Fitness[i][j])));
+            else
+                ui->tableWidget_Fitness->setItem(i,j, new QTableWidgetItem("-"));
+        }
+    }
+    for(int i = 0; i < TraitClass::Size; ++i){
+        for(int j = 0; j < TraitClass::Size; ++j){
+            if(std::abs(i-j) > 1){
+                ui->tableWidget_Fitness->item(j,i)->setBackgroundColor(QColor(Qt::black));
+                continue;
+            }
+            else if(TraitClass::Fitness[i][j]*TraitClass::Fitness[j][i] >= 0 && i != j)
                 ui->tableWidget_Fitness->item(i,j)->setBackgroundColor(QColor(Qt::red));
+            else if(std::max(TraitClass::Fitness[j][i]/Parameters.Trait[j].BirthRate,0.) > 0.5)
+                ui->tableWidget_Fitness->item(j,i)->setBackgroundColor(QColor(Qt::green));
+
         }
     }
 }
