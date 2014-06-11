@@ -107,8 +107,8 @@ void GraphClass::iterateMutationPoint(double &Time, int &Chosen)
 //    tmp = Manager.Trait[Chosen-1].TotalBirthRate;
 //    tmp = Manager.Trait[Chosen].TotalBirthRate;
     if(Chosen == 0){
-        double tmp = Manager.Trait[Chosen+1].TotalBirthRate;
-        MutationTime = Dice.rollExpDist(tmp);
+//        double tmp = Manager.Trait[Chosen+1].TotalBirthRate;
+//        MutationTime = Dice.rollExpDist(tmp);
         MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate);
         Chosen = Chosen+1;
     }

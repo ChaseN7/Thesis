@@ -1,10 +1,12 @@
 \documentclass{article}
 
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{german}
 \usepackage{color}
+\usepackage{bbm}
 \usepackage[utf8]{inputenc}
 \title{Small summery}
 \author{Boris Prochnau}
@@ -127,7 +129,7 @@ In Algorithm 3 in line 3 is used recursion, because this improves the calculatio
 		\ENSURE{Total deathrate of Trait "`i"' will be set}
 		\STATE Trait[i].TotalDeathRate = 0;
 		\STATE addTotalIntrinsicDeathRateOf(i);
-		\STATE addTotCompetitionDeathRateOf(i);
+		\STATE addTotalCompetitionDeathRateOf(i);
 	\end{algorithmic}
 \end{algorithm}
 
@@ -345,11 +347,110 @@ todo
 \newpage
 \section{Zweites Bachelorseminar}
 	\subsection{Ziel}
-	Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation 
+		Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation eines BPDL und TSS Prozesses durchführen kann. Dies soll dem besseren Verständnis über BPDL und TSS Prozessen dienen und kann zu statischen Nachweisen verwendet werden. Gerade deswegen ist es wichtig sicherstellen zu können dass sich keine Fehler in die Implementation einschleicht. Dazu jedoch mehr im Kapitel "{}Korrektheit der Implementation"{}.
 	\subsection{Model}
-	Das verwendete Model
+		Zunächst möchte ich das in der Simulation verwendete Model vorstellen.\\
+		\begin{itemize}
+			\item ? Dieses Modell soll eine Population beschreiben in der jedes Individuum ein Merkmal $ x \in X \subset \mathbf{R}^n $ hat. Wobei die Simulation $ X $ ein endlichen diskreten Merkmalsraum verwendet der hier der Einfachheit halber als Indexmenge $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale steht.
+			\item Jedes Individuum kann sich entweder asexuell fortpflanzen oder sterben
+			\item Diese Ereignisse treten dabei in exponentiell verteilter Häufigkeit auf. Diese exponentiellen Ereignisse haben die folgenden Raten:
+			\begin{itemize}
+				\item b(x): Geburtenraten (Fortpflanzung) für ein Individuum mit Merkmal x.
+				\item d(x): natürliche Todesrate
+				\item c(x,y): Todesrate durch Wettbewerb zwischen zwei Individuen mit Merkmal x und y.
+				\item $ \mu $: Mutationswahrscheinlichkeit für eine Mutation "{}auf die Nachbarn"{} mit je $ 50\% $ Wahrscheinlichkeit.
+			\end{itemize}
+			Durch Ausnutzung des Superpositions Prinzips (? und der Markoveigenschaft) können mehrere exponentielle Ereignisse zusammengefasst werden, so dass man z.B. eine Todesrate und eine Arteigene Geburtenraten erstellen kann:
+			\begin{itemize}
+			 	\item Arteigene Geburtenrate: $ b(x) \cdot (1 - \mu) + (b(x+1) + b(x-1)) \cdot \frac{\mu}{2}$
+			 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, wobei $ N_t $ die Anzahl der Individuen zum Zeitpunkt t ist und $ x_i $ das Merkmal des i-ten Individuums. Diese Rate kann praktischer dargestellt werden als:
+			 	\item Todesrate: $ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) $, wobei $ n $ die Anzahl der Merkmale ist und $ n_t(x_i) $ die Anzahl der Individuen mit Merkmal $ x_i $ zur Zeit t.
+			\end{itemize}
+			Die Simulation soll die Entwicklung der Merkmale und nicht die Ereignisse der Individuen darstellen, daher ist es unpraktisch diese zu betrachten. Alternativ werden die Ereignisse zu denen von Merkmalen zusammengefasst:
+			\begin{itemize}
+				\item Geburtenrate des Merkmals x: \[ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} \]
+				\item Todesrate des Merkmals x: 
+				\[ D(x) = d(x) \cdot n_t(x) + n_t(x) \cdot \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) \]
+			\end{itemize}
+			\item Um in der Simulation für den Fall vieler Merkmale nicht auch genauso viele Zufalls variablen ziehen zu müssen, werden die Raten zusammengefasst bis nur noch eine exponentielle Uhr läuft.
+			\begin{itemize}
+				\item Ereignisrate des Merkmals x (Trait Rate):
+					\[ TR(x) = B(x) + D(x) \]
+				\item Totale Ereignis Rate (Total Event Rate): 
+				\[ TER(x) = \sum_{x \in X} TR(x)\]
+			\end{itemize}
+			Mit der Totalen Ereignisrate gibt es jetzt eine Rate die es erlaubt eine Zufallsvariable für das Eintreffen einer Variable zu ziehen. Anschließend ist es nur noch erforderlich mit der Ziehung zwei weiterer Zufallsvairablen festzustellen welchem Merkmal welches Ereignis zukommt.
+			\item Die Population wird durch die ZV $ \nu_t = \sum_{i = 1}^{N_t} \delta_{x_i}$ beschrieben.\\
+			Dabei nimmt $ \nu_t $ Werte in $ M_F(X) = \{\sum_{i=1}^{n} \delta_{x_i} \} $.
+			\item $ \nu_t $ ist ein Markov Sprung Prozess, $ \int_{x} \mathbbm{1}_{y}(x)\nu_t(dx)$.
+			\item Der Generator des so definierten BPDL-Prozess $ \nu_t $ ist:
+			\begin{align}
+				L_{\phi(\nu)} &= \int_{x} b(x)(1-\mu)[\phi(\nu + \delta_x) - \phi(\nu)]\nu(dx)\\
+							&+ \int_{x}\int_{\mathbb{R}^d} b(x)(\mu)[\phi(\nu + \delta_{x+z}) - \phi(\nu)] m(x,dz) \nu(dx)\\
+							&+ \int_{x} d(x)[\phi(\nu - \delta_x) - \phi(\nu)]\nu(dx)\\
+							&+ \int_{x} \left( \int_{X} c(x,y) \nu(dy) \right) [\phi(\nu - \delta_x) - \phi(\nu)]\nu(dx)
+			\end{align}
+			mit $ \phi: M_F \to \mathbb{R} $
+		\end{itemize}
 	\subsection{Algorithmus}
-	Die Algorithmen
+	\begin{algorithm}[H]
+		\caption{One Evolution Step()}
+		\begin{algorithmic}[1]
+			\ENSURE{A full evolution Step happened}
+			\REQUIRE t
+			\FOR{i=0 \TO n-1}
+				\STATE Trait[i].TotalDeathRate = 0;
+				\STATE Trait[i].TotalDeathRate = (Trait[i].DeathRate) $\cdot$ (Trait[i].Members)
+				\FOR{j=0 \TO n-1}
+					\STATE Trait[i].TotalDeathRate += (Trait.CompDeathRate[i,j])$\cdot$(Trait[j].Members);
+				\ENDFOR
+			\ENDFOR
+			\STATE $ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} $
+			\FOR{i=0 \TO n-1}
+				\STATE Trait[i].TotalTraitRate = Trait[i].TotalBirthRate \\ 
+				\noindent\hspace*{36mm}+ Trait[i].TotalDeathRate;
+				\STATE Trait.TotalEventRate += Trait[i].TotalTraitRate;
+			\ENDFOR
+					
+			\STATE double Parameter = Trait.TotalEventRate;
+					\STATE double newEvent = this.Dice.RollExpDice(Parameter);
+					\STATE Events.EventTimes.push(newEvent);
+					
+			\STATE choseTraitToChange();
+			\STATE choseEventType();
+			\STATE executeEventTypeOnTrait();
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\REQUIRE -
+			
+			\ENSURE{A full evolution Step happened}
+			\STATE calculateTotalDeathRates()
+			\STATE calculateTotalBirthRates()
+			\STATE calculateTotalEventRate()
+			
+			\STATE t = RollExpDice(TotalEventRate);
+			
+			\STATE choseTraitToChange();
+			\STATE choseEventType();
+			\STATE executeEventTypeOnTrait();
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\REQUIRE -
+			\ENSURE{A full evolution Step happened}
+			\STATE calculateEventRates();
+			\STATE sampleEventTime();
+			\STATE changeATrait();
+		\end{algorithmic}
+	\end{algorithm}
+	
 	\subsection{Simulation}
 		\subsubsection{Aufgabenteilung und Flexibilität}
 		Drei Module, jedes hat seine eigene Aufgabe.
@@ -379,11 +480,13 @@ todo
 \newpage
 \section{Weitere geplante Punkte}
 \subsection{große Verbesserungen}
-\begin{itemize}
-\item 	Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
-\item Es sollte das aktuell verwendete K angezeigt werden.
-\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen arbeitet.
-\end{itemize}
+	\begin{itemize}
+		\item 	Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
+		\item Es sollte das aktuell verwendete K angezeigt werden.
+		\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen terminiert.
+		\item Dokumentation zu Programmcode und Bedienung
+		\item Anpassen der neuen Geburten und Equilibrien.
+	\end{itemize}
 
 \subsection{kleine Verbesserungen}
 \begin{itemize}
