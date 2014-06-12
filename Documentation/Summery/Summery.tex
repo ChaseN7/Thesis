@@ -392,54 +392,12 @@ todo
 			\end{align}
 			mit $ \phi: M_F \to \mathbb{R} $
 		\end{itemize}
+		\subsubsection{Normalisierung}
+		...
+		
+		
 	\subsection{Algorithmus}
-	\begin{algorithm}[H]
-		\caption{One Evolution Step()}
-		\begin{algorithmic}[1]
-			\ENSURE{A full evolution Step happened}
-			\REQUIRE t
-			\FOR{i=0 \TO n-1}
-				\STATE Trait[i].TotalDeathRate = 0;
-				\STATE Trait[i].TotalDeathRate = (Trait[i].DeathRate) $\cdot$ (Trait[i].Members)
-				\FOR{j=0 \TO n-1}
-					\STATE Trait[i].TotalDeathRate += (Trait.CompDeathRate[i,j])$\cdot$(Trait[j].Members);
-				\ENDFOR
-			\ENDFOR
-			\STATE $ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} $
-			\FOR{i=0 \TO n-1}
-				\STATE Trait[i].TotalTraitRate = Trait[i].TotalBirthRate \\ 
-				\noindent\hspace*{36mm}+ Trait[i].TotalDeathRate;
-				\STATE Trait.TotalEventRate += Trait[i].TotalTraitRate;
-			\ENDFOR
-					
-			\STATE double Parameter = Trait.TotalEventRate;
-					\STATE double newEvent = this.Dice.RollExpDice(Parameter);
-					\STATE Events.EventTimes.push(newEvent);
-					
-			\STATE choseTraitToChange();
-			\STATE choseEventType();
-			\STATE executeEventTypeOnTrait();
-		\end{algorithmic}
-	\end{algorithm}
-	
-	\begin{algorithm}[H]
-		\caption{EvolutionStep()}
-		\begin{algorithmic}[1]
-			\REQUIRE -
-			
-			\ENSURE{A full evolution Step happened}
-			\STATE calculateTotalDeathRates()
-			\STATE calculateTotalBirthRates()
-			\STATE calculateTotalEventRate()
-			
-			\STATE t = RollExpDice(TotalEventRate);
-			
-			\STATE choseTraitToChange();
-			\STATE choseEventType();
-			\STATE executeEventTypeOnTrait();
-		\end{algorithmic}
-	\end{algorithm}
-	
+	Der verwendete Algorithmus führt einen Sprung des Markov Sprung Prozesses ab dem zuletzt bekannten Zeitpunkt t aus. Die tatsächlich verwendete Funktion sieht im Code so aus:
 	\begin{algorithm}[H]
 		\caption{EvolutionStep()}
 		\begin{algorithmic}[1]
@@ -450,6 +408,80 @@ todo
 			\STATE changeATrait();
 		\end{algorithmic}
 	\end{algorithm}
+	
+	Etwas ausführlicher werden folgende Berechnungen angestoßen:
+		
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\REQUIRE -
+			
+			\ENSURE{A full evolution Step happened}
+			\STATE ---$>$calculateEventRates();
+			\STATE calculateTotalDeathRates()
+			\STATE calculateTotalBirthRates()
+			\STATE calculateTotalEventRate()
+			\STATE ---$>$sampleEventTime();
+			\STATE sampleEventTime();
+			\STATE ---$>$changeATrait();
+			\STATE choseTraitToChange();
+			\STATE choseEventType();
+			\STATE executeEventTypeOnTrait();
+		\end{algorithmic}
+	\end{algorithm}
+	Schließlich der Ablauf der tatsächlichen Berechnung:
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\ENSURE{A full evolution Step happened}
+			\REQUIRE $ t, X = \{0,\dots, n-1\} $
+			\STATE ---$>$calculateEventRates();
+			\FOR{ $ x \in X $ }
+				\STATE $  D(x) := n_t(x) \cdot \left( d(x) + \sum_{y \in X} c(x,y) \cdot n_t(y) \right) $
+				\STATE $ B(x) := \underbrace{b(x) \cdot (1 - \mu) \cdot n_t(x)}_{arteigene}  $
+				\IF{$ x > 0 $}
+					\STATE $ B(x) += \underbrace{b(x-1)\cdot n_t(x-1)}_{Mutation Links} \cdot \frac{\mu}{2} $
+				\ENDIF
+				\IF{$ x < n-1 $}
+					\STATE $ B(x) += \underbrace{b(x+1)\cdot n_t(x+1)}_{Mutation Rechts} \cdot \frac{\mu}{2} $
+				\ENDIF
+				\STATE $ TotalTraitRate(x) = B(x) + D(x) $
+			\ENDFOR
+			\STATE $ TotalEventRate := \sum_{x \in X} TotalTraitRate(x) $
+			
+			\STATE ---$>$sampleEventTime();
+			\STATE sample $ Z \sim exp(TotalEventRate) $
+			\STATE $ t += Z $
+			
+			\STATE ---$>$choseTraitToChange();
+			\STATE sample $ Y \sim U(0,TotalEventRate) $
+			\FOR{$ x \in X $}
+				\IF{$ Y \le TotalTraitRate(x) $}
+					\STATE $ ChosenTrait := x $
+					\STATE break
+				\ENDIF
+				\STATE $ Y -= TotalTraitRate(x) $
+			\ENDFOR
+			
+			\STATE ---$>$choseEventType();
+			\STATE sample $ Y \sim U(0,TotalTraitRate(ChosenTrait)) $
+			\IF{$ Y \le B(ChosenTrait) $}
+				\STATE isBirht := true
+			\ELSE
+				\STATE isBirth := false
+			\ENDIF
+			
+			\STATE ---$>$executeEventTypeOnTrait();
+			\IF{isBirth}
+				\STATE $ n_t(ChosenTrait) += 1 $
+			\ELSE
+				\IF{$ n_t(ChosenTrait) \ge 0 $}
+					\STATE $ n_t(ChosenTrait) -= 1 $
+				\ENDIF
+			\ENDIF
+		\end{algorithmic}
+	\end{algorithm}
+
 	
 	\subsection{Simulation}
 		\subsubsection{Aufgabenteilung und Flexibilität}
@@ -470,8 +502,9 @@ todo
 		
 	\subsection{Korrektheit der Implementation}
 	(Korrektheit des Algorithmus nicht notwendig bzw möglich)
-	Das viel interessantere ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).
-	Daher habe ich das Prinzip der "{}Testgetriebene Entwicklung"{}  (Test Driven Develeopment) verwendet.
+	Das viel interessantere ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).\\
+	Daher habe ich das Prinzip der "{}Testgetriebene Entwicklung"{}  (Test Driven Develeopment) verwendet.\\
+	Spätere statische Möglichkeiten
 	
 	\subsection{Warum ist es vielleicht schwierig simple Mechanik einzupflegen?}
 	Wie man sich vielleicht denken kann sind viele kleine Features an und für sich sehr simpel.
@@ -486,12 +519,17 @@ todo
 		\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen terminiert.
 		\item Dokumentation zu Programmcode und Bedienung
 		\item Anpassen der neuen Geburten und Equilibrien.
+		\item Evtl. Abfrage beim Überschreiben von Dateien
+		\item Instanzexplorer
+		\item GraphClass aufräumen (RangeCheck etc.)
+		\item Unit Tests anpassen und erweitern
 	\end{itemize}
 
 \subsection{kleine Verbesserungen}
 \begin{itemize}
 \item Items in der Tabelle sollten zentrieren
 \item stabiler Zustand weniger Aufdringlich (z.B. größerer Abstand zwischen Strichen und geringere Strichstärke)
+\item Feedback beim Speichern eines Bildes
 \end{itemize}
 
 
