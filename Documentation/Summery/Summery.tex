@@ -1,13 +1,17 @@
 \documentclass{article}
 
+\usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{german}
 \usepackage{color}
 \usepackage{bbm}
-\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{graphicx}
+
 \title{Small summery}
 \author{Boris Prochnau}
 \begin{document}
@@ -346,6 +350,7 @@ todo
 
 \newpage
 \section{Zweites Bachelorseminar}
+Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren Verbracht. Daher wird ein größerer Teil am Ende dem Ergebnis dieser Arbeit gewidmet.
 	\subsection{Ziel}
 		Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation eines BPDL und TSS Prozesses durchführen kann. Dies soll dem besseren Verständnis über BPDL und TSS Prozessen dienen und kann zu statischen Nachweisen verwendet werden. Gerade deswegen ist es wichtig sicherstellen zu können dass sich keine Fehler in die Implementation einschleicht. Dazu jedoch mehr im Kapitel "{}Korrektheit der Implementation"{}.
 	\subsection{Model}
@@ -393,6 +398,7 @@ todo
 			mit $ \phi: M_F \to \mathbb{R} $
 		\end{itemize}
 		\subsubsection{Normalisierung}
+		\subsubsection{Equilibrium}
 		...
 		
 		
@@ -484,38 +490,96 @@ todo
 
 	
 	\subsection{Simulation}
+	Nun kommen wir zur eigentlichen Simulation. Damit ist sowohl die Darstellung als auch die Programmarchitektur gemeint. 
 		\subsubsection{Aufgabenteilung und Flexibilität}
-		Drei Module, jedes hat seine eigene Aufgabe.
-		\subsubsection{Diagramme}
-		Klassendiagramm\\
-		Aktivitätsdiagramm
-		\subsubsection{Graphische Darstellung}
-		Kein Film, zoom, Skalierung, speichern der Bilder etc...
-	\subsection{Programmlayout}
-		\subsubsection{Laden der Parameter}
-		Beste Option ist lesen der Parameter aus Dateien. Dabei wurde gewünscht dass kein direkter Zugriff des Nutzers auf die Dateien notwendig sein sollte um alle verwendeten Parameter anzuzeigen.
-	
-		\subsubsection{Erstellen einer Testinstanz}
-		Da generell der Umgang mit Dateien und speziell auf das Programm zugeschnittenen Regeln für das Beschreiben dieser unerwünscht ist, habe ich eine Möglichkeit gesucht Dateien über das Programm mit Benutzereingabe erstellen zu lassen.
+		Die Architektur des Programms kann grob in drei Module gefasst werden. Die Idee der getrennten Aufgabenbereiche geht darauf zurück dass eine möglichst große Unabhängigkeit zwischen Arbeitsschritten notwendig ist um das Programm flexibel zu halten und sogenannten "{}Coderot"{} - "{}faulen Code"{} zu verhindern. Das bedeutet dass das Programm mit steigender Komplexität zunehmend unflexibler wird, also das Hinzufügen weiterer Features oder das Ändern/Verbessern zu sogenanntem "{}undefiniertem Verhalten"{} führt. (kurze Erklärung zum Begriff).\\
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{./Bild_Module}
+			\caption[Module]{Arbeitsmodule und Klassenabhängigkeiten}
+			\label{Module und Klassen}
+		\end{figure}
+		Innerhalb der Arbeitsschritte sollte dabei genau die selbe Regel der Unabhängigkeit gelten wie bei den Modulen.
+		\subsubsection{Layout}
 		
-		\subsubsection{Präsentation des Programms}
+		\begin{itemize}
+			\item Die Bedienung des Programms sollte das lesen und Anzeigen der Merkmals-Parameter bereitstellen. Da es viele Parameter gibt und die Anzahl der Parameter quadratisch mit der Anzahl der betrachteten Merkmale steigt, bietet sich das Lesen aus zuvor beschriebenen Dateien an.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\linewidth]{./MainWindow_Start}
+				\caption[Startwindow]{MainWindow nach dem Start}
+				\label{MainWindow_Start}
+			\end{figure}
+
+			Zur Darstellung der gelesenen Parameter habe ich ein Baumstruktur gewählt.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\linewidth]{./MainWindow_ParameterBaum}
+				\caption[MainWindow_Parameter]{MainWindow mit geladenen Parametern}
+				\label{Baumstruktur}
+			\end{figure}
+			\item Die letzte Herausforderung bestand darin eine Instanz durch das Programm geleitet erstellen zu können. Während diese Aufgabe bei einer Konsolenanwendung (bekannt aus den klassischen c Programmen) denkbar einfach mit "{}printf"{} und "{}scanf"{} erledigt werden konnte, sollte bei einem GUI eine Lösung her die Inputkonflikte verhindert und das Einlesen der Daten denkbar einfach macht. Dafür war es sinnvoll "{}Enter"{} als Bestätigung abzufangen und sicherzustellen dass der Curser nur innerhalb des gewünschten Feldes bleibt.
+		\end{itemize}
+		Was die Darstellung der Graphen angeht, hat sich ein einfaches Bild des fertigen Plots durchgesetzt, wobei das Zoomen und ziehen des Bildes notwendige Elemente zur Untersuchung des Graphen sind. Zusätzlich ist es notwendig viele Bilder vergleichen zu können. Hierfür wurde das Abspeichern des Bildes gewünscht.\\
+		Die Simulation wird gestartet nachdem man auf den "{}Plot"{} Button drückt. Dabei wird ein neues Fenster geöffnet.
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{./PlotWindow_start}
+			\caption[PlotWindow_start]{Start des PlotWindow}
+			\label{PlotWindow_start}
+		\end{figure}
+		Sobald der Plot Button gedrückt wurde und das Fenster angezeigt wird, arbeitet die Simulation bereits im Hintergrund in einem eigenen Thread. Dort werden alle notwendigen Iterationen bzw. Sprünge der Population durchgeführt ohne den Hauptthread damit zu belasten. Während dieser Arbeiterthread aktiv arbeitet wird der "{}Plot"{} Button ausgegraut um mehrfaches Auslösen zu vermeiden und um anzuzeigen dass die Rechnung im Gange ist.\\
+		Der Arbeiterthread gewährleistet nicht nur eine flüssige Interaktion mit dem Programm, sondern verhindert auch effektiv dass das Betriebssystem denkt das Programm wäre Abgestürzt oder würde nicht mehr ordnungsgemäß funktionieren. Das würde sonst folgendes evtl. bekannte Bild hervorrufen:
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{./KeineRueckmeldung}
+			\caption[Keine Rueckmeldung]{Hauptthread wurde überlastet}
+			\label{Keine Rueckmeldung}
+		\end{figure}
+		Wenn die Simulation  einen gewünschten Zustand erreicht hat, oder die maximale Anzahl an gewünschten Iterationen absolviert hat, werden anschließend maximal 10mio Punkte auf dem Koordinatensystem zu Graphen verbunden. Das kann so aussehen:
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{./PlotWindow_smallBPDL}
+			\caption[PlotWindow]{PlotWindow mit Dimorpher Population}
+			\label{PlotWindow}
+		\end{figure}
+		
 		
 	\subsection{Korrektheit der Implementation}
 	(Korrektheit des Algorithmus nicht notwendig bzw möglich)
-	Das viel interessantere ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).\\
+	Ein ganz besonders interessantes Thema ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).\\
 	Daher habe ich das Prinzip der "{}Testgetriebene Entwicklung"{}  (Test Driven Develeopment) verwendet.\\
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{./UnitTest}
+		\caption[UnitTest]{UnitTest versichert korrektes lesen von Parametern aus Datei}
+		\label{Unit Test}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{./TestResult}
+		\caption[Test Resultat einer Test Datei]{Ergebnise einiger Tests}
+		\label{Test Result}
+	\end{figure}
+
+
 	Spätere statische Möglichkeiten
+	
+	\subsection{TSS}
 	
 	\subsection{Warum ist es vielleicht schwierig simple Mechanik einzupflegen?}
 	Wie man sich vielleicht denken kann sind viele kleine Features an und für sich sehr simpel.
 	Unglücklicherweise gibt es viele kleine solche Features und Daten die mit dem Programm verbunden wären. 
 
 \newpage
+\section{Achtes Treffen}
+\subsection{Was ist geplant?}
+\subsection{Was habe ich gemacht?}
+\subsection{Bekannte Bugs}
 \section{Weitere geplante Punkte}
 \subsection{große Verbesserungen}
 	\begin{itemize}
-		\item 	Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
-		\item Es sollte das aktuell verwendete K angezeigt werden.
+		\item Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
 		\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen terminiert.
 		\item Dokumentation zu Programmcode und Bedienung
 		\item Anpassen der neuen Geburten und Equilibrien.
@@ -523,13 +587,21 @@ todo
 		\item Instanzexplorer
 		\item GraphClass aufräumen (RangeCheck etc.)
 		\item Unit Tests anpassen und erweitern
+		\item Beim speichern die Zeit hinzufügen um das häufige überschreiben zu vermeiden.
+		\item Fehler beim Laden nicht definierter Instanzen prüfen!
+		\item Unterschiedlich große Sprünge erklären (Auslöschung bei Addition -Nulladdition- oder Jumps?)
+		\item Release Version des Programms erstellen.
+		\item Es wurde gewünscht dass irgendwo die Anzahl der Mutationen bis ein Switch von dominanten Merkmalen stattgefunden hat angezeigt wird.
 	\end{itemize}
 
 \subsection{kleine Verbesserungen}
 \begin{itemize}
 \item Items in der Tabelle sollten zentrieren
+\item Es sollte das aktuell verwendete K in der Simulation angezeigt werden.
 \item stabiler Zustand weniger Aufdringlich (z.B. größerer Abstand zwischen Strichen und geringere Strichstärke)
 \item Feedback beim Speichern eines Bildes
+\item Wenn Plot Button grau ist, soll
+\item Überschrift bzw Namen der Fenster ändern.
 \end{itemize}
 
 

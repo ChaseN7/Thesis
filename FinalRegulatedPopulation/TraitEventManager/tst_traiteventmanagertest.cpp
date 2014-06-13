@@ -48,9 +48,6 @@ TraitEventManagerTest::TraitEventManagerTest():
 {
 }
 
-
-// -------------------------- section 1: Rates ------------------------------------
-
 void TraitEventManagerTest::verifyWrittenData()
 {
     QCOMPARE(TraitClass::Size,3.);
@@ -61,6 +58,9 @@ void TraitEventManagerTest::verifyWrittenData()
         QCOMPARE(TraitClass::CompDeathRate[i][i],2.);
     }
 }
+
+// -------------------------- section 1: Rates ------------------------------------
+/// Unit Tests for INPUT VALIDATION
 
 void TraitEventManagerTest::readAndClearStandardInput()
 {

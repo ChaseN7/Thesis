@@ -100,7 +100,7 @@ void GraphClass::iterateGraphPoint(double & Time, int & Chosen)
 /// FIXME: Just finished! Make a Test after Appointment!
 void GraphClass::iterateMutationPoint(double &Time, int &Chosen)
 {
-    RandomDice Dice;
+//    RandomDice Dice;
     double MutationTime = 0;
 //    double TotalMutationRate = Manager.Trait[Chosen].TotalBirthRate
 //    double tmp = Manager.Trait[Chosen+1].TotalBirthRate;
@@ -113,12 +113,12 @@ void GraphClass::iterateMutationPoint(double &Time, int &Chosen)
         Chosen = Chosen+1;
     }
     else if(Chosen == TraitClass::Size-1){
-        MutationTime = Dice.rollExpDist(Manager.Trait[Chosen-1].TotalBirthRate);
+        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen-1].TotalBirthRate);
         Chosen = Chosen-1;
     }
     else{
-        MutationTime = Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
-        Chosen = Chosen-1 + Dice.rollDiscrUnifDist(0,1)*2;
+        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
+        Chosen = Chosen-1 + Manager.Dice.rollDiscrUnifDist(0,1)*2;
     }
     TimeLine[Manager.Events.ChosenTrait].push_back( Time + MutationTime);
     TraitHistory[Manager.Events.ChosenTrait].push_back(ExpectedMonomorph[Manager.Events.ChosenTrait]);
