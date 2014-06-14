@@ -298,9 +298,9 @@ Einführung in TSS
 \item Das erste war das Einfügen einer Tabelle oder Grafik die einen guten Überblick über die Fitness der Population bietet. Diese gibt Aufschluss darüber ob TSS ordnungsgemäßes Verhalten zeigen wird. Allgemein ist es aber auch gut zu sehen welche Population wie stark auf eine andere wirkt, daher vielleicht schon ohne TSS sinnvoll.\\
 Um eine bessere Übersicht von ungewünschtem Verhalten zu zeigen werden Coexistenzen rot markiert. Später wird noch eine weitere grünliche Färbung angezeigt die eine Verdrängungswahrscheinlichkeit darstellt.
 Dieses Feature wird in beiden Programmen vorhanden sein.\\
-Die verwendete Formel zur Berechnung der Fitness war \[ f_{x,y} = b_x - d_x - c_{x,y}\cdot \bar{n_x}\]
+Die verwendete Formel zur Berechnung der Fitness war \[ f_{x,y} = b_x - d_x - c_{x,y}\cdot \bar{n}_x\]
 mit:
-\[ \bar{n_x} = \frac{b_x - d_x}{c_{x,x}}\]
+\[ \bar{n}_x = \frac{b_x - d_x}{c_{x,x}}\]
 Demnach wird auf der Diagonale stets eine Null erwartet. Bei dieser Rechnung tritt jedoch eine Subtraktion auf die Auslöschung verursacht. Zu diesem Zweck habe ich die dargestellte Zahl auf 14 stellen runden lassen.
 \item Ein besseres Verständnis von TSS wäre nützlich. Dazu wurde mir aus [2] S.1135 empfohlen. Leider habe ich es bisher noch nicht geschafft es durchzuarbeiten. Es wird auf den nächsten Wochenplan kommen.
 \item Außerdem wurde die Skalierung der Mutationswahrscheinlichkeit mit K angepasst so dass TSS realistisch laufen kann. Dabei wurde der Faktor $\frac{1}{K^{1.5}}$ gewählt weil es den notwendigen Schranken die in [2] S.1135 beschrieben werden genügt. Ein weiterer Punkt den man optimieren kann wäre es eine Option zur Eingabe eines eigenen Exponenten für K wäre eine mögliche Erweiterung.
@@ -349,10 +349,10 @@ todo
 \end{itemize}
 
 \newpage
-\section{Zweites Bachelorseminar}
+\section{Zweites Bachelorseminar - Simulation der normalisierten BPDL und TSS Prozesse}
 Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren Verbracht. Daher wird ein größerer Teil am Ende dem Ergebnis dieser Arbeit gewidmet.
 	\subsection{Ziel}
-		Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation eines BPDL und TSS Prozesses durchführen kann. Dies soll dem besseren Verständnis über BPDL und TSS Prozessen dienen und kann zu statischen Nachweisen verwendet werden. Gerade deswegen ist es wichtig sicherstellen zu können dass sich keine Fehler in die Implementation einschleicht. Dazu jedoch mehr im Kapitel "{}Korrektheit der Implementation"{}.
+		Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation eines normalisierten BPDL und TSS Prozesses durchführen kann. Dies soll dem besseren Verständnis über BPDL und TSS Prozessen dienen und kann zu statischen Nachweisen verwendet werden. Gerade deswegen ist es wichtig sicherstellen zu können dass sich keine Fehler in die Implementation einschleicht. Dazu jedoch mehr im Kapitel "{}Korrektheit der Implementation"{}.
 	\subsection{Model}
 		Zunächst möchte ich das in der Simulation verwendete Model vorstellen.\\
 		\begin{itemize}
@@ -368,7 +368,7 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 			Durch Ausnutzung des Superpositions Prinzips (? und der Markoveigenschaft) können mehrere exponentielle Ereignisse zusammengefasst werden, so dass man z.B. eine Todesrate und eine Arteigene Geburtenraten erstellen kann:
 			\begin{itemize}
 			 	\item Arteigene Geburtenrate: $ b(x) \cdot (1 - \mu) + (b(x+1) + b(x-1)) \cdot \frac{\mu}{2}$
-			 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, wobei $ N_t $ die Anzahl der Individuen zum Zeitpunkt t ist und $ x_i $ das Merkmal des i-ten Individuums. Diese Rate kann praktischer dargestellt werden als:
+			 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, wobei $ N_t $ die Anzahl der Individuen zum Zeitpunkt t ist und $ x_i $ das Merkmal des i-ten Individuums. Diese Rate kann praktischer dargestellt werden:
 			 	\item Todesrate: $ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) $, wobei $ n $ die Anzahl der Merkmale ist und $ n_t(x_i) $ die Anzahl der Individuen mit Merkmal $ x_i $ zur Zeit t.
 			\end{itemize}
 			Die Simulation soll die Entwicklung der Merkmale und nicht die Ereignisse der Individuen darstellen, daher ist es unpraktisch diese zu betrachten. Alternativ werden die Ereignisse zu denen von Merkmalen zusammengefasst:
@@ -384,11 +384,11 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 				\item Totale Ereignis Rate (Total Event Rate): 
 				\[ TER(x) = \sum_{x \in X} TR(x)\]
 			\end{itemize}
-			Mit der Totalen Ereignisrate gibt es jetzt eine Rate die es erlaubt eine Zufallsvariable für das Eintreffen einer Variable zu ziehen. Anschließend ist es nur noch erforderlich mit der Ziehung zwei weiterer Zufallsvairablen festzustellen welchem Merkmal welches Ereignis zukommt.
+			Mit der Totalen Ereignisrate gibt es jetzt eine Rate die es erlaubt eine Zufallsvariable für das Eintreffen einer Variable zu ziehen. Anschließend ist es nur noch erforderlich (mit der Ziehung zwei weiterer Zufallsvairablen) festzustellen welchem Merkmal welches Ereignis zukommt.
 			\item Die Population wird durch die ZV $ \nu_t = \sum_{i = 1}^{N_t} \delta_{x_i}$ beschrieben.\\
 			Dabei nimmt $ \nu_t $ Werte in $ M_F(X) = \{\sum_{i=1}^{n} \delta_{x_i} \} $.
 			\item $ \nu_t $ ist ein Markov Sprung Prozess, $ \int_{x} \mathbbm{1}_{y}(x)\nu_t(dx)$.
-			\item Der Generator des so definierten BPDL-Prozess $ \nu_t $ ist:
+			\item (Vielleicht nicht erwähnen?) Der Generator des so definierten BPDL-Prozess $ \nu_t $ ist:
 			\begin{align}
 				L_{\phi(\nu)} &= \int_{x} b(x)(1-\mu)[\phi(\nu + \delta_x) - \phi(\nu)]\nu(dx)\\
 							&+ \int_{x}\int_{\mathbb{R}^d} b(x)(\mu)[\phi(\nu + \delta_{x+z}) - \phi(\nu)] m(x,dz) \nu(dx)\\
@@ -398,8 +398,41 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 			mit $ \phi: M_F \to \mathbb{R} $
 		\end{itemize}
 		\subsubsection{Normalisierung}
+		Wie schon zuvor erwähnt ist es für uns wichtig die Todes und Geburts Prozesse nicht auf der Ebene des Individuums zu betrachten, sondern auf der gesamten Population. Dazu wird die LPA(Large Population Approximation) Normalisierung eingeführt.\\
+		Dafür wird der Prozess mit einem Parameter K skaliert und es ergibt sich einen neue Zufallsvariable:
+		\[\nu_t^K := \frac{1}{K} \nu_t \]
+		Hierbei wird die Anfangsgröße $ n_0^K $ der Population proportional zu K gewählt.\\
+		Die Raten für Geburten und natürliche Tode der Individuen bleiben hierbei unverändert. Da die Populationsgröße jedoch quadratisch in Wettbewerbsrate einfließt, sollte gelten: $ c^K = \frac{c}{K} $. Ein Beispiel dafür sieht folgendermaßen aus:
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{./LPANormalisierungK100}
+			\caption[LPAK100]{LPA Normalisierung mit K=100}
+			\label{LPA Normalisierung K=100}
+		\end{figure}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\linewidth]{./LPANormalisierungK10000}
+			\caption[LPAK100]{LPA Normalisierung mit K=10000}
+			\label{LPA Normalisierung K=10000}
+		\end{figure}
+
+		
 		\subsubsection{Equilibrium}
-		...
+		Man erkennt dass die Merkmale für $ K \to \infty $ eine Konvergenz gegen eine Funktion $ \xi_t = n_t \delta_x $ aufweist. Diese Funktion wiederum konvergiert gegen einen stabilen Zustand (im folgenden Equilibrium genannt), worin sich die Populationsgröße nicht mehr ändert. Diese sehen für monomorphe und dimorphe Populationen ohne Mutation folgendermaßen aus:
+		\begin{itemize}
+			\item Monomorphe Population\\
+				\begin{align*}
+				0 & = \dot{n} = (b(x) - d(x) - \bar{n}c(x,x))\bar{n}\\
+				\bar{n} &= \frac{b(x)-d(x)}{c(x,x)}
+				\end{align*}
+			\item Dimorphe Population\\
+				\[ n_x = \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+				\[ \bar{n}_y = \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+				oder $ (\bar{n}_x, 0)$, $ (0, \bar{n}_y)$ bzw. $ (0,0) $
+		\end{itemize}
+		Später im Kapitel TSS wird die Fitness Funktion eingeführt die näher erläutern kann wann welcher dimorphe stabile Zustand angenommen wird.
+		In den Simulationen sind diese stabilen Zustände als gestrichelte Gerade angezeigt, gegen die Konvergenz stattfinden soll.
+		
 		
 		
 	\subsection{Algorithmus}
@@ -549,23 +582,46 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 	(Korrektheit des Algorithmus nicht notwendig bzw möglich)
 	Ein ganz besonders interessantes Thema ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).\\
 	Daher habe ich das Prinzip der "{}Testgetriebene Entwicklung"{}  (Test Driven Develeopment) verwendet.\\
+	Dabei werden Funktionen des Programms unter vorher festgelegten Bedingungen laufen gelassen und mit einem erwarteten Verhalten verglichen. Das Ergebnis ist eine Ausgabe für Erfolg oder Misserfolg des Tests. Folgend ein Beispiel für eine Implementation eines einfachen Tests der prüft ob alle Parameter korrekt aus der Datei in die Variablen geschrieben werden.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.7\linewidth]{./UnitTest}
 		\caption[UnitTest]{UnitTest versichert korrektes lesen von Parametern aus Datei}
 		\label{Unit Test}
 	\end{figure}
+	Anschließend ein Beispiel für einen Durchlauf der Testfunktionen:
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{./TestResult}
-		\caption[Test Resultat einer Test Datei]{Ergebnise einiger Tests}
-		\label{Test Result}
+		\includegraphics[width=0.7\linewidth]{./TestResult_start}
+		\caption[Test Resultat einer Test Datei]{Ergebnisse einiger Tests}
+		\label{Test Results}
 	\end{figure}
-
-
-	Spätere statische Möglichkeiten
+	Die Testfunktionen zeigen auch dass eine komplexe Verwendung der Simulationen über die graphische Darstellung hinaus einfach realisierbar ist.
 	
 	\subsection{TSS}
+	Bei TSS Prozessen beobachten wir wie sich Merkmale gegeneinander durchsetzten und sich verdrängen. (Tafelbild)\\
+	Genau wie bei der LPA-Normalisierung ergeben sich TSS-Prozesse(Trait Substitution Sequence) als Grenzprozesse von BPDL-Prozessen. Zu der LPA-Normalisierung sollten jedoch mit größer werdendem K die Mutationen seltener werden ($ \frac{1}{e^{VK}} << u_K << \frac{1}{K log(K)} $) , also die Mutationswahrscheinlichkeit gegen 0 streben. Skaliert man nun noch zusätzlich die Zeit, so führt dies dazu, dass die Zeit, die ein Merkmal benötigt, um sich gegenüber einem anderen durchzusetzen und dieses zu verdrängen, infinitesimal klein wird. Somit simulieren die TSS-Prozesse eine Population, die zu jedem Zeitpunkt monomorph ist und sich im entsprechenden (für $ K < \infty $ angepassten) Equilibrium befindet.\\
+	Spätestens jetzt wird die Fitness-Funktion interessant:
+	\[f(x,y) = b(x) - d(x) - c(x,y)\bar{n_y} \]
+	Diese Fitness-Funktion gibt an, wie gut sich ein Merkmal gegenüber einem anderen durchsetzen kann. Sie ist die asymptotische Wachstumsrate von y, wenn x sich im Gleichgewichtszustand $ \bar{n}_x $ befindet und nur wenige Individuen von Typ y in der Population vorhanden sind. In der Simulation sieht man die Fitness der Merkmale zueinander in einer Matrix nach dem Laden der Parameter.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{./MainWindow_BandMatrix}
+		\caption[Fitness Matrix]{Fitness Bandmatrix}
+		\label{MainWindow mit Fitness Bandmatrix}
+	\end{figure}
+	Mit der Fitness kann man eine Konvergenz der Wahrscheinlichkeit für das überleben einer Mutation vorhersagen:
+	\[ \frac{\left[ f(y,x)\right]_+ }{b(y)}\]
+	Da diese Wahrscheinlichkeit gerne bereits beim einlesen der Parameter angezeigt werden will, habe ich vor sie als farblich ansteigenden Akzent den Elementen der Zelle hinzuzufügen. Bisher wird in der Matrix etwas grün oder rot markiert. Rot falls eine Koexistenz vorliegt und grün wenn die Wahrscheinlichkeit für Dominanz des Mutanten über 50\% liegt.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\linewidth]{./MainWindow_red_green_loaded}
+		\caption[MainWindow_redGreenFitness]{Fitness Matrix mit roten und gruenen akzenten}
+		\label{fig:MainWindow_red_green_loaded}
+	\end{figure}
+	Wenn der einfache BPDL Simulator für die Simulation dieses Prozesses verwendet werden würde, würde durch die seltenen Mutationen
+
+
 	
 	\subsection{Warum ist es vielleicht schwierig simple Mechanik einzupflegen?}
 	Wie man sich vielleicht denken kann sind viele kleine Features an und für sich sehr simpel.
@@ -576,9 +632,18 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 \subsection{Was ist geplant?}
 \subsection{Was habe ich gemacht?}
 \subsection{Bekannte Bugs}
+
+
 \section{Weitere geplante Punkte}
+\subsection{Bekannte Bugs}
+	\begin{itemize}
+		\item Fehler beim Laden nicht falsch eingetippter Instanznamen abfangen.
+		\item Zeitlinie bei BPDL Programm. Wenn K 100 mal kleiner wird, so wird Die Zeit auch 100 mal kürzer. Sollte aber nicht passieren.
+	\end{itemize}
+	
 \subsection{große Verbesserungen}
 	\begin{itemize}
+		\item skalieren der interpolierten TSS stellen.
 		\item Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
 		\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen terminiert.
 		\item Dokumentation zu Programmcode und Bedienung
@@ -586,23 +651,27 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		\item Evtl. Abfrage beim Überschreiben von Dateien
 		\item Instanzexplorer
 		\item GraphClass aufräumen (RangeCheck etc.)
-		\item Unit Tests anpassen und erweitern
+		\item Unit Tests anpassen und mit TSS erweitern (und Mutation rate testen)
 		\item Beim speichern die Zeit hinzufügen um das häufige überschreiben zu vermeiden.
-		\item Fehler beim Laden nicht definierter Instanzen prüfen!
+
 		\item Unterschiedlich große Sprünge erklären (Auslöschung bei Addition -Nulladdition- oder Jumps?)
 		\item Release Version des Programms erstellen.
 		\item Es wurde gewünscht dass irgendwo die Anzahl der Mutationen bis ein Switch von dominanten Merkmalen stattgefunden hat angezeigt wird.
+		\item komplexere dimorphe stabile Zustände implementieren. Mit Rücksicht auf Fitness.
 	\end{itemize}
 
 \subsection{kleine Verbesserungen}
-\begin{itemize}
-\item Items in der Tabelle sollten zentrieren
-\item Es sollte das aktuell verwendete K in der Simulation angezeigt werden.
-\item stabiler Zustand weniger Aufdringlich (z.B. größerer Abstand zwischen Strichen und geringere Strichstärke)
-\item Feedback beim Speichern eines Bildes
-\item Wenn Plot Button grau ist, soll
-\item Überschrift bzw Namen der Fenster ändern.
-\end{itemize}
+	\begin{itemize}
+		\item Sofortiges Laden der Instanz nach erstellen der neuen Testinstanz
+		\item Was passierte wenn während eines Jumps eine Mutation stattfindet?
+		\item Fitness Matrix beschriften
+		\item Items in der Tabelle sollten zentrieren
+		\item Es sollte das aktuell verwendete K in der Simulation angezeigt werden.
+		\item stabiler Zustand weniger Aufdringlich (z.B. größerer Abstand zwischen Strichen und geringere Strichstärke)
+		\item Feedback beim Speichern eines Bildes
+		\item Wenn Plot Button grau ist, soll
+		\item Überschrift bzw Namen der Fenster ändern.
+	\end{itemize}
 
 
 

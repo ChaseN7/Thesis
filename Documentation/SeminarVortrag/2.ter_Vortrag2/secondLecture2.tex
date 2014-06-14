@@ -1,0 +1,87 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+
+
+\mode<presentation>
+{
+%  \setbeamertemplate{background canvas}[vertical shading][bottom=orange!13,top=blue!13]
+  \setbeamertemplate{navigation symbols}{}
+    \usetheme{Dresden}
+    %alternativ: nichts Dresden/malmoe/Boadilla
+   \setbeamercovered{transparent}
+   \useoutertheme{infolines}
+}
+
+
+\title[abc] % (optional, nur bei langen Titeln noetig)
+{aaa}
+\subtitle{bbb}
+\author[B.Prochnau] % (optional, nur bei vielen Autoren)
+{Boris Prochnau}
+%\institute{Research Institute for Discrete Mathematics Bonn}
+\institute[University of Bonn]{Institute for Applied Mathematics\\University of Bonn}
+
+\date {\today}
+
+
+\usepackage{paralist}
+
+\usepackage[algoruled,algo2e,vlined,titlenotnumbered,german]{algorithm2e}
+
+\usepackage{tikz}
+
+\setbeamercovered{invisible}
+
+% ä Ä ö Ö ü Ü
+\begin{document}
+%
+% ****************************************************************************************************
+%					preliminaries
+% ****************************************************************************************************
+%
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+% \section<presentation>*{Outline}
+
+\begin{frame}
+  \frametitle{Übersicht}
+  \tableofcontents
+  % Die Option [pausesections] koennte nuetzlich sein.
+\end{frame}
+
+\section{Model}
+\begin{frame}
+\frametitle{Titel}
+\end{frame}
+	\subsection{Normalisierung}
+	\begin{frame}
+	\frametitle{Titel}
+	\end{frame}
+	\subsection{Equilibrium}
+	\begin{frame}
+	\frametitle{Titel}
+	\end{frame}
+\section{Algorithmus}
+\begin{frame}
+\frametitle{Titel}
+\end{frame}
+\section{Simulation}
+	\subsection{Aufgabenteilung und Flexibilität}
+	\subsection{Layout}
+\section{Korrektheit der Implementation}
+\section{TSS - Prozesse}
+\section{Schwierigkeiten}
+
+
+
+\end{document}
+% ä Ä ö Ö ü Ü
