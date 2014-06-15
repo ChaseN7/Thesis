@@ -350,44 +350,49 @@ todo
 
 \newpage
 \section{Zweites Bachelorseminar - Simulation der normalisierten BPDL und TSS Prozesse}
-Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren Verbracht. Daher wird ein größerer Teil am Ende dem Ergebnis dieser Arbeit gewidmet.
+Der Inhalt dieses Vortrags soll zeigen was ich bisher gemacht habe und welches Ziel ich damit verfolge. Leider erlaubt die Zeit keinen detaillierten Einblick\\
+Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren Verbracht. Daher wird ein größerer Teil am Ende dem Ergebnis dieser Arbeit gewidmet.\\
+Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zuletzt vorgestellten Models mit einigen Einschränkungen präsentieren.
 	\subsection{Ziel}
-		Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation eines normalisierten BPDL und TSS Prozesses durchführen kann. Dies soll dem besseren Verständnis über BPDL und TSS Prozessen dienen und kann zu statischen Nachweisen verwendet werden. Gerade deswegen ist es wichtig sicherstellen zu können dass sich keine Fehler in die Implementation einschleicht. Dazu jedoch mehr im Kapitel "{}Korrektheit der Implementation"{}.
+		Das Ziel meiner Bachelorarbeit ist es ein Programm zu entwickeln welches eine Simulation eines normalisierten BPDL und TSS Prozesses durchführen kann. Dies soll dem besseren Verständnis über BPDL und TSS Prozessen dienen (und kann zu statischen Nachweisen verwendet werden). Gerade deswegen ist es wichtig sicherstellen zu können dass sich keine Fehler in die Implementation einschleicht. Dazu jedoch mehr im Kapitel "{}Korrektheit der Implementation"{}.
 	\subsection{Model}
 		Zunächst möchte ich das in der Simulation verwendete Model vorstellen.\\
 		\begin{itemize}
-			\item ? Dieses Modell soll eine Population beschreiben in der jedes Individuum ein Merkmal $ x \in X \subset \mathbf{R}^n $ hat. Wobei die Simulation $ X $ ein endlichen diskreten Merkmalsraum verwendet der hier der Einfachheit halber als Indexmenge $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale steht.
+			\item Dieses Modell soll eine Population beschreiben in der jedes Individuum ein Merkmal $ x \in X \subset \mathbf{R}^n $ hat. Wobei die Simulation $ X $ ein endlichen diskreten Merkmalsraum verwendet der hier der Einfachheit halber als Indexmenge $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale steht.
 			\item Jedes Individuum kann sich entweder asexuell fortpflanzen oder sterben
-			\item Diese Ereignisse treten dabei in exponentiell verteilter Häufigkeit auf. Diese exponentiellen Ereignisse haben die folgenden Raten:
+			\item Diese Ereignisse sind exponentiell verteilte Zeitpunkte. Diese exponentiellen Ereignisse haben die folgenden Raten:
 			\begin{itemize}
-				\item b(x): Geburtenraten (Fortpflanzung) für ein Individuum mit Merkmal x.
+				\item b(x): Geburtenraten durch ein Individuum mit Merkmal x (Fortpflanzung, nicht intrinsische Geburten).
 				\item d(x): natürliche Todesrate
 				\item c(x,y): Todesrate durch Wettbewerb zwischen zwei Individuen mit Merkmal x und y.
-				\item $ \mu $: Mutationswahrscheinlichkeit für eine Mutation "{}auf die Nachbarn"{} mit je $ 50\% $ Wahrscheinlichkeit.
+				\item $ \mu $: Mutationswahrscheinlichkeit "{}auf die Nachbarn"{} mit je $ \frac{\mu}{2} $ pro Nachbar. 
 			\end{itemize}
-			Durch Ausnutzung des Superpositions Prinzips (? und der Markoveigenschaft) können mehrere exponentielle Ereignisse zusammengefasst werden, so dass man z.B. eine Todesrate und eine Arteigene Geburtenraten erstellen kann:
+			Durch Ausnutzung des Superpositions Prinzips  können mehrere exponentielle Ereignisse zusammengefasst werden, so dass man z.B. eine Todesrate und eine Arteigene Geburtenraten erstellen kann (Summe exp. vert. ZV wieder exp. vert.):
 			\begin{itemize}
-			 	\item Arteigene Geburtenrate: $ b(x) \cdot (1 - \mu) + (b(x+1) + b(x-1)) \cdot \frac{\mu}{2}$
+			 	\item Arteigene Geburtenrate: $ b(x) \cdot (1 - \mu) + (b(x+1) + b(x-1)) \cdot \frac{\mu}{2}$, $ x \in \mathring{X} $
 			 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, wobei $ N_t $ die Anzahl der Individuen zum Zeitpunkt t ist und $ x_i $ das Merkmal des i-ten Individuums. Diese Rate kann praktischer dargestellt werden:
 			 	\item Todesrate: $ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) $, wobei $ n $ die Anzahl der Merkmale ist und $ n_t(x_i) $ die Anzahl der Individuen mit Merkmal $ x_i $ zur Zeit t.
 			\end{itemize}
 			Die Simulation soll die Entwicklung der Merkmale und nicht die Ereignisse der Individuen darstellen, daher ist es unpraktisch diese zu betrachten. Alternativ werden die Ereignisse zu denen von Merkmalen zusammengefasst:
 			\begin{itemize}
-				\item Geburtenrate des Merkmals x: \[ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} \]
+				\item Geburtenrate (Wachstumsrate) des Merkmals x: \[ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} \]
+				(Notation deutlich machen)
 				\item Todesrate des Merkmals x: 
 				\[ D(x) = d(x) \cdot n_t(x) + n_t(x) \cdot \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) \]
 			\end{itemize}
-			\item Um in der Simulation für den Fall vieler Merkmale nicht auch genauso viele Zufalls variablen ziehen zu müssen, werden die Raten zusammengefasst bis nur noch eine exponentielle Uhr läuft.
+			Das entspricht 2 exponentiellen Uhren pro Merkmal. Eine für Tod und eine für Geburt innerhalb des Merkmals.
+			\item Zur praktischen Simulation ist eine Gesamtrate für das Eintreten eines Ereignisses praktischer. Auf diese Weise wird nur auf das eintreffen einer Uhr gewartet.
 			\begin{itemize}
 				\item Ereignisrate des Merkmals x (Trait Rate):
 					\[ TR(x) = B(x) + D(x) \]
 				\item Totale Ereignis Rate (Total Event Rate): 
-				\[ TER(x) = \sum_{x \in X} TR(x)\]
+				\[ TER = \sum_{x \in X} TR(x)\]
 			\end{itemize}
 			Mit der Totalen Ereignisrate gibt es jetzt eine Rate die es erlaubt eine Zufallsvariable für das Eintreffen einer Variable zu ziehen. Anschließend ist es nur noch erforderlich (mit der Ziehung zwei weiterer Zufallsvairablen) festzustellen welchem Merkmal welches Ereignis zukommt.
-			\item Die Population wird durch die ZV $ \nu_t = \sum_{i = 1}^{N_t} \delta_{x_i}$ beschrieben.\\
-			Dabei nimmt $ \nu_t $ Werte in $ M_F(X) = \{\sum_{i=1}^{n} \delta_{x_i} \} $.
-			\item $ \nu_t $ ist ein Markov Sprung Prozess, $ \int_{x} \mathbbm{1}_{y}(x)\nu_t(dx)$.
+			\item Die Population ist ein Markov Sprungprozess der durch Zufallsvariablen
+			\[ \nu_t = \sum_{i=1}^{N_t} \delta_{x_i}, \text{ mit } \int_X 1\nu_t(dx) = N_t \]
+			beschrieben wird.\\
+			Dabei gilt: \[ \nu_t \in M_F(X) = \left\{ \sum_{i=1}^{n} \delta_{x_i}, n \in \mathbb{N}, x_1, \dots, x_n \in X \right\} \]
 			\item (Vielleicht nicht erwähnen?) Der Generator des so definierten BPDL-Prozess $ \nu_t $ ist:
 			\begin{align}
 				L_{\phi(\nu)} &= \int_{x} b(x)(1-\mu)[\phi(\nu + \delta_x) - \phi(\nu)]\nu(dx)\\
@@ -400,7 +405,8 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		\subsubsection{Normalisierung}
 		Wie schon zuvor erwähnt ist es für uns wichtig die Todes und Geburts Prozesse nicht auf der Ebene des Individuums zu betrachten, sondern auf der gesamten Population. Dazu wird die LPA(Large Population Approximation) Normalisierung eingeführt.\\
 		Dafür wird der Prozess mit einem Parameter K skaliert und es ergibt sich einen neue Zufallsvariable:
-		\[\nu_t^K := \frac{1}{K} \nu_t \]
+		\[ \nu_t^K := \frac{1}{K} \nu_t \]
+		Um weiterhin einen "{}Vergleichbaren"{} Prozess zu erhalten werden einige Anpassungen vorgenommen.
 		Hierbei wird die Anfangsgröße $ n_0^K $ der Population proportional zu K gewählt.\\
 		Die Raten für Geburten und natürliche Tode der Individuen bleiben hierbei unverändert. Da die Populationsgröße jedoch quadratisch in Wettbewerbsrate einfließt, sollte gelten: $ c^K = \frac{c}{K} $. Ein Beispiel dafür sieht folgendermaßen aus:
 		\begin{figure}[H]
@@ -423,11 +429,11 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 			\item Monomorphe Population\\
 				\begin{align*}
 				0 & = \dot{n} = (b(x) - d(x) - \bar{n}c(x,x))\bar{n}\\
-				\bar{n} &= \frac{b(x)-d(x)}{c(x,x)}
+				\bar{n} &= \frac{\left[ b(x)-d(x) \right]_+}{c(x,x)}
 				\end{align*}
 			\item Dimorphe Population\\
 				\[ n_x = \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
-				\[ \bar{n}_y = \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+				\[ n = \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
 				oder $ (\bar{n}_x, 0)$, $ (0, \bar{n}_y)$ bzw. $ (0,0) $
 		\end{itemize}
 		Später im Kapitel TSS wird die Fitness Funktion eingeführt die näher erläutern kann wann welcher dimorphe stabile Zustand angenommen wird.
@@ -436,11 +442,10 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		
 		
 	\subsection{Algorithmus}
-	Der verwendete Algorithmus führt einen Sprung des Markov Sprung Prozesses ab dem zuletzt bekannten Zeitpunkt t aus. Die tatsächlich verwendete Funktion sieht im Code so aus:
+	Der Simulation liegt ein Algorithmus zugrunde der einen Sprung des Markov Sprung Prozesses durchführt. Im Code wird dazu die "{}EvolutionStep()"{} Funktion aufgerufen. (Es gibt auch Jump statt Step, aber mehrere Schritte)
 	\begin{algorithm}[H]
 		\caption{EvolutionStep()}
 		\begin{algorithmic}[1]
-			\REQUIRE -
 			\ENSURE{A full evolution Step happened}
 			\STATE calculateEventRates();
 			\STATE sampleEventTime();
@@ -448,13 +453,11 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		\end{algorithmic}
 	\end{algorithm}
 	
-	Etwas ausführlicher werden folgende Berechnungen angestoßen:
+	Von dieser werden folgende Berechnungen angestoßen:
 		
 	\begin{algorithm}[H]
 		\caption{EvolutionStep()}
 		\begin{algorithmic}[1]
-			\REQUIRE -
-			
 			\ENSURE{A full evolution Step happened}
 			\STATE ---$>$calculateEventRates();
 			\STATE calculateTotalDeathRates()
@@ -525,7 +528,8 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 	\subsection{Simulation}
 	Nun kommen wir zur eigentlichen Simulation. Damit ist sowohl die Darstellung als auch die Programmarchitektur gemeint. 
 		\subsubsection{Aufgabenteilung und Flexibilität}
-		Die Architektur des Programms kann grob in drei Module gefasst werden. Die Idee der getrennten Aufgabenbereiche geht darauf zurück dass eine möglichst große Unabhängigkeit zwischen Arbeitsschritten notwendig ist um das Programm flexibel zu halten und sogenannten "{}Coderot"{} - "{}faulen Code"{} zu verhindern. Das bedeutet dass das Programm mit steigender Komplexität zunehmend unflexibler wird, also das Hinzufügen weiterer Features oder das Ändern/Verbessern zu sogenanntem "{}undefiniertem Verhalten"{} führt. (kurze Erklärung zum Begriff).\\
+		Die Idee der getrennten Aufgabenbereiche geht darauf zurück dass eine möglichst große Unabhängigkeit zwischen Arbeitsschritten notwendig ist um das Programm flexibel zu halten und sogenannten "{}Coderot"{} - "{}faulen Code"{} zu verhindern. Das bedeutet dass das Programm mit steigender Komplexität zunehmend unflexibler wird, also das Hinzufügen weiterer Features oder das Ändern/Verbessern zu sogenanntem "{}undefiniertem Verhalten"{} führt. (kurze Erklärung zum Begriff).\\
+		Die Architektur des Programms kann grob in drei Module gefasst werden. 
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.7\linewidth]{./Bild_Module}
@@ -533,8 +537,8 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 			\label{Module und Klassen}
 		\end{figure}
 		Innerhalb der Arbeitsschritte sollte dabei genau die selbe Regel der Unabhängigkeit gelten wie bei den Modulen.
-		\subsubsection{Layout}
 		
+		\subsubsection{Layout}
 		\begin{itemize}
 			\item Die Bedienung des Programms sollte das lesen und Anzeigen der Merkmals-Parameter bereitstellen. Da es viele Parameter gibt und die Anzahl der Parameter quadratisch mit der Anzahl der betrachteten Merkmale steigt, bietet sich das Lesen aus zuvor beschriebenen Dateien an.
 			\begin{figure}[H]
@@ -552,6 +556,19 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 				\label{Baumstruktur}
 			\end{figure}
 			\item Die letzte Herausforderung bestand darin eine Instanz durch das Programm geleitet erstellen zu können. Während diese Aufgabe bei einer Konsolenanwendung (bekannt aus den klassischen c Programmen) denkbar einfach mit "{}printf"{} und "{}scanf"{} erledigt werden konnte, sollte bei einem GUI eine Lösung her die Inputkonflikte verhindert und das Einlesen der Daten denkbar einfach macht. Dafür war es sinnvoll "{}Enter"{} als Bestätigung abzufangen und sicherzustellen dass der Curser nur innerhalb des gewünschten Feldes bleibt.
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\linewidth]{./MainWindow_createFile}
+				\caption[erstelle Datei]{Nach Klick auf "{}create File"{} werden die neuen Parameter einzeln abgefragt}
+				\label{fig:MainWindow_createFile}
+			\end{figure}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\linewidth]{./MainWindow_FileCreated}
+				\caption[Datei erstellt]{Nach Eingabe des letzten Parameters}
+				\label{fig:MainWindow_FileCreated}
+			\end{figure}
+
 		\end{itemize}
 		Was die Darstellung der Graphen angeht, hat sich ein einfaches Bild des fertigen Plots durchgesetzt, wobei das Zoomen und ziehen des Bildes notwendige Elemente zur Untersuchung des Graphen sind. Zusätzlich ist es notwendig viele Bilder vergleichen zu können. Hierfür wurde das Abspeichern des Bildes gewünscht.\\
 		Die Simulation wird gestartet nachdem man auf den "{}Plot"{} Button drückt. Dabei wird ein neues Fenster geöffnet.
@@ -561,7 +578,7 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 			\caption[PlotWindow_start]{Start des PlotWindow}
 			\label{PlotWindow_start}
 		\end{figure}
-		Sobald der Plot Button gedrückt wurde und das Fenster angezeigt wird, arbeitet die Simulation bereits im Hintergrund in einem eigenen Thread. Dort werden alle notwendigen Iterationen bzw. Sprünge der Population durchgeführt ohne den Hauptthread damit zu belasten. Während dieser Arbeiterthread aktiv arbeitet wird der "{}Plot"{} Button ausgegraut um mehrfaches Auslösen zu vermeiden und um anzuzeigen dass die Rechnung im Gange ist.\\
+		Sobald der Plot Button gedrückt wurde und das Fenster angezeigt wird, arbeitet die Simulation bereits im Hintergrund in einem eigenen Thread. Dort werden alle notwendigen Iterationen bzw. Sprünge der Population durchgeführt ohne den Hauptthread damit zu belasten.\\ Während dieser Arbeiterthread aktiv arbeitet wird der "{}Plot"{} Button ausgegraut um mehrfaches Auslösen zu vermeiden und um anzuzeigen dass die Rechnung im Gange ist.\\
 		Der Arbeiterthread gewährleistet nicht nur eine flüssige Interaktion mit dem Programm, sondern verhindert auch effektiv dass das Betriebssystem denkt das Programm wäre Abgestürzt oder würde nicht mehr ordnungsgemäß funktionieren. Das würde sonst folgendes evtl. bekannte Bild hervorrufen:
 		\begin{figure}[H]
 			\centering
@@ -582,7 +599,7 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 	(Korrektheit des Algorithmus nicht notwendig bzw möglich)
 	Ein ganz besonders interessantes Thema ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).\\
 	Daher habe ich das Prinzip der "{}Testgetriebene Entwicklung"{}  (Test Driven Develeopment) verwendet.\\
-	Dabei werden Funktionen des Programms unter vorher festgelegten Bedingungen laufen gelassen und mit einem erwarteten Verhalten verglichen. Das Ergebnis ist eine Ausgabe für Erfolg oder Misserfolg des Tests. Folgend ein Beispiel für eine Implementation eines einfachen Tests der prüft ob alle Parameter korrekt aus der Datei in die Variablen geschrieben werden.
+	Dabei werden Funktionen des Programms unter vorher festgelegten Bedingungen laufen gelassen und mit einem erwarteten Verhalten verglichen. Das Ergebnis ist eine Ausgabe für Erfolg oder Misserfolg des Tests. Folgend ein Beispiel für eine Implementation eines einfachen Tests der prüft ob alle Parameter korrekt aus der Datei in die Objekte geschrieben werden.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.7\linewidth]{./UnitTest}
@@ -600,9 +617,9 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 	
 	\subsection{TSS}
 	Bei TSS Prozessen beobachten wir wie sich Merkmale gegeneinander durchsetzten und sich verdrängen. (Tafelbild)\\
-	Genau wie bei der LPA-Normalisierung ergeben sich TSS-Prozesse(Trait Substitution Sequence) als Grenzprozesse von BPDL-Prozessen. Zu der LPA-Normalisierung sollten jedoch mit größer werdendem K die Mutationen seltener werden ($ \frac{1}{e^{VK}} << u_K << \frac{1}{K log(K)} $) , also die Mutationswahrscheinlichkeit gegen 0 streben. Skaliert man nun noch zusätzlich die Zeit, so führt dies dazu, dass die Zeit, die ein Merkmal benötigt, um sich gegenüber einem anderen durchzusetzen und dieses zu verdrängen, infinitesimal klein wird. Somit simulieren die TSS-Prozesse eine Population, die zu jedem Zeitpunkt monomorph ist und sich im entsprechenden (für $ K < \infty $ angepassten) Equilibrium befindet.\\
+	Genau wie bei der LPA-Normalisierung ergeben sich TSS-Prozesse(Trait Substitution Sequence) als Grenzprozesse von BPDL-Prozessen. Zu der LPA-Normalisierung sollten jedoch mit größer werdendem K die Mutationen seltener werden ($ \frac{1}{e^{VK}} << \mu_K << \frac{1}{K log(K)} $) , also die Mutationswahrscheinlichkeit gegen 0 streben. Skaliert man nun noch zusätzlich die Zeit, so führt dies dazu, dass die Zeit, die ein Merkmal benötigt, um sich gegenüber einem anderen durchzusetzen und dieses zu verdrängen, infinitesimal klein wird. Somit simulieren die TSS-Prozesse eine Population, die zu jedem Zeitpunkt monomorph ist und sich im entsprechenden (für $ K < \infty $ angepassten) Equilibrium befindet.\\
 	Spätestens jetzt wird die Fitness-Funktion interessant:
-	\[f(x,y) = b(x) - d(x) - c(x,y)\bar{n_y} \]
+	\[ f(x,y) = b(x) - d(x) - c(x,y)\bar{n}_y \]
 	Diese Fitness-Funktion gibt an, wie gut sich ein Merkmal gegenüber einem anderen durchsetzen kann. Sie ist die asymptotische Wachstumsrate von y, wenn x sich im Gleichgewichtszustand $ \bar{n}_x $ befindet und nur wenige Individuen von Typ y in der Population vorhanden sind. In der Simulation sieht man die Fitness der Merkmale zueinander in einer Matrix nach dem Laden der Parameter.
 	\begin{figure}[H]
 		\centering
@@ -611,7 +628,7 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		\label{MainWindow mit Fitness Bandmatrix}
 	\end{figure}
 	Mit der Fitness kann man eine Konvergenz der Wahrscheinlichkeit für das überleben einer Mutation vorhersagen:
-	\[ \frac{\left[ f(y,x)\right]_+ }{b(y)}\]
+	\[ \frac{\left[ f(y,x)\right]_+ }{b(y)} \]
 	Da diese Wahrscheinlichkeit gerne bereits beim einlesen der Parameter angezeigt werden will, habe ich vor sie als farblich ansteigenden Akzent den Elementen der Zelle hinzuzufügen. Bisher wird in der Matrix etwas grün oder rot markiert. Rot falls eine Koexistenz vorliegt und grün wenn die Wahrscheinlichkeit für Dominanz des Mutanten über 50\% liegt.
 	\begin{figure}[H]
 		\centering
@@ -635,10 +652,15 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 
 
 \section{Weitere geplante Punkte}
+\subsection{Offene Fragen}
+	\begin{itemize}
+		\item Soll die Mutationswahrscheinlichkeit für BPDL proportional zu K gestaucht werden oder auch wie bei TSS?
+	\end{itemize}
 \subsection{Bekannte Bugs}
 	\begin{itemize}
 		\item Fehler beim Laden nicht falsch eingetippter Instanznamen abfangen.
 		\item Zeitlinie bei BPDL Programm. Wenn K 100 mal kleiner wird, so wird Die Zeit auch 100 mal kürzer. Sollte aber nicht passieren.
+		\item Manchmal nicht korrektes Aussterben. Todespunkt wird nicht gemalt $ \Rightarrow $ wird als aktiv angezeigt.
 	\end{itemize}
 	
 \subsection{große Verbesserungen}
@@ -653,11 +675,10 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		\item GraphClass aufräumen (RangeCheck etc.)
 		\item Unit Tests anpassen und mit TSS erweitern (und Mutation rate testen)
 		\item Beim speichern die Zeit hinzufügen um das häufige überschreiben zu vermeiden.
-
-		\item Unterschiedlich große Sprünge erklären (Auslöschung bei Addition -Nulladdition- oder Jumps?)
 		\item Release Version des Programms erstellen.
 		\item Es wurde gewünscht dass irgendwo die Anzahl der Mutationen bis ein Switch von dominanten Merkmalen stattgefunden hat angezeigt wird.
 		\item komplexere dimorphe stabile Zustände implementieren. Mit Rücksicht auf Fitness.
+		\item dynamisches Zeichnen des Graphen mit "{}addData"{} und "{}replot"{}
 	\end{itemize}
 
 \subsection{kleine Verbesserungen}
@@ -665,11 +686,12 @@ Den größten Teil der Zeit seit dem letzten Seminar habe ich mit programmieren 
 		\item Sofortiges Laden der Instanz nach erstellen der neuen Testinstanz
 		\item Was passierte wenn während eines Jumps eine Mutation stattfindet?
 		\item Fitness Matrix beschriften
+		\item Fenster benennen
 		\item Items in der Tabelle sollten zentrieren
 		\item Es sollte das aktuell verwendete K in der Simulation angezeigt werden.
 		\item stabiler Zustand weniger Aufdringlich (z.B. größerer Abstand zwischen Strichen und geringere Strichstärke)
 		\item Feedback beim Speichern eines Bildes
-		\item Wenn Plot Button grau ist, soll
+		\item Wenn Plot Button grau ist, soll der Buttontext deutlich machen dass simuliert (gearbeitet) wird. Vielleicht sogar mit "{}estimated time"{}.
 		\item Überschrift bzw Namen der Fenster ändern.
 	\end{itemize}
 
