@@ -116,7 +116,8 @@
 		\pause
 		\begin{itemize}
 			\item Ereignisrate des Merkmals x (Trait Rate):
-				\[ TR(x) = B(x) + D(x) \]
+			\[ TR(x) = B(x) + D(x) \]
+			\pause
 			\item Totale Ereignis Rate (Total Event Rate): 
 			\[ TER = \sum_{x \in X} TR(x)\]
 		\end{itemize}
@@ -129,7 +130,7 @@
 		\[ \nu_t = \sum_{i=1}^{N_t} \delta_{x_i}, \text{ mit } \int_X 1\nu_t(dx) = N_t \]
 		beschrieben wird.\\
 		Wobei:
-		\[ \nu_t \in M_F(X) = \left\{ \sum_{i=1}^{n} \delta_{x_i}, n \in \mathbb{N}, x_1, \dots, x_n \in X \right\} \]
+		\[ \nu_t \in M_F(X) = \left\{ \sum_{i=1}^{N_t} \delta_{x_i}, N_t \in \mathbb{N}, x_1, \dots, x_{N_t} \in X \right\} \]
 	\end{frame}
 	
 	
@@ -226,7 +227,7 @@
 	\end{frame}
 	
 \section{Simulation}
-	\subsection{Aufgabenteilung und Flexibilität}
+	\subsection{Aufgaben und Flexibilität}
 		\begin{frame}
 			\frametitle{Flexibilität}
 			Um Flexibilität aufrecht zu erhalten werden die Arbeitsbereiche im Code getrennt gehalten\\
@@ -235,7 +236,7 @@
 			\begin{itemize}
 				\item Möglichst viel Unabhängigkeit
 				\pause
-				\item verhindert "Coderot" - faulen Code
+				\item verhindert "{}Coderot"{} - faulen Code
 				\pause
 				\item steigende Komplexität führt nicht zu undefiniertem Verhalten
 				\pause
@@ -414,9 +415,12 @@
 		\frametitle{Trait Substitution Sequence}
 		\begin{itemize}
 			\item Wie bei LPA-Normalisierung ergeben sich TSS-Prozesse als Grenzprozesse von BPDL-Prozessen
+			\pause
 			\item Jedoch mit wachsendem K schrumpft $ \mu $ mit der Ordnung:
 			\[ \frac{1}{e^{VK}} << \mu_K << \frac{1}{K log(K)} \]
+			\pause
 			\item Weiterhin wird die Zeit skaliert so dass die Verdrängungszeit infinitesimal klein wird
+			\pause
 			\item Für die Simulation bedeutet es, dass sehr viele Sprünge um das Equilibrium zu erwarten sind
 		\end{itemize}
 	\end{frame}
@@ -465,7 +469,7 @@
 			Im dimorphen Fall gilt:
 			\begin{itemize}
 				\item $ f(y,x) < 0 \Rightarrow (\bar{n}_x,0) $ ist ein stabiler Zustand
-				\item $ f(y,x) > 0 \wedge f(x,y) < 0 \Rightarrow (\bar{n}_x,0) $ ist ein stabiler Zustand
+				\item $ f(y,x) > 0 \wedge f(x,y) < 0 \Rightarrow (\bar{n}_y,0) $ ist ein stabiler Zustand
 			\end{itemize}
 			\pause
 			Für TSS-Prozesse gilt:
