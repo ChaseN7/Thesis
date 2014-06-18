@@ -215,7 +215,7 @@
    </widget>
    <widget class="QTableWidget" name="tableWidget_Fitness">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="geometry">
      <rect>

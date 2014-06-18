@@ -11,6 +11,7 @@
 \usepackage{bbm}
 \usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 \title{Small summery}
 \author{Boris Prochnau}
@@ -645,9 +646,28 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	Unglücklicherweise gibt es viele kleine solche Features und Daten die mit dem Programm verbunden wären. 
 
 \newpage
+
+
+
 \section{Achtes Treffen}
 \subsection{Was ist geplant?}
+	\begin{itemize}
+		\item Fehler mit Equilibrium beheben. TSS sollte korrekt im Equilibrium interpoliert werden und nicht drum herum. \checkmark
+		\item Fehler beim Laden falsch eingetippter Instanznamen abfangen. \checkmark
+		\item BirthRate Berechnung optimieren \checkmark
+		\item "{}CalculateTotalDeathRateOf"{} zu "{}CalculateTotalDeathRates"{} verwandeln. \checkmark
+		\item DeathRate Berechnung beschleunigen. Bzw adjustNewEventRates aufraeumen
+		\item alte Unit Tests wieder zum laufen bringen.
+		\item neue Unit Tests erstellen (alles in GraphClass).
+		\item neue Unit Tests erstellen Mutation und komplexere Validierungen.
+		\item Vereinen des Programmkernels TSS und BPDL
+	\end{itemize}
 \subsection{Was habe ich gemacht?}
+	\begin{itemize}
+		\item Fehler behoben, TSS wird jetzt korrekt im Equilibrium interpoliert.
+		\item Das Laden falscher Instanznamen führt nicht mehr zum Absturz.
+		\item einfache Birthrate berechnung optimiert. Dauer um 10-25\% verbessert. Diese Werte stamme von empirischen Messungen während er Laufzeit.
+	\end{itemize}
 \subsection{Bekannte Bugs}
 
 
@@ -658,29 +678,38 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	\end{itemize}
 \subsection{Bekannte Bugs}
 	\begin{itemize}
-		\item Fehler beim Laden nicht falsch eingetippter Instanznamen abfangen.
 		\item Zeitlinie bei BPDL Programm. Wenn K 100 mal kleiner wird, so wird Die Zeit auch 100 mal kürzer. Sollte aber nicht passieren.
 		\item Manchmal nicht korrektes Aussterben. Todespunkt wird nicht gemalt $ \Rightarrow $ wird als aktiv angezeigt.
+		\item TSS sollte korrekt im Equilibrium interpoliert werden und nicht drum herum. \checkmark
+		\item Fehler beim Laden falsch eingetippter Instanznamen abfangen. \checkmark		
 	\end{itemize}
 	
 \subsection{große Verbesserungen}
 	\begin{itemize}
-		\item skalieren der interpolierten TSS stellen.
-		\item Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
+		
+		\item alte Unit Tests wieder zum laufen bringen.
+		\item neue Unit Tests erstellen (alles in GraphClass).
+		\item neue Unit Tests erstellen Mutation und komplexere Validierungen.
+		\item Vereinen des Programmkernels TSS und BPDL
+		
+		\item Anpassen der neuen Geburten und Equilibrien.
 		\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen terminiert.
 		\item Dokumentation zu Programmcode und Bedienung
-		\item Anpassen der neuen Geburten und Equilibrien.
+		\item aufräumen $ \to $ GraphClass: (RangeCheck etc.), MainWindow: (Fitness etc.)
+		\item Es wurde gewünscht dass irgendwo die Anzahl der Mutationen bis ein Switch von dominanten Merkmalen stattgefunden hat angezeigt wird.
+		
 		\item Evtl. Abfrage beim Überschreiben von Dateien
 		\item Instanzexplorer
-		\item GraphClass aufräumen (RangeCheck etc.)
-		\item Unit Tests anpassen und mit TSS erweitern (und Mutation rate testen)
-		\item Beim speichern die Zeit hinzufügen um das häufige überschreiben zu vermeiden.
+		
+		\item Beim speichern der Bilder die Zeit hinzufügen um das häufige überschreiben zu vermeiden.
 		\item Release Version des Programms erstellen.
-		\item Es wurde gewünscht dass irgendwo die Anzahl der Mutationen bis ein Switch von dominanten Merkmalen stattgefunden hat angezeigt wird.
+
 		\item komplexere dimorphe stabile Zustände implementieren. Mit Rücksicht auf Fitness.
 		\item dynamisches Zeichnen des Graphen mit "{}addData"{} und "{}replot"{}
 		\item interaktives Anpassen der Parameter über die Oberfläche
 		\item test der Totalen Mutationsrate erstellen
+		\item skalieren der interpolierten TSS stellen.
+		\item Es wäre sinnvoll wenn es eine Möglichkeit gibt die angestrebten stabilen Zustände als Option auszuwählen welche angezeigt werden sollten. Dabei sollte die Beschriftung "{}Dimorph"{} oder "{}Monomporph"{} darin auftauchen.
 	\end{itemize}
 
 \subsection{kleine Verbesserungen}

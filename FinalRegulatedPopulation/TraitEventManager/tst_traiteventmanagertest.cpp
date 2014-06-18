@@ -77,7 +77,7 @@ void TraitEventManagerTest::verifyTotalIntrinsicDeathRate()
 {
     Manager.initWithFile("ValidateTests.txt");
     for(int i = 0; i < TraitClass::Size; ++i){
-        Manager.addTotalIntrisicDeathRateOf(i);
+        Manager.setTotalIntrisicDeathRateOf(i);
         QCOMPARE(Manager.Trait[i].TotalDeathRate, 500.);
     }
     Manager.clearData();
@@ -97,27 +97,33 @@ void TraitEventManagerTest::verifyTotalCompDeathRate()
 
 void TraitEventManagerTest::verifyTotalDeathRate()
 {
-    Manager.initWithFile("ValidateTests.txt");
-    QVERIFY(TraitClass::Size == 3);
-    for(int i = 0; i < TraitClass::Size; ++i)
-        Manager.calculateTotalDeathRateOf(i);
     qDebug()<<"verify total death rates ...";
+    Manager.initWithFile("ValidateTests.txt");
+
+    time_t start = clock();
+    for(int k = 0; k < 1000000; ++k)
+        Manager.calculateTotalDeathRates();
+    qDebug()<<"elapsed time:"<< clock()- start<<"ms";
+
     QCOMPARE(Manager.Trait[0].TotalDeathRate, 30000.+500.);
-    qDebug()<<"trait"<<0<<"total death rate:"<<30000.+500.;
+    qDebug()<<"trait 0 total death rate:"<<30000.+500.;
     QCOMPARE(Manager.Trait[1].TotalDeathRate, 25000.+500.);
-    qDebug()<<"trait"<<1<<"total death rate:"<<25000.+500.;
+    qDebug()<<"trait 1 total death rate:"<<25000.+500.;
     QCOMPARE(Manager.Trait[2].TotalDeathRate, 40000.+500.);
-    qDebug()<<"trait"<<2<<"total death rate:"<<40000.+500.;
+    qDebug()<<"trait 2 total death rate:"<<40000.+500.;
+
     Manager.clearData();
 }
 
 void TraitEventManagerTest::verifyTotalBirthRate()
 {
-    Manager.initWithFile("ValidateTests.txt");
-    Manager.calculateTotalBirthRates(0);
-    Manager.calculateTotalBirthRates(0);
-    QVERIFY(TraitClass::Size == 3);
     qDebug()<<"verify total birth rates ...";
+    Manager.initWithFile("ValidateTests.txt");
+    time_t start = clock();
+    for(int k = 0; k < 1000000; ++k)
+        Manager.calculateTotalBirthRates();
+    qDebug()<<"elapsed time:"<< clock()- start<<"ms";
+    QVERIFY(TraitClass::Size == 3);
     QCOMPARE(Manager.Trait[0].TotalBirthRate, 1050.);
     qDebug()<<"trait"<<0<<"total birth rate:"<<1050.<<"verified";
     QCOMPARE(Manager.Trait[1].TotalBirthRate, 1100.);

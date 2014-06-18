@@ -55,7 +55,7 @@ bool GraphClass::isNearTSS(const int & chosen) const
 //    }
     /// Check if active Trait is close enough to its equilibrium
     double diff = TraitHistory[chosen].back() - ExpectedMonomorph[chosen];
-    if(diff > 1./TraitClass::K || diff < -1./TraitClass::K)
+    if(diff >= 0.5/TraitClass::K || diff <= -0.5/TraitClass::K/2)
         return false;
     return true;
 }

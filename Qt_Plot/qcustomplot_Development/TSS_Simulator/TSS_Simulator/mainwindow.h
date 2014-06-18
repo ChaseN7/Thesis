@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void readFileContent(QString Filename);
+    bool readFileContent(QString Filename);
     void addRootItem(QString value);
     void addChildItem(QTreeWidgetItem* parent, QString value);
     ~MainWindow();
@@ -31,6 +31,7 @@ public:
     void iterateMembers(QString StepName, int size);
     void iterateBirths(QString StepName, int size);
     void iterateDeaths(QString StepName, int size);
+    void enableClearWidgets(bool isFound);
 private slots:
     void on_pushButton_plot_clicked();
 

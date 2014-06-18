@@ -191,9 +191,11 @@ void TraitEventManager::clearData()
 bool TraitEventManager::initWithFile(QString FName)
 {
     FileStreaming Stream;
-    bool success = Stream.initializeWithFile(FName, Trait);
-    calcFitness();
-    return success;
+    if(Stream.initializeWithFile(FName, Trait)){
+        calcFitness();
+        return true;
+    }
+    return false;
 }
 
 double TraitEventManager::getKMembers(int TraitIndex) const
