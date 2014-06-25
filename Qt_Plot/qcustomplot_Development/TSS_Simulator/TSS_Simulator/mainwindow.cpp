@@ -34,29 +34,19 @@ void MainWindow::addTreeTraitProperties(TraitEventManager Parameters)
     }
 }
 
-void MainWindow::enableClearWidgets(bool isFound)
-{
-    ui->treeWidget_parameters->clear();
-    ui->tableWidget_Fitness->clear();
-    ui->treeWidget_parameters->setEnabled(isFound);
-    ui->groupBox_Plot->setEnabled(isFound);
-    ui->tableWidget_Fitness->setEnabled(isFound);
-}
-
 void MainWindow::displayTraitData(/*QString Filename, */TraitEventManager Parameters, bool isFound)
 {
-    enableClearWidgets(isFound);
-
+    ui->treeWidget_parameters->clear();
+    ui->treeWidget_parameters->setEnabled(isFound);
+    ui->groupBox_Plot->setEnabled(isFound);
     if(isFound){
         addTreePopulationProperties();
         addTreeTraitProperties(Parameters);
     }
-    else{
+    else
         addRootItem("file not found!");
-        return;
-    }
 
-
+    ui->tableWidget_Fitness->clear();
     ui->tableWidget_Fitness->setColumnCount(TraitClass::Size);
     ui->tableWidget_Fitness->setRowCount(TraitClass::Size);
     // set the default size, here i've set it to 20px by 20x
@@ -146,11 +136,10 @@ bool MainWindow::iterateTraitProperties(QString StepName, int size)
     return true;
 }
 
-bool MainWindow::readFileContent(QString Filename){
+void MainWindow::readFileContent(QString Filename){
     TraitEventManager Parameters;
     bool isFound = Parameters.initWithFile(Filename);
-    displayTraitData(Parameters, isFound);
-    return isFound;
+    displayTraitData(/*Filename, */Parameters, isFound);
 }
 
 void MainWindow::addRootItem(QString value)
@@ -201,9 +190,8 @@ void MainWindow::on_pushButton_plot_clicked()
 void MainWindow::on_pushButton_load_File_clicked()
 {
     QString Filename = ui->lineEdit_FileName->text();
-    ui->treeWidget_parameters->setHeaderLabel("File not found!");
-    if(readFileContent(Filename))
-        ui->treeWidget_parameters->setHeaderLabel(Filename);
+    ui->treeWidget_parameters->setHeaderLabel(Filename);
+    readFileContent(Filename);
 }
 
 void MainWindow::on_pushButton_create_File_clicked()

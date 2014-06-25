@@ -17,7 +17,8 @@ public:
     void addTotalCompDeathRateOf(int TraitIndex);
     void addTotalIntrisicDeathRateOf(int TraitIndex);
     void calculateTotalDeathRateOf(int TraitIndex);
-    void calculateTotalBirthRates(int start);
+    void calculateTotalDeathRates();
+    void calculateTotalBirthRates();
     void calculateTotalEventRate();
     void calculateEventRates();
     void sampleEventTime();
@@ -36,8 +37,8 @@ public:
     /// Utilities
     bool initWithFile(QString FName);
     double getKMembers(int TraitIndex) const;
-    double retStableDimorphOf(int i) const;
-    double retStableMonoStateOf(int i) const;
+    double retStableDimorphKOf(int i) const;
+    double retStableKMonoOf(int i) const;
     QVector<double> retStableDimorphKVector() const;
     QVector<double> retStableMonoKVector() const;
     bool isNear(QVector<double> &Expected);

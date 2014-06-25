@@ -26,9 +26,60 @@ TraitEventManager::TraitEventManager(QString FileName):
     Trait(),
     Events()
 {
-    initWithFile(FileName);
-    calculateEventRates();
+    if(initWithFile(FileName))
+        calculateEventRates();
 }
+
+
+//void TraitEventManager::addTotalCompDeathRateOf(int i)
+//{
+//    double extDeath = 0;
+//    for(int j = 0; j < TraitClass::Size; j++)
+//        extDeath += TraitClass::CompDeathRate.at(i).at(j) * Trait[j].Members;
+//    extDeath *= Trait[i].Members;
+//    Trait[i].TotalDeathRate += extDeath;
+//}
+
+//void TraitEventManager::setTotalIntrisicDeathRateOf(int i)
+//{
+//    Trait[i].TotalDeathRate = (Trait[i].DeathRate)*(Trait[i].Members);
+//}
+
+//void TraitEventManager::calculateTotalDeathRates()
+//{
+//    for(int k = 0; k < TraitClass::Size; ++k){
+//        setTotalIntrisicDeathRateOf(k);
+//        addTotalCompDeathRateOf(k);
+//    }
+//}
+
+//void TraitEventManager::calculateTotalBirthRates()
+//{
+//    int n = TraitClass::Size;
+//    for(int k = 0; k < n; ++k)
+//        Trait[k].TotalBirthRate = (Trait[k].Members)*(Trait[k].BirthRate);
+//    for(int k = 1; k < n-1; ++k){
+//        Trait[k].TotalBirthRate += 0.5*(Trait[k-1].Members)*(Trait[k-1].BirthRate)*(TraitClass::Mutation);
+//        Trait[k].TotalBirthRate += 0.5*(Trait[k+1].Members)*(Trait[k+1].BirthRate)*(TraitClass::Mutation);
+//    }
+//    Trait[n-1].TotalBirthRate += 0.5*(Trait[n-2].Members)*(Trait[n-2].BirthRate)*(TraitClass::Mutation);
+//    Trait[0].TotalBirthRate += 0.5*(Trait[1].Members)*(Trait[1].BirthRate)*(TraitClass::Mutation);
+//}
+
+//void TraitEventManager::calculateTotalEventRate()
+//{
+//    for(int i = 0; i < TraitClass::Size; i++){
+//        Trait[i].TotalTraitRate = Trait[i].TotalBirthRate + Trait[i].TotalDeathRate;
+//        TraitClass::TotalEventRate += Trait[i].TotalTraitRate;
+//    }
+//}
+
+//void TraitEventManager::calculateEventRates()
+//{
+//    calculateTotalDeathRates();
+//    calculateTotalBirthRates();
+//    calculateTotalEventRate();
+//}
 
 
 void TraitEventManager::addTotalCompDeathRateOf(int i)
@@ -52,19 +103,28 @@ void TraitEventManager::calculateTotalDeathRateOf(int TraitIndex)
     addTotalIntrisicDeathRateOf(TraitIndex);
 }
 
-void TraitEventManager::calculateTotalBirthRates(int i)
+void TraitEventManager::calculateTotalDeathRates()
 {
-    Trait[i].TotalBirthRate = (Trait[i].Members) * (Trait[i].BirthRate);
-    if(i < TraitClass::Size - 1){
-        calculateTotalBirthRates(i+1);
-        Trait[i].TotalBirthRate += TraitClass::Mutation*0.5
-                                    *(Trait[i+1].Members)*(Trait[i+1].BirthRate);
+    for(int k = 0; k < TraitClass::Size; ++k){
+        Trait[k].TotalDeathRate = 0;
+        addTotalCompDeathRateOf(k);
+        addTotalIntrisicDeathRateOf(k);
     }
-
-    if(i > 0)
-        Trait[i].TotalBirthRate += TraitClass::Mutation*0.5
-                *(Trait[i-1].Members)*(Trait[i-1].BirthRate);
 }
+
+void TraitEventManager::calculateTotalBirthRates()
+{
+    int n = TraitClass::Size;
+    for(int k = 0; k < n; ++k)
+        Trait[k].TotalBirthRate = (Trait[k].Members)*(Trait[k].BirthRate);
+    for(int k = 1; k < n-1; ++k){
+        Trait[k].TotalBirthRate += 0.5*(Trait[k-1].Members)*(Trait[k-1].BirthRate)*(TraitClass::Mutation);
+        Trait[k].TotalBirthRate += 0.5*(Trait[k+1].Members)*(Trait[k+1].BirthRate)*(TraitClass::Mutation);
+    }
+    Trait[n-1].TotalBirthRate += 0.5*(Trait[n-2].Members)*(Trait[n-2].BirthRate)*(TraitClass::Mutation);
+    Trait[0].TotalBirthRate += 0.5*(Trait[1].Members)*(Trait[1].BirthRate)*(TraitClass::Mutation);
+}
+
 
 void TraitEventManager::calculateTotalEventRate()
 {
@@ -78,10 +138,11 @@ void TraitEventManager::calculateTotalEventRate()
 
 void TraitEventManager::calculateEventRates()
 {
-    for(int i = 0; i < TraitClass::Size; i++){
-        calculateTotalDeathRateOf(i);
-    }
-    calculateTotalBirthRates(0);
+//    for(int i = 0; i < TraitClass::Size; i++){
+//        calculateTotalDeathRateOf(i);
+//    }
+    calculateTotalDeathRates();
+    calculateTotalBirthRates();
     calculateTotalEventRate();
 }
 
@@ -191,11 +252,17 @@ void TraitEventManager::clearData()
 bool TraitEventManager::initWithFile(QString FName)
 {
     FileStreaming Stream;
-    if(Stream.initializeWithFile(FName, Trait)){
-        calcFitness();
-        return true;
+    try{
+        if(Stream.initializeWithFile(FName, Trait)){
+            calcFitness();
+            return true;
+        }
+        throw -1;
     }
-    return false;
+    catch(int e){
+        return false;
+    }
+
 }
 
 double TraitEventManager::getKMembers(int TraitIndex) const
@@ -203,7 +270,7 @@ double TraitEventManager::getKMembers(int TraitIndex) const
     return Trait[TraitIndex].Members / TraitClass::K;
 }
 
-double TraitEventManager::retStableDimorphOf(int i) const
+double TraitEventManager::retStableDimorphKOf(int i) const
 {
     int j;
     if(i > 0)
@@ -231,7 +298,7 @@ QVector<double> TraitEventManager::retStableDimorphKVector() const
 {
     QVector<double> expVals(TraitClass::Size);
     for(int i = 0; i < TraitClass::Size; ++i)
-        expVals[i] = retStableDimorphOf(i)/TraitClass::K;
+        expVals[i] = retStableDimorphKOf(i);
     return expVals;
 }
 
@@ -239,17 +306,17 @@ QVector<double> TraitEventManager::retStableMonoKVector() const
 {
     QVector<double> expVals(TraitClass::Size);
     for(int i = 0; i < TraitClass::Size; ++i)
-        expVals[i] = retStableMonoStateOf(i)/TraitClass::K;
+        expVals[i] = retStableKMonoOf(i);
     return expVals;
 }
 
-double TraitEventManager::retStableMonoStateOf(int i) const
+double TraitEventManager::retStableKMonoOf(int i) const
 {
     double expected = Trait[i].BirthRate /** (1-TraitClass::Mutation)*/ - Trait[i].DeathRate;
     double divisor = TraitClass::CompDeathRate[i][i];
     if(divisor > 0){
         expected /= TraitClass::CompDeathRate[i][i];
-        return expected;
+        return expected/TraitClass::K;
     }
     return -1.;
 }
@@ -259,7 +326,7 @@ bool TraitEventManager::isNear(QVector<double> &Expected)
     bool close = true;
     double diff;
     for(int i = 0; i < TraitClass::Size; i++){
-        diff = getKMembers(i) - Expected[i];
+        diff = fabs(getKMembers(i) - Expected[i]);
         close = close && diff < 15./sqrt(TraitClass::K) && diff > -15./sqrt(TraitClass::K);
     }
     return close;
@@ -269,7 +336,7 @@ void TraitEventManager::calcFitness()
 {
     for(int i = 0; i < TraitClass::Size; ++i){
         for(int j = 0; j < TraitClass::Size; ++j){
-            double tmp = Trait[j].BirthRate - Trait[i].DeathRate - TraitClass::CompDeathRate[i][j] * retStableMonoStateOf(i);
+            double tmp = Trait[j].BirthRate /** (1 - TraitClass::Mutation)*/ - Trait[i].DeathRate - TraitClass::CompDeathRate[i][j] * TraitClass::K * retStableKMonoOf(i);
             TraitClass::Fitness[i][j] = round(tmp*pow(10,14))/pow(10,14);
         }
     }

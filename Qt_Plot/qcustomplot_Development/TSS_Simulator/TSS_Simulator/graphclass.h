@@ -22,7 +22,7 @@ public:
     QVector<double> getExpectedMonomorphOf(const int i) const;
     QVector<double> getXBorders() const;
 
-private:
+public:
     bool isNearDimorph() const;
     bool isNearMonomorph() const;
     bool isNearTSS(const int &chosen) const;
@@ -30,7 +30,11 @@ private:
     int makeIterations(const int maxIt);
     int makeTSSIterations(const int maxIt);
     void iterateGraphPoint(double &Time, int &Chosen);
-    void iterateMutationPoint(double &Time, int &Chosen);
+    void iterateMutationPoint(double &time, int &chosen);
+        double sampleMutationTime(const int &chosen);
+        void storeCurrentPoint(double &Time, int &chosen);
+        void choseMutatedTrait(int &chosen);
+        void makeMutant();
 
     /// private!
     /// Its only public for testing purpose!
@@ -39,7 +43,7 @@ private:
 private:
     void makeJumpedEvSteps(int &Chosen, double &Time);
 
-    QVector<QVector<double> > TimeLine;
+    QVector<QVector<double> > TimeHistory;
     QVector<QVector<double> > TraitHistory;
     QVector<double> ExpectedDimorph;
     QVector<double> ExpectedMonomorph;
