@@ -40,6 +40,21 @@ bool GraphClass::isNearMonomorph() const
 
 bool GraphClass::isNearTSS(const int & chosen) const
 {
+//    /// Check that there is only one surviver and store him in "activeTrait"
+//    /// FIXME: effektivere Schleife? Speichere vielleicht zusätzlich nur das dominante Trait?
+//    int chosen = -1;
+//    for(int i = 0; i < TraitClass::Size; ++i){
+//        if(Manager.getKMembers(i) > 0){
+//            if(chosen >= 0) // Es gibt mehr als einen aktiven Trait
+//                return false;
+//            chosen = i;// Es gibt ein aktiven Trait
+//        }
+//    }
+//    /// Check if active Trait is close enough to its equilibrium
+//    double diff = Manager.getKMembers(chosen) - ExpectedMonomorph[chosen];
+//    if(diff > 0.5/TraitClass::K || diff < -0.5/TraitClass::K)
+//        return false;
+//    return true;
     /// Check that there is only one surviver and store him in "activeTrait"
     /// FIXME: effektivere Schleife? Speichere vielleicht zusätzlich nur das dominante Trait?
     for(int i = 0; i < TraitClass::Size; ++i){
@@ -85,8 +100,7 @@ void GraphClass::calcJumpedSteps(int & maxIt)
 void GraphClass::iterateGraphPoint(double & Time, int & Chosen)
 {
     makeJumpedEvSteps(Chosen, Time);
-    TimeHistory[Chosen].push_back(Time);
-    TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
+    storeCurrentPoint(Time,Chosen);
     maxMembers = maxMembers < Manager.getKMembers(Chosen) ? Manager.getKMembers(Chosen) : maxMembers;
 }
 
@@ -98,30 +112,7 @@ void GraphClass::iterateMutationPoint(double &time, int &chosen)
     choseMutatedTrait(chosen);
     makeMutant();
     storeCurrentPoint(time,chosen);
-
-//    double MutationTime = 0;
-//    if(Chosen == 0){
-//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate);
-//        Chosen = Chosen+1;
-//    }
-//    else if(Chosen == TraitClass::Size-1){
-//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen-1].TotalBirthRate);
-//        Chosen = Chosen-1;
-//    }
-//    else{
-//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
-//        Chosen = Chosen-1 + Manager.Dice.rollDiscrUnifDist(0,1)*2;
-//    }
-//    TimeLine[Manager.Events.ChosenTrait].push_back( Time + MutationTime);
-//    TraitHistory[Manager.Events.ChosenTrait].push_back(ExpectedMonomorph[Manager.Events.ChosenTrait]);
-
-//    Manager.Events.EventTimes = MutationTime;
-//    Manager.Events.ChosenTrait = Chosen;
-//    Manager.Events.isBirth = true;
-//    Time += MutationTime;
-//    TimeLine[Chosen].push_back(Time);
-//    Manager.executeEventTypeOnTrait();
-//    TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
+//    Manager.calculateEventRates();
 }
 
 
@@ -136,8 +127,10 @@ double GraphClass::sampleMutationTime(const int &chosen)
 
 void GraphClass::storeCurrentPoint(double &Time, int &chosen)
 {
-    TimeHistory[chosen].push_back(Time);
-    TraitHistory[chosen].push_back(Manager.getKMembers(chosen));
+    for(int i = 0; i < TraitClass::Size; ++i){
+        TimeHistory[i].push_back(Time);
+        TraitHistory[i].push_back(Manager.getKMembers(i));
+    }
 }
 
 void GraphClass::choseMutatedTrait(int &chosen)
@@ -186,7 +179,7 @@ int GraphClass::makeTSSIterations(const int maxIt)
             if(chosen == 2)
                 qDebug()<<"2. Invasion:"<<time;
         }
-        if(Manager.getKMembers(2) > ExpectedMonomorph[2]){
+        if(Manager.getKMembers(2) > ExpectedMonomorph[2] && Manager.getKMembers(1) == Manager.getKMembers(0)){
             for(int i = 0; i < TraitClass::Size; ++i){
                 qDebug()<< i+1 <<". Birthrate"<< Manager.Trait[i].TotalBirthRate;
             }
@@ -232,7 +225,7 @@ QVector<double> GraphClass::getTraitHistOf(const int i) const
     return TraitHistory.at(i);
 }
 
-QVector<double> GraphClass::getExpectedDimorphOf(const int i) const
+QVector<double> GraphClass::getExpectedDimorphYValsOf(const int i) const
 {
     QVector<double> ExpV;
     ExpV.push_back(ExpectedDimorph[i]);
@@ -240,7 +233,7 @@ QVector<double> GraphClass::getExpectedDimorphOf(const int i) const
     return ExpV;
 }
 
-QVector<double> GraphClass::getExpectedMonomorphOf(const int i) const
+QVector<double> GraphClass::getExpectedMonoYValsOf(const int i) const
 {
     QVector<double> ExpV;
     ExpV.push_back(ExpectedMonomorph[i]);
@@ -256,7 +249,7 @@ QVector<double> GraphClass::getXBorders() const
     return XBorders;
 }
 
-double GraphClass::getExpectedOf(int i) const
+double GraphClass::getExpDimorphOf(int i) const
 {
     return ExpectedDimorph.at(i);
 }
