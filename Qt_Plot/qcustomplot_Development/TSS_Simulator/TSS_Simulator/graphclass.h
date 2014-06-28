@@ -15,11 +15,11 @@ public:
 
     double getMaxMembers() const;
     double getMaxTime() const;
-    double getExpectedOf(int i) const;
+    double getExpDimorphOf(int i) const;
     QVector<double> getTimesOf(const int i) const;
     QVector<double> getTraitHistOf(const int i) const;
-    QVector<double> getExpectedDimorphOf(const int i) const;
-    QVector<double> getExpectedMonomorphOf(const int i) const;
+    QVector<double> getExpectedDimorphYValsOf(const int i) const;
+    QVector<double> getExpectedMonoYValsOf(const int i) const;
     QVector<double> getXBorders() const;
 
 public:
