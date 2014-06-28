@@ -16,6 +16,7 @@ public:
     double getMaxMembers() const;
     double getMaxTime() const;
     double getExpDimorphOf(int i) const;
+    double getExpMonomorphOf(int i) const;
     QVector<double> getTimesOf(const int i) const;
     QVector<double> getTraitHistOf(const int i) const;
     QVector<double> getExpectedDimorphYValsOf(const int i) const;

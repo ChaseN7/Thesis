@@ -40,21 +40,6 @@ bool GraphClass::isNearMonomorph() const
 
 bool GraphClass::isNearTSS(const int & chosen) const
 {
-//    /// Check that there is only one surviver and store him in "activeTrait"
-//    /// FIXME: effektivere Schleife? Speichere vielleicht zusätzlich nur das dominante Trait?
-//    int chosen = -1;
-//    for(int i = 0; i < TraitClass::Size; ++i){
-//        if(Manager.getKMembers(i) > 0){
-//            if(chosen >= 0) // Es gibt mehr als einen aktiven Trait
-//                return false;
-//            chosen = i;// Es gibt ein aktiven Trait
-//        }
-//    }
-//    /// Check if active Trait is close enough to its equilibrium
-//    double diff = Manager.getKMembers(chosen) - ExpectedMonomorph[chosen];
-//    if(diff > 0.5/TraitClass::K || diff < -0.5/TraitClass::K)
-//        return false;
-//    return true;
     /// Check that there is only one surviver and store him in "activeTrait"
     /// FIXME: effektivere Schleife? Speichere vielleicht zusätzlich nur das dominante Trait?
     for(int i = 0; i < TraitClass::Size; ++i){
@@ -113,6 +98,31 @@ void GraphClass::iterateMutationPoint(double &time, int &chosen)
     makeMutant();
     storeCurrentPoint(time,chosen);
 //    Manager.calculateEventRates();
+
+
+//    double MutationTime = 0;
+//    if(Chosen == 0){
+//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate);
+//        Chosen = Chosen+1;
+//    }
+//    else if(Chosen == TraitClass::Size-1){
+//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen-1].TotalBirthRate);
+//        Chosen = Chosen-1;
+//    }
+//    else{
+//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
+//        Chosen = Chosen-1 + Manager.Dice.rollDiscrUnifDist(0,1)*2;
+//    }
+//    TimeLine[Manager.Events.ChosenTrait].push_back( Time + MutationTime);
+//    TraitHistory[Manager.Events.ChosenTrait].push_back(ExpectedMonomorph[Manager.Events.ChosenTrait]);
+
+//    Manager.Events.EventTimes = MutationTime;
+//    Manager.Events.ChosenTrait = Chosen;
+//    Manager.Events.isBirth = true;
+//    Time += MutationTime;
+//    TimeLine[Chosen].push_back(Time);
+//    Manager.executeEventTypeOnTrait();
+//    TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
 }
 
 
@@ -120,17 +130,15 @@ double GraphClass::sampleMutationTime(const int &chosen)
 {
     double Rate = TraitClass::Mutation * Manager.Trait[chosen].TotalBirthRate;
     if(chosen == 0 || chosen == TraitClass::Size-1)
-        Rate /= 2;
+        Rate /= 2.;
     Manager.Events.EventTimes = Manager.Dice.rollExpDist(Rate);
-    return Manager.Dice.rollExpDist(Rate);
+    return Manager.Events.EventTimes;
 }
 
 void GraphClass::storeCurrentPoint(double &Time, int &chosen)
 {
-    for(int i = 0; i < TraitClass::Size; ++i){
-        TimeHistory[i].push_back(Time);
-        TraitHistory[i].push_back(Manager.getKMembers(i));
-    }
+    TimeHistory[chosen].push_back(Time);
+    TraitHistory[chosen].push_back(Manager.getKMembers(chosen));
 }
 
 void GraphClass::choseMutatedTrait(int &chosen)
@@ -179,7 +187,7 @@ int GraphClass::makeTSSIterations(const int maxIt)
             if(chosen == 2)
                 qDebug()<<"2. Invasion:"<<time;
         }
-        if(Manager.getKMembers(2) > ExpectedMonomorph[2] && Manager.getKMembers(1) == Manager.getKMembers(0)){
+        if(Manager.getKMembers(2) > ExpectedMonomorph[2]){
             for(int i = 0; i < TraitClass::Size; ++i){
                 qDebug()<< i+1 <<". Birthrate"<< Manager.Trait[i].TotalBirthRate;
             }
@@ -252,4 +260,9 @@ QVector<double> GraphClass::getXBorders() const
 double GraphClass::getExpDimorphOf(int i) const
 {
     return ExpectedDimorph.at(i);
+}
+
+double GraphClass::getExpMonomorphOf(int i) const
+{
+    return ExpectedMonomorph.at(i);
 }

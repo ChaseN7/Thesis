@@ -130,9 +130,9 @@ double GraphClass::sampleMutationTime(const int &chosen)
 {
     double Rate = TraitClass::Mutation * Manager.Trait[chosen].TotalBirthRate;
     if(chosen == 0 || chosen == TraitClass::Size-1)
-        Rate /= 2;
+        Rate /= 2.;
     Manager.Events.EventTimes = Manager.Dice.rollExpDist(Rate);
-    return Manager.Dice.rollExpDist(Rate);
+    return Manager.Events.EventTimes;
 }
 
 void GraphClass::storeCurrentPoint(double &Time, int &chosen)

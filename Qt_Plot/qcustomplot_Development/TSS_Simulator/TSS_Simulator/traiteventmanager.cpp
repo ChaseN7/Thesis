@@ -138,9 +138,6 @@ void TraitEventManager::calculateTotalEventRate()
 
 void TraitEventManager::calculateEventRates()
 {
-//    for(int i = 0; i < TraitClass::Size; i++){
-//        calculateTotalDeathRateOf(i);
-//    }
     calculateTotalDeathRates();
     calculateTotalBirthRates();
     calculateTotalEventRate();

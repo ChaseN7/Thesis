@@ -191,26 +191,26 @@ void TSS_UnitTestTest::sampleMutationTime()
 {
     double time = 0;
     GraphClass Graph("ValidateTSSTests.txt", false);
-    int chosen = 1;
+    const int chosen = 1;
     for(int i = 0; i < 100000; ++i){
+        int tmp = chosen;
         Graph.Manager.Trait[0].Members = 0;
         Graph.Manager.Trait[1].Members = 0;
         Graph.Manager.Trait[2].Members = 0;
 
-        Graph.Manager.Trait[chosen].Members = Graph.getExpMonomorphOf(chosen) * TraitClass::K;
+        Graph.Manager.Trait[tmp].Members = Graph.getExpMonomorphOf(tmp) * TraitClass::K;
 
         Graph.Manager.calculateEventRates();
-        Graph.iterateMutationPoint(time, chosen);
-//        if(Graph.Manager.Events.ChosenTrait == 0 || Graph.Manager.Events.ChosenTrait == 2 )
-//            qDebug() << "FEHLER: unmögliche Mutation";
+        Graph.iterateMutationPoint(time, tmp);
     }
-//    GraphClass TestGraph("ValidateTSSTests.txt", false);
+    double actual = time/100000;
     double expected = 1/(Graph.Manager.Trait[chosen].TotalBirthRate * TraitClass::Mutation);
-    double actual = time/10000;
-    qDebug() << TraitClass::Mutation;
-    qDebug() << Graph.Manager.Trait[chosen].TotalBirthRate;
-    QCOMPARE(actual, expected);
-    qDebug() << time/10000 << 1/(Graph.Manager.Trait[chosen].TotalBirthRate * TraitClass::Mutation);
+    if(chosen == TraitClass::Size - 1 || chosen == 0)
+        expected *= 2.;
+    qDebug() << "actual:" << actual << "expected:" << expected
+             << "absolute:" << fabs((actual - expected)/expected);
+    QVERIFY(fabs((actual - expected)/expected) < 0.05);
+//    QCOMPARE(actual, expected);
 }
 
 
