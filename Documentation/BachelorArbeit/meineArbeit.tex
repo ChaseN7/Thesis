@@ -1,0 +1,78 @@
+\documentclass[11pt, a4paper, german]{article}
+
+\usepackage[german]{babel}
+\usepackage{BA_Titelseite}
+
+
+%Namen des Verfassers der Arbeit
+\authornew{Boris Prochnau}
+
+%Geburtsdatum des Verfassers
+\geburtsdatum{22. Dezember 1989}
+%Gebortsort des Verfassers
+\geburtsort{Tartu}
+%Datum der Abgabe der Arbeit
+\date{\today}
+
+%Name des Betreuers
+% z.B.: Prof. Dr. Peter Koepke
+\betreuer{Betreuer: Prof. Dr. Anton Bovier}
+%Name des Instituts an dem der Betreuer der Arbeit tätig ist.
+%z.B.: Mathematisches Institut
+\institut{Instituts für Angewandte Mathematik}
+%Titel der Bachelorarbeit
+\title{Simulation normalisierter BPDL Prozesse}
+%Do not change!
+\ausarbeitungstyp{Bachelorarbeit Mathematik}
+
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\clearpage
+
+
+\section*{Ziel der Bachelorarbeit}
+Das Ziel meiner Bachelorarbeit ist es eine Programm zu schreiben was den zeitlichen Verlauf von sogenannten BPDL (...) Prozessen graphisch darstellt.\\
+Dabei ist das Interesse besonders bei normalisierten BPDL Prozessen und schließlich auch bei TSS (trait subsitution sequence) Prozessen.\\
+Dabei reicht es nicht einfach eine Implementierung zu machen, denn durch die Zufallseigenschaft lässt sich nicht so einfach die Korrektheit verifizieren. Gerade bei TSS Prozessen ist die Anzahl der Mutationen und deren Abstände und Invasionschancen entscheidend.\\
+Zu diesem Zweck wird ein Teil der Arbeit diese Problemstellung behandeln.
+
+\section*{Model}
+Das verwendete Model lehnt sich an das Model aus [...] an. Jedoch wurde für meine Simulation einige kleine Änderungen gewünscht.\\
+Grundgerüst:
+	\begin{itemize}
+		\item Jedes Individuum hat ein Merkmal $ x \in X $. \\
+		Der Einfachheit halber sei X eine Indexmenge: $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale.
+		\item Jedes Individuum kann sich asexuell fortpflanzen oder sterben
+		\item Tod und Fortpflanzung sind Ereignisse deren erstes Eintreffen durch sogenannte exponentielle Uhren beschrieben werden können. Diese Uhren haben exponentiell verteilte Weckzeiten. Durch die Gedächtnislosigkeit der Exponentialverteilung, können die Uhren nach dem klingeln der ersten neu gestellt werden. 
+	\end{itemize}
+	Gleich wird klar dass diese Eigenschaft entscheiden ist um die Sichtweise von der Ebene des Individuums auf die gesamte Population zu heben.\\
+	Diese Todes und Fortpflanzungs - Ereignisse eines Individuums haben feste Raten die das Merkmal des Individuums auszeichnen.
+	\begin{itemize}
+		\item b(x): Geburtenraten durch ein Individuum mit Merkmal x
+		\item d(x): natürliche Todesrate
+		\item c(x,y): Todesrate durch Wettbewerb zwischen Individuen mit Merkmal x und y.
+		\item $ \mu $: Mutationswahrscheinlichkeit "{}auf die Nachbarn"{} mit je $ \frac{\mu}{2} $ pro Nachbar. 
+	\end{itemize}
+	Durch Superposition lassen sich die beiden Todesraten zu einer gemeinsamen Todesrate zusammenfassen oder die Geburtenrate z.B. zu einer intrinsischen Geburtenrate auftrennt.
+	\begin{itemize}
+		\item intrinsische Geburtenrate: $ b(x) \cdot (1 - \mu) $
+	 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, $ N_t = \#Individuen$ zum Zeitpunkt t, und \underline{$ x_i $ das Merkmal des i-ten Individuums}.
+	 	\item ODER Todesrate: $ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) $, $ n = \#Merkmale$, und $ n_t(x_i) = \#Individuen $ mit \underline{Merkmal $ x_i $} zur Zeit t.
+	\end{itemize}
+
+\section*{Algorithmus}
+
+\section*{Simulation}
+
+\section*{Korrektheit der Implementation}
+
+\section*{TSS Prozesse}
+
+%\clearpage
+
+\end{document}
