@@ -12,6 +12,7 @@
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{wasysym}
 
 \title{Small summery}
 \author{Boris Prochnau}
@@ -655,19 +656,23 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	Reden über Fitnessberechnung. $ K = 100; \mu = 0.1 $ das heißt für $ \mu_K = 0.1 \cdot \frac{1}{100\cdot \sqrt{100}} = 0.0001$. Da wir aber eine Berechnung durchführen die theoretisch unabhängig von K sein sollte würde ich erstmal $ \bar{\mu}_K = \mu_K \cdot K = 0.01 $ verwenden.
 	\[ f(x,y) = b(x) \cdot (1 - \bar{\mu}_K) - d(x) - c(x,y)\bar{n}_y; \qquad \bar{n}_x = \frac{b(x)(1-\bar{\mu}_K) - d(x)}{c(x,x)}\]
 	Ich habe jetzt einige Änderungen eingeführt die alle Berechnungen darauf zurück führen dass ich die Formeln wieder so umstelle wie sei im Paper von Silke Völk waren. Also:
-	\[ f(x,y) = b(x) \cdot - d(x) - c(x,y)\bar{n}_y; \qquad \bar{n}_x = \frac{b(x) - d(x)}{c(x,x)}\]
+	\[ f(x,y) = b(x) - d(x) - c(x,y)\bar{n}_y; \qquad \bar{n}_x = \frac{b(x) - d(x)}{c(x,x)}\]
 	Jedoch hat sich herausgestellt dass die Berechnungen mit den Wettbewerbstoden evtl. fehlerhaft waren, da ich die Wettbewerbsrate bereits um K skaliert eingelesen habe.
 	\begin{itemize}
-		\item Release und Stand des Programms während der BA besprechen.
-		\item Fehler mit Equilibrium beheben. TSS sollte korrekt im Equilibrium interpoliert werden und nicht drum herum. \checkmark
-		\item Fehler beim Laden falsch eingetippter Instanznamen abfangen. \checkmark
-		\item BirthRate Berechnung optimieren \checkmark
-		\item "{}CalculateTotalDeathRateOf"{} zu "{}CalculateTotalDeathRates"{} verwandeln. \checkmark
-		\item DeathRate Berechnung beschleunigen. Bzw adjustNewEventRates aufraeumen
-		\item alte Unit Tests wieder zum laufen bringen.
-		\item neue Unit Tests erstellen (alles in GraphClass).
-		\item neue Unit Tests erstellen Mutation und komplexere Validierungen.
-		\item Vereinen des Programmkernels TSS und BPDL
+		\item Bachelorarbeit angefangen \CheckedBox
+		\item Beweise f"ur die Bachelorarbeit sammeln. \CheckedBox
+		\item Beweise f"ur die Bachelorarbeit verstehen und einarbeiten. \Square
+		\item Release und Stand des Programms während der BA besprechen. \Square
+		\item Fehler mit Equilibrium beheben. TSS sollte korrekt im Equilibrium interpoliert werden und nicht drum herum. \CheckedBox
+		\item Fehler beim Laden falsch eingetippter Instanznamen abfangen. \CheckedBox
+		\item BirthRate Berechnung optimieren \CheckedBox
+		\item "{}CalculateTotalDeathRateOf"{} zu "{}CalculateTotalDeathRates"{} verwandeln. \CheckedBox
+		\item DeathRate Berechnung beschleunigen. Bzw adjustNewEventRates aufraeumen.\Square
+		\item alte Unit Tests wieder zum laufen bringen. \CheckedBox
+		\item neue Unit Tests erstellen (alles in GraphClass und f"ur TSS). \Square
+		\item neue Unit Tests erstellen Mutation und komplexere Validierungen. \CheckedBox
+		\item Vereinen des Programmkernels TSS und BPDL. \XBox
+		\item Fehler behoben dass TSS Spr"unge manchmal gleich lang innerhalb einer Instanz waren waren. \CheckedBox
 	\end{itemize}
 
 	NEU:
@@ -680,14 +685,17 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	
 \subsection{Was habe ich gemacht?}
 	\begin{itemize}
+		\item neue Unit Tests erstellen Mutation und komplexere Validierungen.
 		\item Fehler behoben, TSS wird jetzt korrekt im Equilibrium interpoliert.
 		\item Das Laden falscher Instanznamen führt nicht mehr zum Absturz.
-		\item einfache Birthrate berechnung optimiert. Dauer um 10-25\% verbessert. Diese Werte stamme von empirischen Messungen während er Laufzeit.
-		\item einfache Birthrate berechnung optimiert. Dauer um 10-25\% verbessert. Diese Werte stammen von empirischen Messungen während der Laufzeit.
+		\item einfache Birthrate Berechnung optimiert. Dauer um 10-25\% verbessert. Diese Werte stamme von empirischen Messungen während er Laufzeit.
+		\item einfache Birthrate Berechnung optimiert. Dauer um 10-25\% verbessert. Diese Werte stammen von empirischen Messungen während der Laufzeit.
+		\item Fehler behoben dass TSS Spr"unge manchmal gleich lang innerhalb einer Instanz waren waren.
+		\item Bachelorarbeit angefangen
 	\end{itemize}
 \subsection{Bekannte Bugs}
 	Es hat sich herausgestellt dass einige Berechnungen die ein "{}K"{} beinhalten falsch sind!\\
-	Vielleicht muss in der Mutation noch einmal die EventRaten im nachhineinn berechnet werden, sonst ist die Geburtsrate zu gering und sie sterben zu schnell aus.
+	Vielleicht muss in der Mutation noch einmal die EventRaten im Nachhinein berechnet werden, sonst ist die Geburtsrate zu gering und sie sterben zu schnell aus.
 	
 
 \section{Weitere geplante Punkte}
@@ -710,6 +718,7 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 		\item neue Unit Tests erstellen (alles in GraphClass).
 		\item neue Unit Tests erstellen Mutation und komplexere Validierungen.
 		\item Vereinen des Programmkernels TSS und BPDL
+		\item weiteres Abbruchkriterium (Zeit) hinzuf"ugen.
 		
 		\item Anpassen der neuen Geburten und Equilibrien.
 		\item dynamisches Abbruchkriterium welches für alle TSS Instanzen angemessen terminiert.
