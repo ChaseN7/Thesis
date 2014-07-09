@@ -1,0 +1,101 @@
+
+
+\documentclass[11pt, a4paper, german]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[ngerman]{babel}
+\usepackage{BA_Titelseite}
+
+%Namen des Verfassers der Arbeit
+\authornew{Boris Prochnau}
+
+%Geburtsdatum des Verfassers
+\geburtsdatum{22. Dezember 1989}
+%Gebortsort des Verfassers
+\geburtsort{Tartu}
+%Datum der Abgabe der Arbeit
+\date{\today}
+
+%Name des Betreuers
+% z.B.: Prof. Dr. Peter Koepke
+\betreuer{Betreuer: Prof. Dr. Anton Bovier}
+%Name des Instituts an dem der Betreuer der Arbeit tätig ist.
+%z.B.: Mathematisches Institut
+\institut{Institut für Angewandte Mathematik}
+%Titel der Bachelorarbeit
+\title{Simulation normalisierter BPDL Prozesse}
+%Do not change!
+\ausarbeitungstyp{Bachelorarbeit Mathematik}
+
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\clearpage
+
+
+\section{Einleitung}
+Das Ziel dieser Bachelorarbeit ist es eine Programm zu entwickeln welches den zeitlichen Verlauf von sogenannten normalisierten BPDL Prozessen graphisch darstellt.\\
+Diese BPDL (von Bolker, Pacala, Dieckmann und Law) Prozesse basieren auf einem stochastischen Populationsmodell, welches im n"achsten Kapitel n"aher vorgestellt wird. \\
+
+Dem Programm sollte es m"oglich sein die Parameter einer Population festlegen zu k"onnen und die Entwicklung dieser Population schlie"slich zeitlich verfolgen zu k"onnen. Auf diese Weise soll man beobachten k"onnen ob sich ein Merkmal gegen"uber einem anderen Durchsetzten kann oder sich ein stabiler Zustand einpendelt. Insbesondere kann der Einfluss der Normalisierung auf das vorzeitige Aussterben eines Prozesses deutlich dargestellt werden.\\
+
+Alle Simulationen basieren auf einem Modell, dass jedes Lebewesen einer Population (z.B. Pflanzen) ein bestimmtes Merkmal tr"agt. Diese Merkmale werden durch Wettbewerb zu jeder existenten Gruppe, Geburten und Todesraten klassifiziert. Schlie"slich ist es jedoch die Entwicklung der Population und nicht der Individuen die simuliert werden soll, weshalb man im simulierten Prozess zwar den Tod und die Geburt von Individuen verfolgen kann, aber nicht die Entwicklung spezieller Individuen. Der "Ubergang zu dieser Sichtweise wird n"aher im 2. Kapitel beschrieben und kr"ont in der Konvergenz zu einer deterministischen Funktion.\\
+
+Um zu Pr"ufen ob und wie schnell der Prozess gegen seinen Stabilen Zustand konvergiert, werden in der Simulation auch stabile Zust"ande f"ur diverse Situationen automatisch dazu gestellt. Anhand dieser k"onnen individuelle und dynamische Abbruchkriterien formuliert werden.\\
+
+Schlie"slich werde ich noch kurz die TSS Prozesse und ein weiteres Programm vorstellen, welches die bisher betrachteten BPDL Prozesse erweitert auf TSS-Prozesse. Dabei sollen nicht nur das besonders interessante Verhalten vom Wechsel des dominanten Merkmals simuliert werden, sondern es wird eine verbesserte Laufzeit durch Interpolation vorgestellt die eine effiziente Simulation trotz sehr gro"ser Zeit und besonders pr"azise Betrachtung von Aktionsreichen Gebieten anbietet.
+
+
+%Dabei ist das Interesse besonders bei normalisierten BPDL Prozessen und schließlich auch bei TSS (trait subsitution sequence) Prozessen.\\
+%Dabei reicht es nicht einfach eine Implementierung zu machen, denn durch die Zufallseigenschaft lässt sich nicht so einfach die Korrektheit verifizieren. Gerade bei TSS Prozessen ist die Anzahl der Mutationen und deren Abstände und Invasionschancen entscheidend.\\
+%Zu diesem Zweck wird ein Teil der Arbeit diese Problemstellung behandeln.
+
+\section{Modell}
+Das verwendete Model lehnt sich an das Model aus [...] an. Jedoch wurde für meine Simulation einige kleine Änderungen gewünscht.\\
+Grundgerüst:
+	\begin{itemize}
+		\item Jedes Individuum hat ein Merkmal $ x \in X $. \\
+		Der Einfachheit halber sei X eine Indexmenge: $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale.
+		\item Jedes Individuum kann sich asexuell fortpflanzen oder sterben
+		\item Tod und Fortpflanzung sind Ereignisse deren erstes Eintreffen durch sogenannte exponentielle Uhren beschrieben werden können. Diese Uhren haben exponentiell verteilte Weckzeiten. Durch die Gedächtnislosigkeit der Exponentialverteilung, können die Uhren nach dem klingeln der ersten neu gestellt werden. 
+	\end{itemize}
+	Gleich wird klar dass diese Eigenschaft entscheiden ist um die Sichtweise von der Ebene des Individuums auf die gesamte Population zu heben.\\
+	Diese Todes und Fortpflanzungs- Ereignisse eines Individuums haben feste Raten die das Merkmal des Individuums auszeichnen.
+	\begin{itemize}
+		\item b(x): Geburtenraten durch ein Individuum mit Merkmal x
+		\item d(x): natürliche Todesrate
+		\item c(x,y): Todesrate durch Wettbewerb zwischen Individuen mit Merkmal x und y.
+		\item $ \mu $: Mutationswahrscheinlichkeit "{}auf die Nachbarn"{} mit je $ \frac{\mu}{2} $ pro Nachbar. 
+	\end{itemize}
+	Durch Superposition lassen sich die beiden Todesraten zu einer gemeinsamen Todesrate zusammenfassen oder die Geburtenrate z.B. zu einer intrinsischen Geburtenrate auftrennt.
+	\begin{itemize}
+		\item intrinsische Geburtenrate: $ b(x) \cdot (1 - \mu) $
+	 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, $ N_t = \#Individuen$ zum Zeitpunkt t, und \underline{$ x_i $ das Merkmal des i-ten Individuums}.
+	 	\item ODER Todesrate: $ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) $, $ n = \#Merkmale$, und $ n_t(x_i) = \#Individuen $ mit \underline{Merkmal $ x_i $} zur Zeit t. 
+	\end{itemize}
+
+\section{Algorithmus}
+
+\section{Simulation}
+
+\section{Korrektheit der Implementation}
+
+\section{TSS Prozesse}
+
+\section{Ausblick}
+
+\begin{itemize}
+	\item Weiteres Abbruchkriterium = Zeit : sehr einfach zu implementieren.
+\end{itemize}
+
+%\clearpage
+
+\end{document}
