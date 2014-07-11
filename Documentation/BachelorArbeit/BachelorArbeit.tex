@@ -1,14 +1,18 @@
 
-
 \documentclass[11pt, a4paper, german]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 \usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{bbm}
 \usepackage[ngerman]{babel}
 \usepackage{BA_Titelseite}
+\bibliographystyle{unsrt}
 
 %Namen des Verfassers der Arbeit
 \authornew{Boris Prochnau}
@@ -59,31 +63,190 @@ Schlie"slich werde ich noch kurz die TSS Prozesse und ein weiteres Programm vors
 %Zu diesem Zweck wird ein Teil der Arbeit diese Problemstellung behandeln.
 
 \section{Modell}
-Das verwendete Model lehnt sich an das Model aus [...] an. Jedoch wurde für meine Simulation einige kleine Änderungen gewünscht.\\
-Grundgerüst:
+Das verwendete Model lehnt sich an das Model aus \cite{Champagnat20061127} an. Dieses nutzt die drei grundlegenden Mechanismen von Darwins Evolutionslehre: Vererbung, Variation (Mutationen) und Selektion durch Wettbewerb um eine Menge von Merkmalen f"ur Individuen zu beschreiben. Diese bestimmen die F"ahigkeit des Individuums zu "uberleben und sich fortzupflanzen.\\
+Jedoch wurden für meine Simulation einige kleine Änderungen gewünscht die im Anschluss erl"autert werden. \\
+	\subsection{Grundlagen}
+	Sei $ X $ der Raum der Merkmale. Jedes Individuum hat genau ein solches Merkmal $ i \in X $. Der Einfachheit halber sei X eine Indexmenge: $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale und im folgenden seien $ i,j \in X $ zwei solche Merkmale. Au"serdem gilt:
 	\begin{itemize}
-		\item Jedes Individuum hat ein Merkmal $ x \in X $. \\
-		Der Einfachheit halber sei X eine Indexmenge: $ X = \{1,\dots, n\} $ repräsentativ für eine Durchzählung der Merkmale.
-		\item Jedes Individuum kann sich asexuell fortpflanzen oder sterben
-		\item Tod und Fortpflanzung sind Ereignisse deren erstes Eintreffen durch sogenannte exponentielle Uhren beschrieben werden können. Diese Uhren haben exponentiell verteilte Weckzeiten. Durch die Gedächtnislosigkeit der Exponentialverteilung, können die Uhren nach dem klingeln der ersten neu gestellt werden. 
+		\item Jedes Individuum kann sich asexuell fortpflanzen oder sterben.
+		\item Fortpflanzungs- und Todeszeitpunkte k"onnen durch sogenannte exponentielle Uhren (wie in \cite[S. 3]{fournier2004microscopic}) beschrieben werden. Diese Uhren haben exponentiell verteilte Weckzeiten. Durch die Gedächtnislosigkeit der Exponentialverteilung, können alle Uhren nach dem ersten Klingeln neu gestellt werden. 
+		\item Die Fortpflanzung eines Individuums aus $ i $ kann jedoch auch in der Geburt eines Individuums in $ j $ resultieren.
 	\end{itemize}
-	Gleich wird klar dass diese Eigenschaft entscheiden ist um die Sichtweise von der Ebene des Individuums auf die gesamte Population zu heben.\\
-	Diese Todes und Fortpflanzungs- Ereignisse eines Individuums haben feste Raten die das Merkmal des Individuums auszeichnen.
+	Sp"ater wird deutlich dass die Zur"uckstellbarkeit der Uhren entscheiden ist um die Sichtweise von der Ebene des Individuums auf die der gesamten Population zu heben.\\
+	Diese Todes und Fortpflanzungs- Ereignisse eines Individuums haben feste Raten die das dazugeh"orige Merkmal beschreiben.\\
+	
+	\begin{tabular}{r p{26em}}
+		$ b(i) $: & Ist die Geburtenraten durch ein Individuum mit Merkmal $ i $.\\
+		$ d(i) $: & Ist die natürliche Todesrate.\\
+		$ c(i, j) $: & Ist die Todesrate durch Wettbewerb zwischen Individuen mit Merkmal i und j.\\
+		$ \mu $: & Ist die Mutationswahrscheinlichkeit "{}auf die Nachbarn"{} mit je $ \frac{\mu}{2} $ pro Nachbar. \\
+	\end{tabular}\\
+
+	Schlie"slich lassen sich durch Superposition z.B. die beiden Todesraten zu einer gemeinsamen Todesrate zusammenfassen oder die arteigene Geburtenrate abtrennen.\\
+	
+	\begin{tabular}{ r p{18em} }
+		$ b(i) \cdot (1 - \mu) $: & ist die arteigene Geburtenrate eines Individuums mit Merkmal $ i $\\
+		$ d(i) + \sum_{j=1}^{N_t} c(i, j) $: & ist die gesamte Todesrate eines Individuums mit Merkmal i (mit $ N_t := $ \#Individuen zur Zeit t mit Merkmal $ i $).\\
+		$ d(i) + \sum_{j=1}^{n} c(i,j) \cdot n_t(i) $: & wie oben, nur mit $ n := $ \#Merkmale, und $ n_t(i) :=$ \#Individuen zur Zeit t mit Merkmal $ i $
+	\end{tabular}\\
+	
+	Die letzte Darstellung der Todesrate ist praktischer f"ur die Betrachtung der Population. "Ahnlich k"onnen weitere Ereignisse zusammengefasst werden, so dass man z.B. eine Todesrate und eine arteigene Geburtenraten der Merkmale erstellen kann:
+
 	\begin{itemize}
-		\item b(x): Geburtenraten durch ein Individuum mit Merkmal x
-		\item d(x): natürliche Todesrate
-		\item c(x,y): Todesrate durch Wettbewerb zwischen Individuen mit Merkmal x und y.
-		\item $ \mu $: Mutationswahrscheinlichkeit "{}auf die Nachbarn"{} mit je $ \frac{\mu}{2} $ pro Nachbar. 
+	 	\item Arteigene Geburtenrate des Merkmals i: 
+	 	\[ b(i) \cdot (1 - \mu) + \left( b(i+1) \cdot \mathbbm{1}_{i>1} + b(i-1) \cdot \mathbbm{1}_{i>1} \right) \cdot \frac{\mu}{2} \] 
+	 	\item Gesamte Todesrate des Merkmals i: 
+	 	\[ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) \]
 	\end{itemize}
-	Durch Superposition lassen sich die beiden Todesraten zu einer gemeinsamen Todesrate zusammenfassen oder die Geburtenrate z.B. zu einer intrinsischen Geburtenrate auftrennt.
+	
+	Die Simulation soll die Entwicklung der Merkmale und nicht die Ereignisse der Individuen darstellen, daher ist es unpraktisch diese zu betrachten. Alternativ werden die Ereignisse zu denen von Merkmalen zusammengefasst:
 	\begin{itemize}
-		\item intrinsische Geburtenrate: $ b(x) \cdot (1 - \mu) $
-	 	\item Todesrate: $ d(x) + \sum_{i=1}^{N_t} c(x,x_i) $, $ N_t = \#Individuen$ zum Zeitpunkt t, und \underline{$ x_i $ das Merkmal des i-ten Individuums}.
-	 	\item ODER Todesrate: $ d(x) + \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) $, $ n = \#Merkmale$, und $ n_t(x_i) = \#Individuen $ mit \underline{Merkmal $ x_i $} zur Zeit t. 
+		\item Geburtenrate (Wachstumsrate) des Merkmals x: \[ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} \]
+		(Notation deutlich machen)
+		\item Todesrate des Merkmals x: 
+		\[ D(x) = d(x) \cdot n_t(x) + n_t(x) \cdot \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) \]
 	\end{itemize}
+	
+	
+	
+	
+%	\newline
+	\noindent\rule{\textwidth}{1pt}
+	\begin{itemize}
+		\item 
+		Die Simulation soll die Entwicklung der Merkmale und nicht die Ereignisse der Individuen darstellen, daher ist es unpraktisch diese zu betrachten. Alternativ werden die Ereignisse zu denen von Merkmalen zusammengefasst:
+		\begin{itemize}
+			\item Geburtenrate (Wachstumsrate) des Merkmals x: \[ B(x) = b(x) \cdot (1 - \mu) \cdot n_t(x) + (b(x+1)\cdot n_t(x+1) + b(x-1)\cdot n_t(x-1)) \cdot \frac{\mu}{2} \]
+			(Notation deutlich machen)
+			\item Todesrate des Merkmals x: 
+			\[ D(x) = d(x) \cdot n_t(x) + n_t(x) \cdot \sum_{i=1}^{n} c(x,x_i) \cdot n_t(x_i) \]
+		\end{itemize}
+		Das entspricht 2 exponentiellen Uhren pro Merkmal. Eine für Tod und eine für Geburt innerhalb des Merkmals.
+		\item Zur praktischen Simulation ist eine Gesamtrate für das Eintreten eines Ereignisses praktischer. Auf diese Weise wird nur auf das eintreffen einer Uhr gewartet.
+		\begin{itemize}
+			\item Ereignisrate des Merkmals x (Trait Rate):
+				\[ TR(x) = B(x) + D(x) \]
+			\item Totale Ereignis Rate (Total Event Rate): 
+			\[ TER = \sum_{x \in X} TR(x)\]
+		\end{itemize}
+		Mit der Totalen Ereignisrate gibt es jetzt eine Rate die es erlaubt eine Zufallsvariable für das Eintreffen einer Variable zu ziehen. Anschließend ist es nur noch erforderlich (mit der Ziehung zwei weiterer Zufallsvairablen) festzustellen welchem Merkmal welches Ereignis zukommt.
+		\item Die Population ist ein Markov Sprungprozess der durch Zufallsvariablen
+		\[ \nu_t = \sum_{i=1}^{N_t} \delta_{x_i}, \text{ mit } \int_X 1\nu_t(dx) = N_t \]
+		beschrieben wird.\\
+		Dabei gilt: \[ \nu_t \in M_F(X) = \left\{ \sum_{i=1}^{n} \delta_{x_i}, n \in \mathbb{N}, x_1, \dots, x_n \in X \right\} \]
+		\item (Vielleicht nicht erwähnen?) Der Generator des so definierten BPDL-Prozess $ \nu_t $ ist:
+		\begin{align}
+			L_{\phi(\nu)} &= \int_{x} b(x)(1-\mu)[\phi(\nu + \delta_x) - \phi(\nu)]\nu(dx)\\
+						&+ \int_{x}\int_{\mathbb{R}^d} b(x)(\mu)[\phi(\nu + \delta_{x+z}) - \phi(\nu)] m(x,dz) \nu(dx)\\
+						&+ \int_{x} d(x)[\phi(\nu - \delta_x) - \phi(\nu)]\nu(dx)\\
+						&+ \int_{x} \left( \int_{X} c(x,y) \nu(dy) \right) [\phi(\nu - \delta_x) - \phi(\nu)]\nu(dx)
+		\end{align}
+		mit $ \phi: M_F \to \mathbb{R} $
+	\end{itemize}
+	
+	
+	\subsection{Normalisierung}
+	
+	\subsection{Equilibrium}
+	Man erkennt dass die Merkmale für $ K \to \infty $ eine Konvergenz gegen eine Funktion $ \xi_t = n_t \delta_x $ aufweist. Diese Funktion wiederum konvergiert gegen einen stabilen Zustand (im folgenden Equilibrium genannt), worin sich die Populationsgröße nicht mehr ändert. Diese sehen für monomorphe und dimorphe Populationen ohne Mutation folgendermaßen aus:
+	\begin{itemize}
+		\item Monomorphe Population\\
+			\begin{align*}
+			0 & = \dot{n} = (b(x) - d(x) - \bar{n}c(x,x))\bar{n}\\
+			\bar{n} &= \frac{\left[ b(x)-d(x) \right]_+}{c(x,x)}
+			\end{align*}
+		\item Dimorphe Population\\
+			\[ n_x = \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+			\[ n = \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+			oder $ (\bar{n}_x, 0)$, $ (0, \bar{n}_y)$ bzw. $ (0,0) $
+	\end{itemize}
+	Später im Kapitel TSS wird die Fitness Funktion eingeführt die näher erläutern kann wann welcher dimorphe stabile Zustand angenommen wird.
+	In den Simulationen sind diese stabilen Zustände als gestrichelte Gerade angezeigt, gegen die Konvergenz stattfinden soll.
 
 \section{Algorithmus}
-
+	Der Simulation liegt ein Algorithmus zugrunde der einen Sprung des Markov Sprung Prozesses durchführt. Im Code wird dazu die "{}EvolutionStep()"{} Funktion aufgerufen. (Es gibt auch Jump statt Step, aber mehrere Schritte)
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\ENSURE{A full evolution Step happened}
+			\STATE calculateEventRates();
+			\STATE sampleEventTime();
+			\STATE changeATrait();
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Von dieser werden folgende Berechnungen angestoßen:
+		
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\ENSURE{A full evolution Step happened}
+			\STATE ---$>$calculateEventRates();
+			\STATE calculateTotalDeathRates()
+			\STATE calculateTotalBirthRates()
+			\STATE calculateTotalEventRate()
+			\STATE ---$>$sampleEventTime();
+			\STATE sampleEventTime();
+			\STATE ---$>$changeATrait();
+			\STATE choseTraitToChange();
+			\STATE choseEventType();
+			\STATE executeEventTypeOnTrait();
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Schließlich der Ablauf der tatsächlichen Berechnung:
+	
+	\begin{algorithm}[H]
+		\caption{EvolutionStep()}
+		\begin{algorithmic}[1]
+			\ENSURE{A full evolution Step happened}
+			\REQUIRE $ t, X = \{0,\dots, n-1\} $
+			\STATE ---$>$calculateEventRates();
+			\FOR{ $ x \in X $ }
+				\STATE $  D(x) := n_t(x) \cdot \left( d(x) + \sum_{y \in X} c(x,y) \cdot n_t(y) \right) $
+				\STATE $ B(x) := \underbrace{b(x) \cdot (1 - \mu) \cdot n_t(x)}_{arteigene}  $
+				\IF{$ x > 0 $}
+					\STATE $ B(x) += \underbrace{b(x-1)\cdot n_t(x-1)}_{Mutation Links} \cdot \frac{\mu}{2} $
+				\ENDIF
+				\IF{$ x < n-1 $}
+					\STATE $ B(x) += \underbrace{b(x+1)\cdot n_t(x+1)}_{Mutation Rechts} \cdot \frac{\mu}{2} $
+				\ENDIF
+				\STATE $ TotalTraitRate(x) = B(x) + D(x) $
+			\ENDFOR
+			\STATE $ TotalEventRate := \sum_{x \in X} TotalTraitRate(x) $
+			
+			\STATE ---$>$sampleEventTime();
+			\STATE sample $ Z \sim exp(TotalEventRate) $
+			\STATE $ t += Z $
+			
+			\STATE ---$>$choseTraitToChange();
+			\STATE sample $ Y \sim U(0,TotalEventRate) $
+			\FOR{$ x \in X $}
+				\IF{$ Y \le TotalTraitRate(x) $}
+					\STATE $ ChosenTrait := x $
+					\STATE break
+				\ENDIF
+				\STATE $ Y -= TotalTraitRate(x) $
+			\ENDFOR
+			
+			\STATE ---$>$choseEventType();
+			\STATE sample $ Y \sim U(0,TotalTraitRate(ChosenTrait)) $
+			\IF{$ Y \le B(ChosenTrait) $}
+				\STATE isBirht := true
+			\ELSE
+				\STATE isBirth := false
+			\ENDIF
+			
+			\STATE ---$>$executeEventTypeOnTrait();
+			\IF{isBirth}
+				\STATE $ n_t(ChosenTrait) += 1 $
+			\ELSE
+				\IF{$ n_t(ChosenTrait) \ge 0 $}
+					\STATE $ n_t(ChosenTrait) -= 1 $
+				\ENDIF
+			\ENDIF
+		\end{algorithmic}
+	\end{algorithm}
 \section{Simulation}
 
 \section{Korrektheit der Implementation}
@@ -95,6 +258,7 @@ Grundgerüst:
 \begin{itemize}
 	\item Weiteres Abbruchkriterium = Zeit : sehr einfach zu implementieren.
 \end{itemize}
+\bibliography{science1}
 
 %\clearpage
 
