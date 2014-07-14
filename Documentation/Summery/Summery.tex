@@ -413,13 +413,13 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 		Die Raten für Geburten und natürliche Tode der Individuen bleiben hierbei unverändert. Da die Populationsgröße jedoch quadratisch in Wettbewerbsrate einfließt, sollte gelten: $ c^K = \frac{c}{K} $. Ein Beispiel dafür sieht folgendermaßen aus:
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{./LPANormalisierungK100}
+			\includegraphics[width=0.7\linewidth]{./Pictures/LPANormalisierungK100}
 			\caption[LPAK100]{LPA Normalisierung mit K=100}
 			\label{LPA Normalisierung K=100}
 		\end{figure}
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{./LPANormalisierungK10000}
+			\includegraphics[width=0.7\linewidth]{./Pictures/LPANormalisierungK10000}
 			\caption[LPAK100]{LPA Normalisierung mit K=10000}
 			\label{LPA Normalisierung K=10000}
 		\end{figure}
@@ -534,7 +534,7 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 		Die Architektur des Programms kann grob in drei Module gefasst werden. 
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{./Bild_Module}
+			\includegraphics[width=0.7\linewidth]{./Pictures/Bild_Module}
 			\caption[Module]{Arbeitsmodule und Klassenabhängigkeiten}
 			\label{Module und Klassen}
 		\end{figure}
@@ -545,7 +545,7 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 			\item Die Bedienung des Programms sollte das lesen und Anzeigen der Merkmals-Parameter bereitstellen. Da es viele Parameter gibt und die Anzahl der Parameter quadratisch mit der Anzahl der betrachteten Merkmale steigt, bietet sich das Lesen aus zuvor beschriebenen Dateien an.
 			\begin{figure}[H]
 				\centering
-				\includegraphics[width=0.7\linewidth]{./MainWindow_Start}
+				\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_Start}
 				\caption[Startwindow]{MainWindow nach dem Start}
 				\label{MainWindow_Start}
 			\end{figure}
@@ -553,20 +553,20 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 			Zur Darstellung der gelesenen Parameter habe ich ein Baumstruktur gewählt.
 			\begin{figure}[H]
 				\centering
-				\includegraphics[width=0.7\linewidth]{./MainWindow_ParameterBaum}
+				\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_ParameterBaum}
 				\caption[MainWindow_Parameter]{MainWindow mit geladenen Parametern}
 				\label{Baumstruktur}
 			\end{figure}
 			\item Die letzte Herausforderung bestand darin eine Instanz durch das Programm geleitet erstellen zu können. Während diese Aufgabe bei einer Konsolenanwendung (bekannt aus den klassischen c Programmen) denkbar einfach mit "{}printf"{} und "{}scanf"{} erledigt werden konnte, sollte bei einem GUI eine Lösung her die Inputkonflikte verhindert und das Einlesen der Daten denkbar einfach macht. Dafür war es sinnvoll "{}Enter"{} als Bestätigung abzufangen und sicherzustellen dass der Curser nur innerhalb des gewünschten Feldes bleibt.
 			\begin{figure}[H]
 				\centering
-				\includegraphics[width=0.7\linewidth]{./MainWindow_createFile}
+				\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_createFile}
 				\caption[erstelle Datei]{Nach Klick auf "{}create File"{} werden die neuen Parameter einzeln abgefragt}
 				\label{fig:MainWindow_createFile}
 			\end{figure}
 			\begin{figure}[H]
 				\centering
-				\includegraphics[width=0.7\linewidth]{./MainWindow_FileCreated}
+				\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_FileCreated}
 				\caption[Datei erstellt]{Nach Eingabe des letzten Parameters}
 				\label{fig:MainWindow_FileCreated}
 			\end{figure}
@@ -576,7 +576,7 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 		Die Simulation wird gestartet nachdem man auf den "{}Plot"{} Button drückt. Dabei wird ein neues Fenster geöffnet.
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{./PlotWindow_start}
+			\includegraphics[width=0.7\linewidth]{./Pictures/PlotWindow_start}
 			\caption[PlotWindow_start]{Start des PlotWindow}
 			\label{PlotWindow_start}
 		\end{figure}
@@ -584,14 +584,14 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 		Der Arbeiterthread gewährleistet nicht nur eine flüssige Interaktion mit dem Programm, sondern verhindert auch effektiv dass das Betriebssystem denkt das Programm wäre Abgestürzt oder würde nicht mehr ordnungsgemäß funktionieren. Das würde sonst folgendes evtl. bekannte Bild hervorrufen:
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{./KeineRueckmeldung}
+			\includegraphics[width=0.7\linewidth]{./Pictures/KeineRueckmeldung}
 			\caption[Keine Rueckmeldung]{Hauptthread wurde überlastet}
 			\label{Keine Rueckmeldung}
 		\end{figure}
 		Wenn die Simulation  einen gewünschten Zustand erreicht hat, oder die maximale Anzahl an gewünschten Iterationen absolviert hat, werden anschließend maximal 10mio Punkte auf dem Koordinatensystem zu Graphen verbunden. Das kann so aussehen:
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=0.7\linewidth]{./PlotWindow_smallBPDL}
+			\includegraphics[width=0.7\linewidth]{./Pictures/PlotWindow_smallBPDL}
 			\caption[PlotWindow]{PlotWindow mit Dimorpher Population}
 			\label{PlotWindow}
 		\end{figure}
@@ -604,14 +604,14 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	Dabei werden Funktionen des Programms unter vorher festgelegten Bedingungen laufen gelassen und mit einem erwarteten Verhalten verglichen. Das Ergebnis ist eine Ausgabe für Erfolg oder Misserfolg des Tests. Folgend ein Beispiel für eine Implementation eines einfachen Tests der prüft ob alle Parameter korrekt aus der Datei in die Objekte geschrieben werden.
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{./UnitTest}
+		\includegraphics[width=0.7\linewidth]{./Pictures/UnitTest}
 		\caption[UnitTest]{UnitTest versichert korrektes lesen von Parametern aus Datei}
 		\label{Unit Test}
 	\end{figure}
 	Anschließend ein Beispiel für einen Durchlauf der Testfunktionen:
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{./TestResult_start}
+		\includegraphics[width=0.7\linewidth]{./Pictures/TestResult_start}
 		\caption[Test Resultat einer Test Datei]{Ergebnisse einiger Tests}
 		\label{Test Results}
 	\end{figure}
@@ -625,7 +625,7 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	Diese Fitness-Funktion gibt an, wie gut sich ein Merkmal gegenüber einem anderen durchsetzen kann. Sie ist die asymptotische Wachstumsrate von y, wenn x sich im Gleichgewichtszustand $ \bar{n}_x $ befindet und nur wenige Individuen von Typ y in der Population vorhanden sind. In der Simulation sieht man die Fitness der Merkmale zueinander in einer Matrix nach dem Laden der Parameter.
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{./MainWindow_BandMatrix}
+		\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_BandMatrix}
 		\caption[Fitness Matrix]{Fitness Bandmatrix}
 		\label{MainWindow mit Fitness Bandmatrix}
 	\end{figure}
@@ -634,7 +634,7 @@ Zu Beginn möchte ich jedoch nochmal kurz eine etwas andere Darstellung des zule
 	Da diese Wahrscheinlichkeit gerne bereits beim einlesen der Parameter angezeigt werden will, habe ich vor sie als farblich ansteigenden Akzent den Elementen der Zelle hinzuzufügen. Bisher wird in der Matrix etwas grün oder rot markiert. Rot falls eine Koexistenz vorliegt und grün wenn die Wahrscheinlichkeit für Dominanz des Mutanten über 50\% liegt.
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.7\linewidth]{./MainWindow_red_green_loaded}
+		\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_red_green_loaded}
 		\caption[MainWindow_redGreenFitness]{Fitness Matrix mit roten und gruenen akzenten}
 		\label{fig:MainWindow_red_green_loaded}
 	\end{figure}
