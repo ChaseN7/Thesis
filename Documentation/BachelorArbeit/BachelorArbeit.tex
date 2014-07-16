@@ -62,6 +62,7 @@ Schlie"slich werde ich noch kurz die TSS Prozesse und ein weiteres Programm vors
 %Dabei reicht es nicht einfach eine Implementierung zu machen, denn durch die Zufallseigenschaft lässt sich nicht so einfach die Korrektheit verifizieren. Gerade bei TSS Prozessen ist die Anzahl der Mutationen und deren Abstände und Invasionschancen entscheidend.\\
 %Zu diesem Zweck wird ein Teil der Arbeit diese Problemstellung behandeln.
 
+\clearpage
 \section{Modell}
 Das verwendete Model lehnt sich an das Model aus \cite{Champagnat20061127} an. Dieses nutzt die drei grundlegenden Mechanismen von Darwins Evolutionslehre: Vererbung, Variation (Mutationen) und Selektion durch Wettbewerb um eine Menge von Merkmalen f"ur Individuen zu beschreiben. Diese bestimmen die F"ahigkeit des Individuums zu "uberleben und sich fortzupflanzen.\\
 Jedoch wurden für meine Simulation einige kleine Änderungen gewünscht die im Anschluss erl"autert werden. \\
@@ -153,8 +154,14 @@ Jedoch wurden für meine Simulation einige kleine Änderungen gewünscht die im 
 	mit $ \phi: M_F \to \mathbb{R} $\\	
 
 		
-	\subsection{Normalisierung}
-	Wie schon zuvor erwähnt ist es für uns wichtig die Todes und Geburts Prozesse nicht auf der Ebene des Individuums zu betrachten, sondern auf der gesamten Population. Dazu wird die LPA(Large Population Approximation) Normalisierung eingeführt.\\
+		
+	
+	
+\clearpage
+\section{Normalisierung und Eigenschaften des BPDL Prozesses}
+
+\subsection{Normalisierung des BPDL Prozesses}
+	Wie schon zuvor erwähnt ist es für uns wichtig die Tode und Geburten nicht auf der Ebene des Individuums, sondern der gesamten Population zu betrachten. Dazu wird die LPA(Large Population Approximation) Normalisierung eingeführt.\\
 	Dafür wird der Prozess mit einem Parameter K skaliert und es ergibt sich eine neue Zufallsvariable:
 	\[ \nu_t^K := \frac{1}{K} \nu_t \]
 	Um f"ur $ \nu_t^K $ das selbe Verhalten wie f"ur $ \nu_t $ zu erhalten, m"ussen einige Anpassungen vorgenommen werden.\\
@@ -171,26 +178,25 @@ Jedoch wurden für meine Simulation einige kleine Änderungen gewünscht die im 
 		\includegraphics[width=0.7\linewidth]{./Pictures/LPANormalisierungK10000}
 		\caption[LPAK100]{LPA Normalisierung mit K=10000}
 		\label{LPA Normalisierung K=10000}
-	\end{figure}	
+	\end{figure}
 	
+	\subsection{Fitness}
 	
-\clearpage
-\section{Fitness}
-\section{Equilibrium}
-Man erkennt dass die Merkmale für $ K \to \infty $ eine Konvergenz gegen eine Funktion $ \xi_t = n_t \delta_x $ aufweist. Diese Funktion wiederum konvergiert gegen einen stabilen Zustand (im folgenden Equilibrium genannt), worin sich die Populationsgröße nicht mehr ändert. Diese sehen für monomorphe und dimorphe Populationen ohne Mutation folgendermaßen aus:
-\begin{itemize}
-	\item Monomorpher Population:\\
-		\begin{align*}
-		0 & = \dot{n} = (b(x) - d(x) - \bar{n}c(x,x))\bar{n}\\
-		\bar{n}_x &= \frac{\left[ b(x)-d(x) \right]_+}{c(x,x)}
-		\end{align*}
-	\item Dimorphe Population:\\
-		Auf die selbe Weise l"asst sich ein dimorpher stabiler Zustand ermitteln:
-		\[ n_x = \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
-		\[ n_y = \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
-		Also sind $ (n_x, n_y) $, $ (\bar{n}_x, 0)$, $ (0, \bar{n}_y)$ oder $ (0,0) $ m"ogliche stabile Zust"ande im dimorphen Fall.
-\end{itemize}
-Die BPDL Simulationen erkennen dimorphe und monomorphe Populationen und stellen stets einen passenden stabilen Zustand $ n_x $, bzw. $ bar{n}_x $ dar. Um zu entscheiden unter welchen Voraussetzungen welcher stabile Zustand erreicht wird der folgende Satz helfen:
+	\subsection{Equilibrium}
+	Man erkennt dass die Merkmale für $ K \to \infty $ eine Konvergenz gegen eine Funktion $ \xi_t = n_t \delta_x $ aufweist. Diese Funktion wiederum konvergiert gegen einen stabilen Zustand (im folgenden Equilibrium genannt), worin sich die Populationsgröße nicht mehr ändert. Diese sehen für monomorphe und dimorphe Populationen ohne Mutation folgendermaßen aus:
+	\begin{itemize}
+		\item Monomorpher Population:\\
+			\begin{align*}
+			0 & = \dot{n} = (b(x) - d(x) - \bar{n}c(x,x))\bar{n}\\
+			\bar{n}_x &= \frac{\left[ b(x)-d(x) \right]_+}{c(x,x)}
+			\end{align*}
+		\item Dimorphe Population:\\
+			Auf die selbe Weise l"asst sich ein dimorpher stabiler Zustand ermitteln:
+			\[ n_x = \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+			\[ n_y = \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+			Also sind $ (n_x, n_y) $, $ (\bar{n}_x, 0)$, $ (0, \bar{n}_y)$ oder $ (0,0) $ m"ogliche stabile Zust"ande im dimorphen Fall.
+	\end{itemize}
+	Die BPDL Simulationen erkennen dimorphe und monomorphe Populationen und stellen stets einen passenden stabilen Zustand $ n_x $, bzw. $ bar{n}_x $ dar. Um zu entscheiden unter welchen Voraussetzungen welcher stabile Zustand erreicht wird der folgende Satz helfen:
 
 
 \clearpage
@@ -199,10 +205,9 @@ Die BPDL Simulationen erkennen dimorphe und monomorphe Populationen und stellen 
 \begin{center}
 	$ <<< \quad \downarrow $ In Arbeit $ \downarrow \quad >>> $
 \end{center}
-
-\section{Wichtige Aussagen}
 	
-\section{Algorithmus}
+\section{Algorithmus zur Simulation eines normalisierten BPDL Prozesses}
+	\subsection{Implementierung}
 	Der Simulation liegt ein Algorithmus zugrunde der einen Sprung des Markov Sprung Prozesses durchführt. Im Code wird dazu die "{}EvolutionStep()"{} Funktion aufgerufen. (Es gibt auch Jump statt Step, aber mehrere Schritte)
 	\begin{algorithm}[H]
 		\caption{EvolutionStep()}
@@ -233,6 +238,7 @@ Die BPDL Simulationen erkennen dimorphe und monomorphe Populationen und stellen 
 		\end{algorithmic}
 	\end{algorithm}
 	
+	\subsection{Pseudocode}
 	Schließlich der Ablauf der tatsächlichen Berechnung:
 	
 	\begin{algorithm}[H]
@@ -287,8 +293,11 @@ Die BPDL Simulationen erkennen dimorphe und monomorphe Populationen und stellen 
 		\end{algorithmic}
 	\end{algorithm}
 	
+	\subsection{Optimierung f"ur viele Merkmale}
+	
 \clearpage
-\section{Simulation}
+
+\section{Simulation und Programmablauf}
 
 Nun kommen wir zur eigentlichen Simulation. Damit ist sowohl die Darstellung als auch die Programmarchitektur gemeint. 
 	\subsection{Aufgabenteilung und Flexibilität}
@@ -332,7 +341,6 @@ Nun kommen wir zur eigentlichen Simulation. Damit ist sowohl die Darstellung als
 			\caption[Datei erstellt]{Nach Eingabe des letzten Parameters}
 			\label{fig:MainWindow_FileCreated}
 		\end{figure}
-
 	\end{itemize}
 	Was die Darstellung der Graphen angeht, hat sich ein einfaches Bild des fertigen Plots durchgesetzt, wobei das Zoomen und ziehen des Bildes notwendige Elemente zur Untersuchung des Graphen sind. Zusätzlich ist es notwendig viele Bilder vergleichen zu können. Hierfür wurde das Abspeichern des Bildes gewünscht.\\
 	Die Simulation wird gestartet nachdem man auf den "{}Plot"{} Button drückt. Dabei wird ein neues Fenster geöffnet.
@@ -359,7 +367,7 @@ Nun kommen wir zur eigentlichen Simulation. Damit ist sowohl die Darstellung als
 	\end{figure}
 
 \clearpage
-\section{Korrektheit der Implementation}
+\section{Verhaltenstest - Korrektheit der Implementation}
 (Korrektheit des Algorithmus nicht notwendig bzw möglich)
 Ein ganz besonders interessantes Thema ist die Korrektheit der Implementation. Diese ist generell mit steigender Komplexität schwerer zu prüfen (besonders bei Zufallsbedingten Simulationen).\\
 Daher habe ich das Prinzip der "{}Testgetriebene Entwicklung"{}  (Test Driven Develeopment) verwendet.\\
@@ -378,6 +386,8 @@ Anschließend ein Beispiel für einen Durchlauf der Testfunktionen:
 	\label{Test Results}
 \end{figure}
 Die Testfunktionen zeigen auch dass eine komplexe Verwendung der Simulationen über die graphische Darstellung hinaus einfach realisierbar ist.
+
+	\subsection{Unit Tests der Algorithmusmodule}
 
 \clearpage
 \section{TSS Prozesse}
@@ -422,7 +432,7 @@ Wenn der einfache BPDL Simulator für die Simulation dieses Prozesses verwendet 
 \section{Fragen}
 \begin{itemize}
 	\item Normalisierung, Equilibrium und mono/dimorphe F"alle als einzelne Kapitel?
-	\item Soll ich monomorphe BPDL Prozesse einf"uhren? Schlie"slich kann ich damit das fast sichere Aussterben 
+	\item Soll ich monomorphe BPDL Prozesse einf"uhren? Schlie"slich kann ich damit das fast sicheres Aussterben 
 	\item Beweis der LPA-Normalisierung per Differentialgleichungen?
 \end{itemize}
 
