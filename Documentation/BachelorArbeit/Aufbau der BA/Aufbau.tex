@@ -12,7 +12,8 @@
 \usepackage{bbm}
 \usepackage[ngerman]{babel}
 \usepackage{BA_Titelseite}
-%\bibliographystyle{unsrt}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+\bibliographystyle{unsrt}
 
 %Namen des Verfassers der Arbeit
 \authornew{Boris Prochnau}
@@ -48,64 +49,110 @@
 \section{Einleitung}
 Hier steht eine Einleitung bestehend aus:\\
 Ziel dieser Bachelorarbeit...\\
+Vorstellung des Populationsmodells...\\
+N"aheres zur Simulation... \\
+N"aheres zum erwarteten Verhalten der Simulation...\\
+Welche M"oglichkeiten das Programm bieten soll...\\
+Schlie"slich erw"ahne ich noch TSS Prozesse und dass ich auch daf"ur ein Programm geschrieben habe welches den besonders interessanten Wechsel dominanter Spezies durch Invasion simulieren kann.
 
 
 \clearpage
 \section{Modell}
+Hier woran sich das von mir verwendete Modell orientiert \cite{Champagnat20061127} und das es sich an Darwins Evolutionslehre anlehnt.\\
+Dann erw"ahne ich noch kurz dass f"ur die von mir erwartete Simulation ein etwas anderes Modell simuliert.
 
 	\subsection{Grundlagen}
+	Hier f"uhre ich das von mir verwendete Modell ein.\\
+	Anschlie"send (im selben Kapitel) erkl"are ich dass wir das Modell zwar aus der Sicht des Individuums erstellt haben, jedoch durch Superposition die Ereignisse auf die Ebene der Merkmale anheben k"onnen und so die gesamte Population simulieren k"onnen.
 	
 	\subsection{BPDL Prozess}
-	
-		
+	Hier beschreibe den aus dem Modell resultierenden stochastischen Prozess und in welchem Raum er lebt. \\
+	Dort werde ich auch den eigentlichen Generator des BPDL Prozesses erw"ahnen und den daraus f"ur mich abgeleiteten Generator aufschreiben.\\
+	L"asst sich noch etwas wichtiges zum Prozess sagen?
 	
 	
 \clearpage
 \section{Normalisierung und Eigenschaften des BPDL Prozesses}
+Hier werde ich erkl"aren dass man von dem Prozess Eigenschaften erwarten kann die man anhand der Fitness erkl"aren kann oder einen stabilen Zustand zu dem der Prozess konvergiert. \\
+Um diese Eigenschaften besser untersuchen zu k"onnen und um sie deutlich zu machen weise ich darauf hin dass wir die Normalisierung des BPDL Prozesses nutzten.
 
-\subsection{Normalisierung des BPDL Prozesses}
+	\subsection{Normalisierung des BPDL Prozesses}
+	Hier nenne ich den von Silke angef"uhrten Grund, dass wir die LPA Normalisierung einf"uhren um die Betrachtungsebene auf die der Population und weg vom Individuum zu heben. Ich w"urde auch gerne betonen dass diese Methode sich besonders daf"ur eignet wenn viele Individuen sich auf wenige Merkmale verteilen und man m"oglichst gut deren erwartetes Verhalten beobachten kann. \textit{(Hier tauchen Bilder auf!)}
 
 	\subsection{Fitness}
+	Hier w"urde ich zun"achst gerne die Fitnessfunktion einf"uhren und wie Martina mir empfohlen hat auch auf den Aufbau der Fitness eingehen und versuchen zu erl"autern wieso die Berechnung der Fitness so aussieht wie sie es tut. Nat"urlich erw"ahne ich dabei dass sie die anf"angliche Wachstumsrate eines mutierten Merkmals darstellt usw.
 	
 	\subsection{Equilibrium}
-
+	Soll ich das Kapitel vielleicht lieber "{}stabiler Zustand"{} nennen? Loren meinte dass Equilibrium vielleicht nicht in der Bachelorarbeit auftauchen sollte.\\
+	Hier erkl"are ich das deterministische Verhalten von Merkmalen wenn $ K\to \infty $ (ohne Mutation) und dass wir in der Regel einen stabilen Zustand beobachten k"onnen in der sich die Populationsgr"o"se nicht mehr "andert.\\
+	Schlie"slich beschreibe ich die stabilen Zust"ande im monomorphen, dimorphen Fall und wann diese angenommen werden.\\
+	\textit{(Hier k"onnte ich Bilder einf"ugen wenn ihr das f"ur eine gute Idee haltet)}
 
 \clearpage
-
-\noindent\rule{\textwidth}{2pt}
-\begin{center}
-	$ <<< \quad \downarrow $ In Arbeit $ \downarrow \quad >>> $
-\end{center}
-	
 \section{Algorithmus zur Simulation eines normalisierten BPDL Prozesses}
+Hier wei"se ich darauf hin dass sich der Pseudocode von der Implementierung in so fern unterscheidet, dass bei der Implementierung sorgf"altig darauf geachtet wurde die trennbaren Aufgaben nicht innerhalb einer Funktion auszuf"uhren und jede Aufgabe einzeln ansprechbar ist.\\
+Dies ist sp"ater f"ur den Verhaltenstest entscheidend und auch aus weiteren Gr"unden sinnvoll die in "{}Aufgabenteilung und Flexibilit"at"{} angesprochen werden.
+
 	\subsection{Implementierung}
+	Hier stelle ich heuristisch die Implementierung eines Sprungs von $ \nu_t $ vor.
 	
 	\subsection{Pseudocode}
+	An dieser Stelle schreibe ich den gesamten Pseudocode auf und mache kleine Verweise auf die ausgelagerten Arbeitspakete die zuvor erw"ahnte Implementierung.
 
 	\subsection{Optimierung f"ur viele Merkmale}
+	Hier werde ich die von mir schon besprochene Optimierung nennen welche bei vielen Merkmalen wichtig wird. Diese verwendet zur Berechnung der neuen Raten die alten Werte und korrigiert nur die alten Werte statt sie neu auszurechnen. Nat"urlich auch wie ich diese implementiert habe.
 	
+	\subsection{Aufwand}
+	Ich bin noch nicht sicher ob ich diesen Teil erw"ahnen soll, aber ich m"ochte hier erw"ahnen dass z.B. bei den von mir gemessenen Werten die  Berechnung der Todesrate die mit Abstand meiste Zeit in Anspruch nimmt und warum das klar ist. Schlie"slich vielleicht noch weitere Punkte die f"ur den Aufwand einer solchen Simulation von Interesse sind, wie z.B. das Verh"altnis von gro"sen K, simulierter Zeit und notwendigen Spr"ungen.
+
 \clearpage
+\section{Das Programm}
+Hier sage ich vielleicht einige einleitende Worte zur Entwicklung des Programms.
 
-\section{Simulation und Programmablauf}
-
-	\subsection{Aufgabenteilung und Flexibilität}
+	\subsection{Architektur: Aufgaben und Flexibilität}
+	Hier werde ich einige Stolpersteine erw"ahnen denen ich versucht habe mit der von mir gew"ahlten Architektur auszuweichen.\\
+	Dann f"uhre ich anhand eines Diagramms 3 gr"o"sere Arbeitspakete ein in die die Aufgaben einsortiert wurden und worauf geachtet wurde.\\
+	Vielleicht werde ich noch einige Vorteile meiner Vorgehensweise aufz"ahlen oder etwas anderes was meine Konzepte betont.
 	
-	\subsection{Layout}
-
+	\subsection{Layout: Lesen und Darstellen der Parameter}
+	Hier erkl"are ich anhand von Screenshots meines Programms wie Parameter eingelesen und dargestellt werden. Damit ist auch die Fitness und die Ber"ucksichtigung des "{}K"{} Parameters gemeint.
+	
+	\subsection{Layout: Erstellen neuer Instanzen}
+	Wie erwartet erkl"are ich hier wie eine neue Instanz erstellt wird (auch anhand von Bildern) und warum das in unserem Fall deutlich aufwendiger ist als es mit einer Konsole gewesen w"are.
+	
+	\subsection{Layout: Pr"asentation der Simulation}
+	Zun"achst nenne ich die verschiedenen Anforderungen an die Darstellung der Graphen (Anzeige, Zoom, Bewegungsfreiheit, Koordinatensystem, Speicherm"oglichkeit, Absturzsicherheit...).\\
+	Dann beschreibe ich ganz kurz wie man die Berechnung der Simulation startet und warum das in der Programmierung ein kritischer Punkt war.\\
+	Nach der Anzeige des Graphen beschreibe ich was nun tats"achlich Dargestellt wurde (Zeit und Gr"o"se, stabile Zust"ande, Anzahl der Spr"unge, Legende mit Daten).\\
+	\textit{(Hier habe ich auch Bilder verwendet)}
 
 \clearpage
 \section{Verhaltenstest - Korrektheit der Implementation}
+Hier stelle ich das Konzept der "{}Testgetriebenen Entwicklung"{} das ich zuvor recherchiert und einstudiert habe. Ich erkl"are dabei warum die zunehmende Komplexit"at des Programms den Code es notwendig macht solche Mittel zu verwenden und es sehr gro"se M"oglichkeiten nicht nur zur Kontrolle sondern auch zur Verhaltensanalyse bietet.
+
 	\subsection{Unit Tests der Algorithmusmodule}
+	Hier beabsichtige ich einige Tests und deren Resultate zu pr"asentieren um von der Korrektheit der Simulation zu "uberzeugen.
+	
 
 \clearpage
 \section{TSS Prozesse}
-
+Zun"achst leite ich die TSS Prozesse ein und stelle die "Anderung an der Mutation vor. An dieser Stelle sollte ich mich nochmal kurz mit einem von euch zusammen setzten um genauer zu besprechen warum diese Wahl der Mutation getroffen wurde.\\
+Dann sage ich noch dass viele Spr"unge um das Equilibrium zu erwarten sind und wie dieses Modell mit der gew"ohnlichen BPDL Simulation aussehen w"urde. (Bilder)\\
+Dann hebe ich noch einmal die Bedeutung der Fitness hervor und erkl"are dass sich durch die Fitnessfunktion die Invasionswahrscheinlichkeit bestimmen l"asst und wie ich das farblich hervorgehoben habe. Dabei sage ich noch kurz etwas zum Abbruchkriterium und zum verhalten wenn wir die Mutation nicht nur auf die Nachbarn beschr"ankt h"atten.\\
+	\subsection{Optimierung}
+	Hier stelle ich die lineare Interpolation als eine Optimierung vor die "Ubersichtlichkeit, Analyse und Laufzeit deutlich verbessert. Dann beschreibe ich anhand von Bildern wie gut man Mutationen und deren Auswirkungen verfolgen kann und wie ich gepr"uft habe ob auch hier alles Korrekt l"auft.\\
+	Schlie"slich erkl"are ich wie ich die Mutationszeitpunkte ermittelt habe.
+	
 	\subsection{Algorithmus}
+	Ich wei"s nicht ob ich diesen Punkt einbringen soll, aber wenn dann werden hier die Details zum zus"atzliche Aufwand wie zum Beispiel der Bestimmung eines Sprung Start und Endpunktes oder dem Abbruch erw"ahnt.
+	
 	
 \clearpage
 \section{Ausblick}
+Hier werde ich wahrscheinlich einige Funktionen vermerken die es bis zu diesem Zeitpunkt nicht mehr in das Programm geschafft haben.
+
 
 \clearpage
-%\bibliography{science1}
+\bibliography{science1}
 
 \end{document}
