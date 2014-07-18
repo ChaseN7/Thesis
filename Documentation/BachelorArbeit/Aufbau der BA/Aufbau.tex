@@ -58,8 +58,8 @@ Schlie"slich erw"ahne ich noch TSS Prozesse und dass ich auch daf"ur ein Program
 
 \clearpage
 \section{Modell}
-Hier stelle  das von mir verwendete Modell vor. Es orientiert sich an \cite{Champagnat20061127} und basiert auf Darwins Evolutionslehre.\\
-Dann erw"ahne ich noch kurz dass f"ur die von mir erwartete Simulation ein etwas anderes Modell verwendet wird.
+Hier wird das von mir verwendete Modell vorgestellt. Es orientiert sich an \cite{Champagnat20061127} und basiert auf Darwins Evolutionslehre.\\
+Dann erw"ahne ich noch kurz dass f"ur die von mir erwartete Simulation ein anderen Schwerpunkt hat oder eine andere Anwendung fokussiert.
 
 	\subsection{Grundlagen}
 	Hier f"uhre ich das von mir verwendete Modell ein.\\
@@ -90,17 +90,17 @@ Um diese Eigenschaften besser untersuchen zu k"onnen und um sie deutlich zu mach
 
 \clearpage
 \section{Algorithmus zur Simulation eines normalisierten BPDL Prozesses}
-Hier wei"se ich darauf hin dass sich der Pseudocode von der Implementierung in so fern unterscheidet, dass bei der Implementierung sorgf"altig darauf geachtet wurde die trennbaren Aufgaben nicht innerhalb einer Funktion auszuf"uhren und jede Aufgabe einzeln ansprechbar ist.\\
+Hier weise ich darauf hin dass sich der Pseudocode von der Implementierung in so fern unterscheidet, dass bei der Implementierung sorgf"altig darauf geachtet wurde die trennbaren Aufgaben nicht innerhalb einer Funktion auszuf"uhren und jede Aufgabe einzeln ansprechbar ist.\\
 Dies ist sp"ater f"ur den Verhaltenstest entscheidend und auch aus weiteren Gr"unden sinnvoll die in "{}Aufgabenteilung und Flexibilit"at"{} angesprochen werden.
 
 	\subsection{Implementierung}
 	Hier stelle ich heuristisch die Implementierung eines Sprungs von $ \nu_t $ vor.
 	
 	\subsection{Pseudocode}
-	An dieser Stelle schreibe ich den gesamten Pseudocode auf und mache kleine Verweise auf die ausgelagerten Arbeitspakete die zuvor erw"ahnte Implementierung.
+	An dieser Stelle schreibe ich den gesamten Pseudocode auf und mache kleine Verweise auf die ausgelagerten Arbeitspakete der zuvor erw"ahnten Implementierung.
 
 	\subsection{Optimierung f"ur viele Merkmale}
-	Hier werde ich die von mir schon besprochene Optimierung nennen welche bei vielen Merkmalen wichtig wird. Diese verwendet zur Berechnung der neuen Raten die alten Werte und korrigiert nur die alten Werte statt sie neu auszurechnen. Nat"urlich auch wie ich diese implementiert habe.
+	Hier werde ich die von mir schon besprochene Optimierung nennen welche bei vielen Merkmalen wichtig wird. Diese verwendet zur Berechnung der neuen Raten die alten Werte und korrigiert nur die alten Werte statt sie neu auszurechnen. Ich werde auch kurz vorstellen (heuristisch oder anhand von Pseudocode) wie ich diese implementiert habe.
 	
 	\subsection{Aufwand}
 	Ich bin noch nicht sicher ob ich diesen Teil erw"ahnen soll, aber ich m"ochte hier erw"ahnen dass z.B. bei den von mir gemessenen Werten die  Berechnung der Todesrate die mit Abstand meiste Zeit in Anspruch nimmt und warum das klar ist. Schlie"slich vielleicht noch weitere Punkte die f"ur den Aufwand einer solchen Simulation von Interesse sind, wie z.B. das Verh"altnis von gro"sen K, simulierter Zeit und notwendigen Spr"ungen.
@@ -111,7 +111,7 @@ Hier sage ich vielleicht einige einleitende Worte zur Entwicklung des Programms.
 
 	\subsection{Architektur: Aufgaben und Flexibilität}
 	Hier werde ich einige Stolpersteine erw"ahnen denen ich versucht habe mit der von mir gew"ahlten Architektur auszuweichen.\\
-	Dann f"uhre ich anhand eines Diagramms 3 gr"o"sere Arbeitspakete ein in die die Aufgaben einsortiert wurden und worauf geachtet wurde.\\
+	Dann erkl"are ich dass die Aufgaben in 3 gro"se Bereiche Aufgeteilt werden k"onnen und erl"autere das anhand eines Diagramms.\\
 	Vielleicht werde ich noch einige Vorteile meiner Vorgehensweise aufz"ahlen oder etwas anderes was meine Konzepte betont.
 	
 	\subsection{Layout: Lesen und Darstellen der Parameter}
@@ -128,7 +128,7 @@ Hier sage ich vielleicht einige einleitende Worte zur Entwicklung des Programms.
 
 \clearpage
 \section{Verhaltenstest - Korrektheit der Implementation}
-Hier stelle ich das Konzept der "{}Testgetriebenen Entwicklung"{} das ich zuvor recherchiert und einstudiert habe. Ich erkl"are dabei warum die zunehmende Komplexit"at des Programms den Code es notwendig macht solche Mittel zu verwenden und es sehr gro"se M"oglichkeiten nicht nur zur Kontrolle sondern auch zur Verhaltensanalyse bietet.
+Hier stelle ich das Konzept der "{}Testgetriebenen Entwicklung"{} vor, das ich zuvor recherchiert und daf"ur erlernt hatte. Ich erkl"are dabei warum die zunehmende Komplexit"at des Code es notwendig macht solche Mittel zu verwenden und es sehr gro"se M"oglichkeiten nicht nur zur Kontrolle sondern auch zur Verhaltensanalyse bietet.
 
 	\subsection{Unit Tests der Algorithmusmodule}
 	Hier beabsichtige ich einige Tests und deren Resultate zu pr"asentieren um von der Korrektheit der Simulation zu "uberzeugen.
@@ -142,6 +142,9 @@ Dann hebe ich noch einmal die Bedeutung der Fitness hervor und erkl"are dass sic
 	\subsection{Optimierung}
 	Hier stelle ich die lineare Interpolation als eine Optimierung vor die "Ubersichtlichkeit, Analyse und Laufzeit deutlich verbessert. Dann beschreibe ich anhand von Bildern wie gut man Mutationen und deren Auswirkungen verfolgen kann und wie ich gepr"uft habe ob auch hier alles Korrekt l"auft.\\
 	Schlie"slich erkl"are ich wie ich die Mutationszeitpunkte ermittelt habe.
+	
+	\subsection{Aufwand}
+	H"angt nicht mehr nur von K ab...
 	
 	\subsection{Algorithmus}
 	Ich wei"s nicht ob ich diesen Punkt einbringen soll, aber wenn dann werden hier die Details zum zus"atzliche Aufwand wie zum Beispiel der Bestimmung eines Sprung Start und Endpunktes oder dem Abbruch erw"ahnt.
