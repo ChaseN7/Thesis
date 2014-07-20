@@ -44,7 +44,7 @@ PlotWindow::PlotWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->customPlot->xAxis->setLabel("Time");
-    ui->customPlot->yAxis->setLabel("Population");
+    ui->customPlot->yAxis->setLabel("Traitsize");
 
     PlotRenderer * plotter = new PlotRenderer;
 
@@ -65,7 +65,7 @@ PlotWindow::PlotWindow(QWidget *parent) :
 void PlotWindow::drawGraph(const GraphClass * Graph, int iterations){
     ui->customPlot->clearGraphs();
     ui->label_iterations->setText("Iterations: " + QString::number(iterations));
-    createTraitGraphs(Graph->Manager.retStableDimorphVector());
+    createTraitGraphs(/*Graph->Manager.retStableDimorphVector()*/ Graph->getExpectedVector());
     drawGraphsWithClass(Graph);
 
     emit graphDrawn();

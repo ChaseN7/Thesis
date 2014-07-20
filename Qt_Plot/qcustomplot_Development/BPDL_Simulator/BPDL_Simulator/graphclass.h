@@ -20,6 +20,7 @@ public:
     QVector<double> getTimesOf(const int i) const;
     QVector<double> getTraitHistOf(const int i) const;
     QVector<double> getExpectedVectorOf(const int i) const;
+    QVector<double> getExpectedVector() const;
     QVector<double> getXBorders() const;
 
     int makeIterations(const int maxIt);

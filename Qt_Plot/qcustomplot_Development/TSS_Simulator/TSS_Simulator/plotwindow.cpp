@@ -44,7 +44,7 @@ PlotWindow::PlotWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->customPlot->xAxis->setLabel("Time");
-    ui->customPlot->yAxis->setLabel("Population");
+    ui->customPlot->yAxis->setLabel("Traitsize");
 
     PlotRenderer * plotter = new PlotRenderer;
 

@@ -6,7 +6,13 @@ GraphClass::GraphClass(QString FName, bool rangeChecked) : Manager(FName)
     TimeLine.resize(TraitClass::Size);
     TraitHistory.resize(TraitClass::Size);
     Expected.resize(TraitClass::Size);
-    Expected = Manager.retStableDimorphVector();
+    if(TraitClass::Size == 2)
+        Expected = Manager.retStableDimorphVector();
+    else{
+        for(int i = 0; i < TraitClass::Size; ++i){
+            Expected[i] = Manager.retStableMonoStateOf(i)/TraitClass::K;
+        }
+    }
     maxMembers = 0;
     maxTime = 0;
     jumpedSteps = 1;
@@ -117,6 +123,11 @@ QVector<double> GraphClass::getExpectedVectorOf(const int i) const
     ExpV.push_back(Expected[i]);
     ExpV.push_back(Expected[i]);
     return ExpV;
+}
+
+QVector<double> GraphClass::getExpectedVector() const
+{
+    return Expected;
 }
 
 QVector<double> GraphClass::getXBorders() const
