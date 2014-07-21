@@ -116,7 +116,7 @@ void TraitEventManager::calculateTotalBirthRates()
 {
     int n = TraitClass::Size;
     for(int k = 0; k < n; ++k)
-        Trait[k].TotalBirthRate = (Trait[k].Members)*(Trait[k].BirthRate);
+        Trait[k].TotalBirthRate = (Trait[k].Members)*(Trait[k].BirthRate)*(1-TraitClass::Mutation);
     for(int k = 1; k < n-1; ++k){
         Trait[k].TotalBirthRate += 0.5*(Trait[k-1].Members)*(Trait[k-1].BirthRate)*(TraitClass::Mutation);
         Trait[k].TotalBirthRate += 0.5*(Trait[k+1].Members)*(Trait[k+1].BirthRate)*(TraitClass::Mutation);

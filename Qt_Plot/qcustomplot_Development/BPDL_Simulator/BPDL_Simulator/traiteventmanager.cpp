@@ -54,7 +54,7 @@ void TraitEventManager::calculateTotalDeathRateOf(int TraitIndex)
 
 void TraitEventManager::calculateTotalBirthRates(int i)
 {
-    Trait[i].TotalBirthRate = (Trait[i].Members)*(Trait[i].BirthRate);
+    Trait[i].TotalBirthRate = (Trait[i].Members)*(Trait[i].BirthRate)*(1-TraitClass::Mutation);
     if(i < TraitClass::Size - 1){
         calculateTotalBirthRates(i+1);
         Trait[i].TotalBirthRate += TraitClass::Mutation*0.5
@@ -220,7 +220,7 @@ double TraitEventManager::retStableDimorphOf(int i) const
     if(devisor != 0)
         expected /= devisor;
     else
-        expected = -1.;
+        return -1.;
 
     return expected/TraitClass::K;
 }
