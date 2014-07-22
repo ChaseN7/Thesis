@@ -49,12 +49,12 @@
 
 \clearpage
 \section{Einleitung}
-Ziel dieser Bachelorarbeit ist die Entwickelung eines Programms, das die Dynamik einer Population simulieren kann. Dar"uber hinaus wird die Erweiterung zu einem zweiten Programm vorgestellt welches besonders interessante Populationen, genannt "{}Trait Substitution Sequences"{}, simulieren kann.\\
+Ziel dieser Bachelorarbeit ist die Entwickelung eines Programms, das die Dynamik einer Population simulieren kann. Dar"uber hinaus wird die Erweiterung zu einem zweiten Programm vorgestellt welches besonders interessante Prozesse, genannt "{}Trait Substitution Sequences"{}, simulieren kann.\\
 
-Alle Simulationen basieren auf dem Modell, dass jedes Lebewesen einer Population (z.B. Pflanzen) ein bestimmtes Merkmal tr"agt. Bestimmt wird ein Merkmal durch Todesraten und einer Fortpflanzungsrate. Die Todesraten sind eine einfache nat"urliche Todesrate und eine durch Wettbewerb mit jedem anderem Individuum. Das hei"st diese Rate steigt mit der Anzahl der konkurrierenden Individuen.\\
+Alle Simulationen basieren auf dem Modell, dass jedes Lebewesen einer Population (z.B. Pflanzen) ein Merkmal tr"agt. Bestimmt wird ein Merkmal durch Todesraten und einer Fortpflanzungsrate. Die Todesrate besteht aus einer nat"urliche Todesrate und eine durch Wettbewerb mit jedem anderem Individuum. Das hei"st die wettbewerbliche Todesrate steigt mit der Anzahl der konkurrierenden Individuen.\\
 Schlie"slich ist es jedoch die Entwicklung der Population und nicht der Individuen die simuliert werden soll. Deshalb kann man im simulierten Prozess zwar Tode und die Geburten verfolgen, aber nicht welches Individuum dieses Ereignis ausl"ost. Der "Ubergang zu dieser Sichtweise wird n"aher im 2. Kapitel beschrieben.\\
 
-Das Programm sollte Parameter einlesen k"onnen und eine Oberfl"ache bieten auf die Simulation graphisch angezeigt wird. Tats"achlich wird das Programm mehr bieten und flexible Erweiterungsm"oglichkeiten beinhalten.\\
+Das Programm sollte Parameter einlesen k"onnen und eine Oberfl"ache bieten auf der die Simulation graphisch angezeigt wird. Tats"achlich wird das Programm mehr bieten und flexible Erweiterungsm"oglichkeiten beinhalten.\\
 Die graphische Darstellung des Prozesses soll die M"oglichkeit bieten beobachten zu k"onnen ob sich ein Merkmal unter anderen Durchsetzten kann, es einen stabilen Zustand annimmt oder sicher dem Tod entgegen strebt.\\
 \textit{N"aheres zum erwarteten Verhalten der Simulation fehlt noch}\\
 
@@ -90,8 +90,8 @@ Ziel wird es sein zwei spezielle BPDL-Grenzwert-Prozesse simulieren zu k"onnen.
 	
 	\begin{tabular}{ r p{18em} }
 		$ b(x) \cdot (1 - \mu) $ & Ist die arteigene Geburtenrate eines Individuums mit Merkmal $ x $, also mutationsfreie Geburten.\\
-		$ d(x) + \sum_{i=1}^{N_t} c(x, x_i) $ & Ist die gesamte Todesrate eines Individuums mit Merkmal x (mit $ N_t := $ \#Individuen zur Zeit t mit Merkmal $ x $ und $ x_i $ das Merkmal des i-ten Individuums).\\
-		$ d(x) + \sum_{y=1}^{n} c(x,y) \cdot n_t(x) $ & Wie oben, nur mit $ n := $ \#Merkmale, und $ n_t(x) :=$ \#Individuen zur Zeit t mit Merkmal $ x $
+		$ d(x) + \sum_{i=1}^{N_t} c(x, x_i) $ & Ist die gesamte Todesrate eines Individuums mit Merkmal x (mit $ N_t \hat{=} $ \#Individuen zur Zeit t mit Merkmal $ x $ und $ x_i $ das Merkmal des i-ten Individuums).\\
+		$ d(x) + \sum_{y=1}^{n} c(x,y) \cdot n_t(x) $ & Wie oben, nur mit $ n \hat{=} $ \#Merkmale, und $ n_t(x) \hat{=}$ \#Individuen zur Zeit t mit Merkmal $ x $
 	\end{tabular}\\
 
 	Weil die Simulation die Entwicklung der Merkmale und nicht die Ereignisse der Individuen darstellt, ist es unpraktisch weiterhin die Raten jedes Individuums zu berechnen. Die letzte Darstellung der Todesrate ist z.B. praktischer f"ur die Betrachtung der Population durch den Fokus auf die Merkmale.  "Ahnlich k"onnen weitere Ereignisse zusammengefasst werden, so dass man z.B. eine Todesrate und eine arteigene Geburtenraten der Merkmale erstellen kann:
@@ -120,7 +120,7 @@ Ziel wird es sein zwei spezielle BPDL-Grenzwert-Prozesse simulieren zu k"onnen.
 	
 	\subsection{BPDL Prozess}
 	Die auf dem vorhergehenden Modell basierende Population wird durch die Zufallsvariable
-	\[ \nu_t = \sum_{i=1}^{N_t} \delta_{x_i}, \quad x_i := \text{Das Merkmal des i-ten Individuums} \]
+	\[ \nu_t = \sum_{i=1}^{N_t} \delta_{x_i}, \quad x_i \hat{=} \text{Das Merkmal des i-ten Individuums} \]
 	beschrieben. Sie bildet Merkmale auf die Anzahl ihrer Repr"asentanten ab.\\
 	Mit Zeitpfaden ist $ \nu_t $ ein stochastischer Prozess, genauer ein Markov Sprung Prozess auf dem Raum:
 	\[ \nu_t \in M_F(X) = \left\{ \sum_{i=1}^{n} \delta_{x_i}, n \in \mathbb{N}, x_1, \dots, x_n \in X \right\} \]
@@ -144,7 +144,7 @@ Ziel wird es sein zwei spezielle BPDL-Grenzwert-Prozesse simulieren zu k"onnen.
 		 [\phi(\nu + \delta_{x_j}) - \phi(\nu)] \cdot n(x_i)\\		 
 		&+ \sum_{i = 1}^{\infty} (d(x) + \sum_{j = 1}^{\infty} c_{i,j} \cdot n(x_j))[\phi(\nu - \delta_x) - \phi(\nu)] \cdot n(x_i)\\
 	\end{align*}
-	mit $ \phi: M_F \to \mathbb{R} $ und $ n(x_i) := $ Anzahl Individuen mit Merkmal $ x_i $.\\	
+	mit $ \phi: M_F \to \mathbb{R} $ und $ n(x_i) \hat{=} $ \#Individuen mit Merkmal $ x_i $.\\	
 
 
 \clearpage
@@ -387,7 +387,7 @@ Die hier verwendete Vorgehensweise unterscheidet sich von der aus \cite{fournier
  		\end{algorithmic}
  	\end{algorithm}
  	Auf die selbe Weise wird entschieden welches Ereignis eintrifft und speichern diese Entscheidung in "{}isBirth"{}. Da wir hier jedoch nur Geburt und Tod zur Auswahl haben w"urde sich nat"urlich eine Bernoulli verteilte Zufallsvariable ergeben mit, 
- 	\[ \text{isBirth} \sim \text{Bern(TotalBirthRate[ChosenTrait])} \]
+ 	\[ \text{isBirth} \sim \text{Ber(TotalBirthRate[ChosenTrait])} \]
  	Im Code wurde "{}isBirth"{} folgenderma"sen gezogen:
 	\begin{algorithm}[H]
  		\caption{choseEventType()}
