@@ -1,0 +1,64 @@
+\documentclass[11pt,a4paper,notitlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+
+\title{Beweis 2.7 - Lipschitz Stetigkeit}
+
+\newcommand{\tvec}[2]{\begin{pmatrix}#1\\#2\end{pmatrix}}
+
+\begin{document}
+\maketitle
+Beh: Es gibt ein $ M_K < \infty $ so dass:
+\[ \left| F\tvec{n_1^x}{n_1^y} - F\tvec{n_2^x}{n_2^y} \right| \overset{!}{<} M_K \left| \tvec{n_1^x}{n_1^y} - \tvec{n_2^x}{n_2^y} \right|\] 
+mit $ n_{1,2}^{x,y} \in K $, $ K $ Kompakt, $ b(x), c(x,y), d(x) \forall x,y \in X \text{ endlich}$ und 
+\begin{align}
+	F\tvec{n^x}{n^y} = \tvec{n^x(b(x)-d(x)-c(x,x)n^x-c(x,y)n^y)}{n^y(b(y)-d(y)-c(y,y)n^y-c(y,x)n^x)}
+	\label{nDGL}
+\end{align}
+
+\begin{proof}
+	Betrachten wir zun"achst nur die erste Zeile:
+	\begin{align*}
+		 &&& M_K |n_1^x - n_2^x| >  |
+		 (n_1^x - n_2^x)(b(x)-d(x))\\
+		 &&&  - ((n_1^x)^2 - (n_2^x)^2)c(x,x) - ((n_1^y)^2 - (n_2^y)^2)c(x,y)|\\
+		 \Leftrightarrow&&& M_K >  \left| b(x) - d(x)
+		 - \frac{(n_1^x)^2 - (n_2^x)^2}{|n_1^x - n_2^x|}c(x,x) - \frac{(n_1^y)^2 - (n_2^y)^2}{|n_1^x - n_2^x|}c(x,y) \right|\\
+		 \Leftrightarrow&&& \tilde{M}_K > \left| \frac{(n_1^x)^2 - (n_2^x)^2}{|n_1^x - n_2^x|} + \frac{(n_1^y)^2 - (n_2^y)^2}{|n_1^x - n_2^x|} \right|\\
+		 \Leftrightarrow&&& \tilde{M}_K > \left| \underbrace{n_1^x + n_2^x}_{\text{beschr"ankt}} + \frac{(n_1^y)^2 - (n_2^y)^2}{|n_1^x - n_2^x|} \right|
+	\end{align*}
+	somit bleibt nur noch zu zeigen:
+	\[ \left| \frac{(n_1^y)^2 - (n_2^y)^2}{|n_1^x - n_2^x|} \right| < \infty \]
+	Dank der "Ahnlichkeit kann die zweite Zeile identisch umgeformt werden und es bleicht somit zu zeigen:
+	\begin{align}
+		\frac{(n_1^y)^2 - (n_2^y)^2}{|n_1^x - n_2^x|} < \infty\\
+		\frac{(n_1^x)^2 - (n_2^x)^2}{|n_1^y - n_2^y|} < \infty
+	\end{align}
+	Addition der 1. und 2. Zeile ergibt:
+	\begin{align*}
+		&& \left| \frac{(n_1^y)^2 - (n_2^y)^2}{|n_1^x - n_2^x|} + 
+		\frac{(n_1^x)^2 - (n_2^x)^2}{n_1^y - n_2^y} \right| &< \infty\\
+		\overset{\text{gleicher Nenner}}{\Leftrightarrow} && \frac{|((n_1^y)^2 - (n_2^y)^2)(n_1^y - n_2^y)| + |((n_1^x)^2 - (n_2^x)^2)(n_1^x - n_2^x)|}{|n_1^x - n_2^x||n_1^y - n_2^y|} &< \infty\\
+		\overset{\text{3. bin. Formel}}{\Leftrightarrow} && \frac{|(n_1^y - n_2^y)^2 (n_1^y + n_2^y)| + |(n_1^x - n_2^x)^2 (n_1^x + n_2^x)|}{|n_1^x - n_2^x||n_1^y - n_2^y|} &< \infty\\
+		\overset{\text{spalten}}{\Leftrightarrow} && \left| \frac{(n_1^y - n_2^y) (n_1^y + n_2^y)}{n_1^x - n_2^x} \right| + \left| \frac{(n_1^x - n_2^x) (n_1^x + n_2^x)}{n_1^y - n_2^y} \right| &< \infty\\
+		\overset{T}{\Leftrightarrow} && \left| \frac{n_1^y - n_2^y}{n_1^x - n_2^x} \right|  + \left| \frac{n_1^x - n_2^x}{n_1^y - n_2^y} \right|  \cdot \frac{n_1^x + n_2^x}{n_1^y + n_2^y}&< \infty\\
+		\overset{\text{Konstante absch.}}{\Leftrightarrow} && \left| \frac{n_1^y - n_2^y}{n_1^x - n_2^x} \right|  + \left| \frac{n_1^x - n_2^x}{n_1^y - n_2^y} \right|  &< \infty\\
+	\end{align*}
+	Damit hat sich das Problem bestenfalls dazu ver"andert dass ich wissen muss dass sich $ n_1 $ und $ n_2 $ in beiden Traits gleich schnell ann"ahern m"ussen. Ab hier habe ich etwas Schwierigkeiten. Bin ich vielleicht auf dem falschen Weg oder habe etwas falsch gemacht?\\
+	Ich versuche es derzeit argumentativ, aber bin etwas verwirrt durch die Natur von $ n_1, n_2 $. Sie l"osen also beide in jedem Punkt die Differentialgleichung (\ref{nDGL}). Aber wenn sie das tun, dann kann sich $ n_1^y $ und $ n_2^y $ nicht voneinander unterscheiden, wenn $ n_1^x = n_2^x $. Oder?
+%	Problematisch ist es jedoch immer noch falls $ n_1^x \to n_2^x $ oder $ n_1^y \to n_2^y $. Jedoch l"asst sich diese Gleichung f"ur beiden F"alle so umformen, dass sie entsch"arft werden.
+%	
+%	\begin{align}
+%		\frac{(n_1^y - n_2^y)^2 (n_1^y + n_2^y) + (n_1^x - n_2^x)^2 (n_1^x + n_2^x)}{n_1^x(n_1^y - n_2^y) - n_2^x(n_1^y + n_2^y)} &< \infty\\
+%		\frac{(n_1^y - n_2^y)^2 (n_1^y + n_2^y) + (n_1^x - n_2^x)^2 (n_1^x + n_2^x)}{n_1^x(n_1^y - n_2^y) - n_2^x(n_1^y + n_2^y)} &< \infty
+%	\end{align}
+	
+\end{proof}
+
+\end{document}
