@@ -29,8 +29,16 @@
   Url                      = {http://www.sciencedirect.com/science/article/pii/S0040580997913319}
 }
 
+@Article{breymann2011c++,
+  Title                    = {Der C++-Programmierer},
+  Author                   = {Breymann, Ulrich},
+  Year                     = {2011},
+
+  Publisher                = {Carl Hanser Verlag GmbH \& Co. KG}
+}
+
 @Article{Champagnat20061127,
-  Title                    = {A microscopic interpretation for adaptive dynamics trait substitution sequence models },
+  Title                    = {A microscopic interpretation for adaptive dynamics trait substitution sequence models},
   Author                   = {Nicolas Champagnat},
   Journal                  = {Stochastic Processes and their Applications },
   Year                     = {2006},
@@ -62,7 +70,7 @@
   Url                      = {http://dx.doi.org/10.1007/s00440-010-0292-9}
 }
 
-@Article{raey,
+@Article{raey_Dieckmann_Law,
   Title                    = {The dynamical theory of coevolution: a derivation from stochastic ecological processes},
   Author                   = {Dieckmann, Ulf and Law, Richard},
   Journal                  = {Journal of Mathematical Biology},
@@ -119,6 +127,35 @@
   Publisher                = {Springer},
   Year                     = {2012},
   Volume                   = {260}
+}
+
+@Article{martin2008clean,
+  Title                    = {Clean Code},
+  Author                   = {Martin, Robert C},
+  Journal                  = {A Handbook of Agile Software Craftsmanship. PrenticeHall},
+  Year                     = {2008},
+  Pages                    = {464}
+}
+
+@Article{martin2007professionalism,
+  Title                    = {Professionalism and Test-Driven Development.},
+  Author                   = {Martin, Robert C},
+  Journal                  = {Ieee Software},
+  Year                     = {2007},
+  Number                   = {3},
+  Pages                    = {32--36},
+  Volume                   = {24}
+}
+
+@Book{Martin:2003:ASD:515230,
+  Title                    = {Agile Software Development: Principles, Patterns, and Practices},
+  Author                   = {Martin, Robert Cecil},
+  Publisher                = {Prentice Hall PTR},
+  Year                     = {2003},
+
+  Address                  = {Upper Saddle River, NJ, USA},
+
+  ISBN                     = {0135974445}
 }
 
 @MastersThesis{Porth,

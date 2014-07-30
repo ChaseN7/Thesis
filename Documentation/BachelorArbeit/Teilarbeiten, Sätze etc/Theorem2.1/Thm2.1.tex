@@ -2,19 +2,131 @@
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{makeidx}
 \usepackage{graphicx}
+\usepackage{color}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+
+\bibliographystyle{unsrt}
+
 \title{Theorem 2.1}
+
+\theoremstyle{plain}
+\newtheorem{satz}{Satz}
+\newcommand{\eps}{\ensuremath{\varepsilon}}
+\newcommand{\tvec}[2]{\begin{pmatrix}#1\\#2\end{pmatrix}}
+\newcommand{\trvec}[3]{\begin{pmatrix}#1\\#2\\#3\end{pmatrix}}
+
 \begin{document}
 
 \maketitle
 
-Der Punkt 2.7 bedeutet f"ur unseren Fall, dass zwei L"osungen $ n, \tilde{n} $ des Differentialgleichungssystems die Eigenschaft haben, dass ihre Ableitungen 
-$ \dot{n}, \dot{\tilde{n}} $ nicht viel gr"o"seren Abstand haben k"onnen als $ n, \tilde{n} $. In anderen Worten ist:
-\[ \frac{\dot{n}(s) - \dot{\tilde{n}}(s)}{n(s) - \tilde{n}(s)} \le M_K\]
-was einfach nur aussagt dass der Quotient $ \frac{\dot{n}(s) - \dot{\tilde{n}}(s)}{n(s) - \tilde{n}(s)} $ an jeder Stelle $ s $ nach oben beschr"ankt ist. \\
-Ich vermute dass diese Bedingung f"ur unser Modell immer zutrifft, weil sie stets die selben stabilen Punkte haben zu denen sie konvergieren. Aber wahrscheinlich gibt es eine deutlich bessere Variante das zu begr"unden. Insbesondere m"usste ich meine Begr"undung erstmal nachweisen.
+Um die Konvergenz zeigen zu k"onnen verwenden wir das folgende Theorem:
 
+\begin{satz}
+	Angenommen f"ur jedes kompakte $ K \subset E $,
+	\begin{align}
+		\sum_l |l| \sup_{x \in K} \beta_l(x) < \infty
+	\end{align}
+	und es existiert ein $ M_K > 0 $, so dass
+	\begin{align}
+		|F(x) - F(y)| \le M_K|y-x|,	\qquad x,y \in K
+	\end{align}
+	Angenommen $ X_n $ erf"ullt (2.3), $ \lim_{n \to \infty} X_n(0) = x_0 $, und $ X $ erf"ullt 
+	\begin{align}
+		X(t) = x_0 + \int_{0}^{t} F(X(s)) ds, \qquad t \ge 0.
+	\end{align}
+	Dann gilt f"ur jedes $ t > 0 $,
+	\begin{align}
+		\lim_{n\to \infty} \sup_{s\le t} |X_n(s) - X(s)| = 0 \qquad a.s.
+	\end{align}
+\end{satz}
+	
+\begin{satz}[\cite{ethier2009markov}, Theorem 2.1]
+	Angenommen f"ur jedes $ K \subset E $ kompakt, gilt
+	\begin{align}
+		\sum_{x \in X} |l| \sup_{n_s(x) \in K}\beta_l(n_s(x)) < \infty, \quad s \in T \subset \mathbb{R}_+
+	\end{align}
+	und es existiert ein $ M_K $, so dass:
+	\begin{align}
+		\left| F(n_s) - F(\tilde{n}_s) \right| \overset{!}{<} M_K \left| n_s - \tilde{n}_s \right|, \quad M_K \in \mathbb{R}_{+}
+	\end{align} 
+	Angenommen 
+\end{satz}
+
+
+
+
+
+
+Falls aus $ K \to \infty $ auch $ n_0^K \to n_0 $ folgt, dann l"asst sich beweisen, dass das mutationsfreie System $ \nu_t^K $ mit $ K \to \infty $ gegen ein deterministisches System konvergiert. Ein solches deterministisches System muss folgende Differentialgleichung erf"ullen:
+\begin{align}
+\begin{split}
+	\trvec{\dot{n}(x)}{\dot{n}(y)}{\vdots} &= \trvec{n(x) \cdot ( b(x) - d(x) - \sum_{y \in X}c(x,y)\cdot n(y)}{\dots}{\dots},\\
+	n(0) &= n_0 
+\end{split}
+\end{align}
+
+Die Konvergenz folgt unmittelbar aus \cite[\textbf{Thm 2.1}]{ethier2009markov}, also reicht es die Bedingungen (2.6) und (2.7) in \cite[\textbf{Thm 2.1}]{ethier2009markov} zu pr"ufen:
+
+\begin{satz}
+	Unser Modell erf"ullt die Bedingungen von \cite[\textbf{Theorem 2.1}]{ethier2009markov}.
+\end{satz}
+
+\begin{proof}
+	Wir gehen zun"achst von einer dimorphen Population $ X = \{x,y\} $ aus. Dann sind:\\ 
+	\[ n_1 = \tvec{n_1^x}{n_1^y}, \quad n_2 = \tvec{n_2^x}{n_2^y} \]
+	zwei L"osungen der Differentialgleichung
+	\begin{align}
+		F\tvec{n^x}{n^y} = \tvec{\dot{n}^x}{\dot{n}^y} =  \tvec{n^x(b(x)-d(x)-c(x,x)n^x-c(x,y)n^y)}{n^y(b(y)-d(y)-c(y,y)n^y-c(y,x)n^x)}
+		\label{nDGL}
+	\end{align}
+	ausgewertet zu einem Zeitpunkt $ s \in \mathbb{R}_{+} $.\\
+	\textbf{Endliche Raten:}\\
+	Bedingung 2.6 aus \cite[\textbf{Thm 2.1}]{ethier2009markov} zu pr"ufen ist in unserem Fall sehr einfach. Unser Merkmalsraum und die verwendeten Raten sind endlich. Damit haben wir stets eine endliche Summe "uber endliche Raten, welche nat"urlich wieder endlich ist.\\
+	\textbf{Lipschitz-Stetigkeit:}\\
+	Bedingung 2.7 aus \cite[\textbf{Thm 2.1}]{ethier2009markov} fordert die Lipschitz-Stetigkeit f"ur 
+	\[ \left| F\tvec{n_1^x}{n_1^y} - F\tvec{n_2^x}{n_2^y} \right| \overset{!}{<} M_K \left| \tvec{n_1^x}{n_1^y} - \tvec{n_2^x}{n_2^y} \right|, \quad M_K \in \mathbb{R}_{+} \]
+	Zun"achst w"ahlen wir $ \eps := |n_1 - n_2| = \sqrt{|n_1^x - n_2^x|^2 + |n_1^y - n_2^y|^2} $, daraus folgt:
+	\begin{align}
+	\begin{split}
+		|n_1^x - n_2^x| \le \eps\\
+		|n_1^y - n_2^y| \le \eps \label{epsAbsch}
+	\end{split}
+	\end{align}
+	Falls es ein $ c \in \mathbb{R}_{+} $ gibt mit
+	\begin{align}
+	\begin{split}
+		|F(n_1)_1 - F(n_2)_1| &\le \eps \cdot c\\
+		|F(n_1)_2 - F(n_2)_2| &\le \eps \cdot c \label{BeweisLipschitz}
+	\end{split}
+	\end{align}
+	So folgt wegen 
+	\begin{align}
+	\begin{split}
+		|F(n_1) - F(n_2)| &= \sqrt{(F(n_1)_1 - F(n_2)_1)^2 + (F(n_1)_2 - F(n_2)_2)^2}\\
+		&\le \sqrt{(\eps \cdot c)^2 + (\eps \cdot c)^2}\\
+		&= \sqrt{2} \cdot \eps \cdot c < \infty \Rightarrow \text{Behauptung}
+		\label{epsBehauptung}
+	\end{split}
+	\end{align}
+	Also bleibt nur noch (\ref{BeweisLipschitz}) zu pr"ufen. F"ur $ F_1 $ und $ F_2 $ ist dabei das Vorgehen analog, daher wird nur $ F_1 $ vorgestellt:\\
+	\begin{align*}
+		|F(n_1)_1 - F(n_2)_1| & = |(n_1^x - n_2^x)(b(x) - d(x)) - ((n_1^x)^2 - (n_2^x)^2) \cdot c(x,x)\\
+		&  - ((n_1^y)^2 - (n_2^y)^2) \cdot c(x,y) |\\
+		& \le  |\underbrace{\textcolor{blue}{(n_1^x - n_2^x)}}_{ \le \eps}(b(x) - d(x)) |\\
+		& + | \textcolor{blue}{(n_1^x - n_2^x)}(n_1^x + n_2^x) \cdot c(x,x) | \\
+		& + | \textcolor{blue}{(n_1^y - n_2^y)}(n_1^y + n_2^y) \cdot c(x,y) |\\
+		& \le \eps \cdot (| b(x) - d(x) | +  |\underbrace{n_1^x + n_2^x}_{\text{beschr"ankt}}| c(x,x) + | n_1^y + n_2^y | \cdot c(x,y))\\
+		& \le \eps \cdot ( c_1 + c_2 \cdot c(x,x) + c_3 \cdot c(x,y) )\\
+		& = \eps \cdot c
+	\end{align*}
+	wie schon erw"ahnt folgt durch analoges Vorgehen f"ur $ y $, dass (\ref{epsAbsch}) f"ur unser Modell gilt.\\ 
+	Tats"achlich kann f"ur F"alle mit mehr als 2 Merkmalen durch analoges Vorgehen die selben Absch"atzungen gemacht werden die alle zum gleichen Ergebnis f"uhren.\\
+	Schlie"slich folgt f"ur alle F"alle durch (\ref{epsBehauptung}) die Behauptung.
+\end{proof}
+\bibliography{science1}
 \end{document}

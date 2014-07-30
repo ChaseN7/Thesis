@@ -77,7 +77,7 @@ void TraitEventManagerTest::verifyTotalIntrinsicDeathRate()
 {
     Manager.initWithFile("ValidateTests.txt");
     for(int i = 0; i < TraitClass::Size; ++i){
-        Manager.setTotalIntrisicDeathRateOf(i);
+        Manager.addTotalIntrisicDeathRateOf(i);
         QCOMPARE(Manager.Trait[i].TotalDeathRate, 500.);
     }
     Manager.clearData();
@@ -106,11 +106,8 @@ void TraitEventManagerTest::verifyTotalDeathRate()
     qDebug()<<"elapsed time:"<< clock()- start<<"ms";
 
     QCOMPARE(Manager.Trait[0].TotalDeathRate, 30000.+500.);
-    qDebug()<<"trait 0 total death rate:"<<30000.+500.;
     QCOMPARE(Manager.Trait[1].TotalDeathRate, 25000.+500.);
-    qDebug()<<"trait 1 total death rate:"<<25000.+500.;
     QCOMPARE(Manager.Trait[2].TotalDeathRate, 40000.+500.);
-    qDebug()<<"trait 2 total death rate:"<<40000.+500.;
 
     Manager.clearData();
 }
@@ -124,12 +121,12 @@ void TraitEventManagerTest::verifyTotalBirthRate()
         Manager.calculateTotalBirthRates();
     qDebug()<<"elapsed time:"<< clock()- start<<"ms";
     QVERIFY(TraitClass::Size == 3);
-    QCOMPARE(Manager.Trait[0].TotalBirthRate, 1050.);
-    qDebug()<<"trait"<<0<<"total birth rate:"<<1050.<<"verified";
-    QCOMPARE(Manager.Trait[1].TotalBirthRate, 1100.);
-    qDebug()<<"trait"<<1<<"total birth rate:"<<1100.<<"verified";
-    QCOMPARE(Manager.Trait[2].TotalBirthRate, 1050.);
-    qDebug()<<"trait"<<2<<"total birth rate:"<<1050.<<"verified";
+    QCOMPARE(Manager.Trait[0].TotalBirthRate, 950.);
+    qDebug()<<"trait"<<0<<"total birth rate:"<<950.<<"verified";
+    QCOMPARE(Manager.Trait[1].TotalBirthRate, 1000.);
+    qDebug()<<"trait"<<1<<"total birth rate:"<<1000.<<"verified";
+    QCOMPARE(Manager.Trait[2].TotalBirthRate, 950.);
+    qDebug()<<"trait"<<2<<"total birth rate:"<<950.<<"verified";
     Manager.clearData();
 }
 
@@ -141,7 +138,7 @@ void TraitEventManagerTest::verifyEventRates()
     // death: 96500
     // = 99700
     qDebug()<<"verify: Total Event Rate = 99700 ...";
-    QCOMPARE(TraitClass::TotalEventRate,99700.);
+    QCOMPARE(TraitClass::TotalEventRate,99400.);
     Manager.clearData();
 }
 
@@ -174,23 +171,23 @@ void TraitEventManagerTest::sampleEventTimeTest()
 
 void TraitEventManagerTest::choseTraitToChangeTest()
 {
-    QSKIP("--- not ready for testing ---");
-//    Manager.Stream.initializeWithFile(QString::fromStdString("ValidateTests.txt"),Manager.Trait);
-//    Manager.calculateEventRates();
-//    double iterations = 100000.;
-//    std::vector<int> ChosenTraitHistory(TraitClass::Size,0.);
-//    for(int i = 0; i < iterations; i++){
-//        Manager.choseTraitToChange();
-////        ChosenTraitHistory[Manager.Events.ChosenTrait[i]]++;
-//    }
-//    for(int i = 0; i < TraitClass::Size; ++i){
-//        double expected = Manager.Trait[i].TotalTraitRate/TraitClass::TotalEventRate;
-//        double actual = ChosenTraitHistory[i]/iterations;
-//        qDebug()<< "verify chosen trait hist. of trait" << i << "~" << actual << ":" << expected << "...";
+//    QSKIP("--- not ready for testing ---");
+    Manager.initWithFile("ValidateTests.txt");
+    Manager.calculateEventRates();
+    double iterations = 100000.;
+    std::vector<double> ChosenTraitHistory(TraitClass::Size,0.);
+    for(int i = 0; i < iterations; i++){
+        Manager.choseTraitToChange();
+        ChosenTraitHistory[Manager.Events.ChosenTrait]+= 1/iterations;
+    }
+    for(int i = 0; i < TraitClass::Size; ++i){
+        double expected = Manager.Trait[i].TotalTraitRate/TraitClass::TotalEventRate;
+        double actual = (ChosenTraitHistory[i] - expected)/expected;
+        qDebug()<< "verify chosen trait hist. of trait" << i << " with error:" << fabs(actual) << "%...";
+        QVERIFY(fabs(actual) < 0.05);
 //        QVERIFY((actual > expected - 0.01) && (actual < expected + 0.01));
-//    }
-////    Manager.Events.EventTimes.clear();
-//    Manager.clearData();
+    }
+    Manager.clearData();
 }
 
 void TraitEventManagerTest::choseEventTypeTest()
@@ -246,19 +243,18 @@ void TraitEventManagerTest::executeEventTypeOnTraitTest()
 
 void TraitEventManagerTest::changeATraitTest()
 {
-    QSKIP("--- not ready for testing ---");
-//    Manager.Stream.initializeWithFile(QString::fromStdString("ValidateTests.txt"),Manager.Trait);
-//    Manager.calculateEventRates();
-//    Manager.sampleEventTime();
-//    Manager.changeATrait();
-//    int ChosenTrait = Manager.Events.ChosenTrait.back();
-//    qDebug()<< "verify full step changes ...";
-//    if(Manager.Events.isBirth.back())
-//        QCOMPARE(Manager.Trait[ChosenTrait].Members,101.);
-//    else
-//        QCOMPARE(Manager.Trait[ChosenTrait].Members,99.);
-//    Manager.Events.EventTimes.clear();
-//    Manager.clearData();
+    //QSKIP("--- not ready for testing ---");
+    Manager.initWithFile("ValidateTests.txt");
+    Manager.calculateEventRates();
+    Manager.sampleEventTime();
+    Manager.changeATrait();
+    int ChosenTrait = Manager.Events.ChosenTrait;
+    qDebug()<< "verify full step changes ...";
+    if(Manager.Events.isBirth)
+        QCOMPARE(Manager.Trait[ChosenTrait].Members,101.);
+    else
+        QCOMPARE(Manager.Trait[ChosenTrait].Members,99.);
+    Manager.clearData();
 }
 
 // ------------------ section 4: Utilities ------------------------
@@ -336,8 +332,9 @@ void TraitEventManagerTest::printAndCheckDifference()
 {
     for(int i = 0; i < TraitClass::Size; ++i){
         qDebug() << "trait " << i << " error:"
-                 << Manager.getKMembers(i) - Manager.retStableDimorphOf(i)
-                 << "from" << Manager.retStableDimorphOf(i);
+                 << fabs(Manager.getKMembers(i) - Manager.retStableDimorphOf(i))/Manager.retStableDimorphOf(i)
+                 << "%" ;
+//                 << "from" << Manager.retStableDimorphOf(i);
     }
 }
 

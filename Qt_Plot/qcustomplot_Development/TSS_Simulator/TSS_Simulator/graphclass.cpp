@@ -47,8 +47,8 @@ bool GraphClass::isNearTSS(const int & chosen) const
             return false;
     }
     /// Check if active Trait is close enough to its equilibrium
-    double diff = TraitHistory[chosen].back() - ExpectedMonomorph[chosen];
-    if(diff > 0.5/TraitClass::K || diff < -0.5/TraitClass::K)
+    double diff = fabs(TraitHistory[chosen].back() - ExpectedMonomorph[chosen]);
+    if(diff > jumpedSteps*0.5/TraitClass::K /*|| diff < -0.5/TraitClass::K*/)
         return false;
     return true;
 }
@@ -92,37 +92,12 @@ void GraphClass::iterateGraphPoint(double & Time, int & Chosen)
 /// FIXME: Just finished! Make a Test after Appointment!
 void GraphClass::iterateMutationPoint(double &time, int &chosen)
 {
+//    Manager.Trait[chosen].Members = ExpectedMonomorph[chosen];
     storeCurrentPoint(time, chosen);
     time += sampleMutationTime(chosen);
     choseMutatedTrait(chosen);
     makeMutant();
     storeCurrentPoint(time,chosen);
-//    Manager.calculateEventRates();
-
-
-//    double MutationTime = 0;
-//    if(Chosen == 0){
-//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate);
-//        Chosen = Chosen+1;
-//    }
-//    else if(Chosen == TraitClass::Size-1){
-//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen-1].TotalBirthRate);
-//        Chosen = Chosen-1;
-//    }
-//    else{
-//        MutationTime = Manager.Dice.rollExpDist(Manager.Trait[Chosen+1].TotalBirthRate + Manager.Trait[Chosen-1].TotalBirthRate);
-//        Chosen = Chosen-1 + Manager.Dice.rollDiscrUnifDist(0,1)*2;
-//    }
-//    TimeLine[Manager.Events.ChosenTrait].push_back( Time + MutationTime);
-//    TraitHistory[Manager.Events.ChosenTrait].push_back(ExpectedMonomorph[Manager.Events.ChosenTrait]);
-
-//    Manager.Events.EventTimes = MutationTime;
-//    Manager.Events.ChosenTrait = Chosen;
-//    Manager.Events.isBirth = true;
-//    Time += MutationTime;
-//    TimeLine[Chosen].push_back(Time);
-//    Manager.executeEventTypeOnTrait();
-//    TraitHistory[Chosen].push_back(Manager.getKMembers(Chosen));
 }
 
 
@@ -137,8 +112,12 @@ double GraphClass::sampleMutationTime(const int &chosen)
 
 void GraphClass::storeCurrentPoint(double &Time, int &chosen)
 {
-    TimeHistory[chosen].push_back(Time);
-    TraitHistory[chosen].push_back(Manager.getKMembers(chosen));
+    for(int i = 0; i < TraitClass::Size; ++i){
+        TimeHistory[i].push_back(Time);
+        TraitHistory[i].push_back(Manager.getKMembers(i));
+    }
+//    TimeHistory[chosen].push_back(Time);
+//    TraitHistory[chosen].push_back(Manager.getKMembers(chosen));
 }
 
 void GraphClass::choseMutatedTrait(int &chosen)
@@ -187,7 +166,7 @@ int GraphClass::makeTSSIterations(const int maxIt)
             if(chosen == 2)
                 qDebug()<<"2. Invasion:"<<time;
         }
-        if(Manager.getKMembers(2) > ExpectedMonomorph[2]){
+        if(Manager.getKMembers(2) >= ExpectedMonomorph[2] - jumpedSteps/TraitClass::K ){
             for(int i = 0; i < TraitClass::Size; ++i){
                 qDebug()<< i+1 <<". Birthrate"<< Manager.Trait[i].TotalBirthRate;
             }

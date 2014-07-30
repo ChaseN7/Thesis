@@ -16,8 +16,9 @@ public:
     /// All Methods below should be private after testing is over.
     void addTotalCompDeathRateOf(int TraitIndex);
     void addTotalIntrisicDeathRateOf(int TraitIndex);
-    void calculateTotalDeathRateOf(int TraitIndex);
-    void calculateTotalBirthRates(int i);
+    void calculateTotalDeathRates();
+    void calculateTotalBirthRates(int StartRecursion);
+    void calculateTotalBirthRates();
     void calculateTotalEventRate();
     void calculateEventRates();
     void sampleEventTime();

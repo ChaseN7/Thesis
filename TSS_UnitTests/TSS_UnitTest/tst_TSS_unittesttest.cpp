@@ -120,14 +120,14 @@ void TSS_UnitTestTest::verifyTotalDeathRate()
         Manager.calculateTotalDeathRateOf(1);
         Manager.calculateTotalDeathRateOf(2);
     }
-    qDebug()<<"elapsed time:"<< clock()- start<<"ms";
+    qDebug()<<"elapsed time:"<< clock()- start<<"ms  ->"<<speedIterations<<" Iterations";
 
     QCOMPARE(Manager.Trait[0].TotalDeathRate, 400.+ 1400.);
-    qDebug()<<"trait 0 total death rate:"<< 400.+ 1400.;
+        qDebug()<<"trait 0 total death rate:"<< 400.+ 1400.;
     QCOMPARE(Manager.Trait[1].TotalDeathRate, 0.+ 0.);
-    qDebug()<<"trait 1 total death rate:"<< 0.+ 0.;
+        qDebug()<<"trait 1 total death rate:"<< 0.+ 0.;
     QCOMPARE(Manager.Trait[2].TotalDeathRate, 200.+400.);
-    qDebug()<<"trait 2 total death rate:"<< 200.+400.;
+        qDebug()<<"trait 2 total death rate:"<< 200.+400.;
 
     Manager.clearData();
 }
@@ -143,14 +143,13 @@ void TSS_UnitTestTest::verifyTotalBirthRate()
 
     QVERIFY(TraitClass::Size == 3);
     /// 6 * 2 * 100 = 1200
-    QCOMPARE(Manager.Trait[0].TotalBirthRate, 1200.);
-    qDebug()<<"trait"<<0<<"total birth rate:"<<1200.<<"verified";
-    double BirthRateOf1 = (Manager.Trait[0].TotalBirthRate + Manager.Trait[2].TotalBirthRate)
-            * 0.2 * 1/(TraitClass::K * sqrt(TraitClass::K)) * 0.5;
+    QCOMPARE(Manager.Trait[0].TotalBirthRate, 1199.76);
+    qDebug()<<"trait"<<0<<"total birth rate:"<<1199.76<<"verified";
+    double BirthRateOf1 = 0.16;
     QCOMPARE(Manager.Trait[1].TotalBirthRate, BirthRateOf1);
     qDebug()<<"trait"<<1<<"total birth rate:"<< BirthRateOf1 <<"(only mutations) verified";
-    QCOMPARE(Manager.Trait[2].TotalBirthRate, 400.);
-    qDebug()<<"trait" << 2 << "total birth rate:" << 400 << "verified";
+    QCOMPARE(Manager.Trait[2].TotalBirthRate, 399.92);
+    qDebug()<<"trait" << 2 << "total birth rate:" << 399.92 << "verified";
     Manager.clearData();
 }
 
@@ -162,7 +161,7 @@ void TSS_UnitTestTest::verifyEventRates()
     // death: 1800 + 0 + 600
     // = 4000.16
     qDebug()<<"verify: Total Event Rate = 4000.16 ...";
-    QCOMPARE(TraitClass::TotalEventRate,4000.16);
+    QCOMPARE(TraitClass::TotalEventRate,3999.84);
     Manager.clearData();
 }
 
@@ -182,9 +181,9 @@ void TSS_UnitTestTest::sampleEventTimeTest()
     }
     qDebug()<<"elapsed time:"<< clock()- start<<"ms";
     actual /= speedIterations;
-    actual = fabs(actual - expected);
-    qDebug() << "error:" << actual/expected << "%";
-    QVERIFY(actual < pow(10,-3.));
+    actual = fabs(actual - expected)/expected;
+    qDebug() << "error:" << actual << "% "/* << expected << " - " << actual*/;
+    QVERIFY(actual < 0.005);
 }
 
 void TSS_UnitTestTest::sampleMutationTime()
