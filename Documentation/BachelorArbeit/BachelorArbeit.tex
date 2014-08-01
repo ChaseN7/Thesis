@@ -10,6 +10,7 @@
 %\usepackage[compatible]{algpseudocode}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+%\usepackage{algpseudocode}
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{tabularx}
@@ -59,21 +60,19 @@
 
 \clearpage
 \section{Einleitung}
-Ziel dieser Bachelorarbeit ist die Entwickelung eines Programms, das die Dynamik einer Population simulieren kann. Dar"uber hinaus wird die Erweiterung zu einem zweiten Programm vorgestellt welches besonders interessante Prozesse, genannt "{}Trait Substitution Sequences"{}, simulieren kann.\\
+In dieser Bachelorarbeit behandelt die Entwicklung eines Programms zur Simulation einer Populationsdynamik. Dazu wird erst ein Grundlegendes Modell vorgestellt, welches den zu simulierenden BPDL Prozess beschreibt.\\
+Das Programm sollte jedoch nicht nur in der Lage sein diesen Prozess zu simulieren sondern auch die Approximation von Grenzwertprozessen die aus dem BPDL Prozess gewonnen werden. Dazu z"ahlt auch der sogenannte "{}TSS-Prozess"{}. Die Simulation einer Approximation des "{}TSS-Prozesses"{} ist besonders interessant und wird im Kapitel 3 eingef"uhrt und sp"ater im Kapitel 7 genauer beschrieben.\\
+%Ziel dieser Bachelorarbeit ist die Entwickelung eines Programms, das die Dynamik einer Population simulieren kann. 
+%Dar"uber hinaus wird die Erweiterung zu einem zweiten Programm vorgestellt welches besonders interessante Grenz-Prozesse, genannt "{}Trait Substitution Sequences"{}, approximieren kann.\\
+Alle Simulationen sollen auf dem selben Modell basieren.\\
+Jedes Lebewesen einer Population (z.B. Pflanzen, Zelle oder Tier) wird durch ein Merkmal beschrieben. Diese Merkmale erzeugen Dynamik in der Population indem sie z.B. Gr"o"se, Essensaufnahme, Fortpflanzungsrate oder Konkurrenz zu anderen Merkmalen angibt.\\
+In unserem Modell besteht ein Merkmal aus einer asexuellen Fortpflanzungsrate und zwei Todesraten. Die Todesraten bestehen aus einer nat"urlichen Todesrate und einer Todesrate die durch Wettbewerb zu jedem anderen Lebewesen entsteht. Man bemerkt schon dass ein Individuum in diesem Modell nur sterben, t"oten (durch Wettbewerb) oder sich fortpflanzen kann. Wobei das interessante an der Dynamik ist dass die wettbewerbliche Todesraten der Individuen von den Populationsgr"o"sen abh"angen und damit nicht trivial machen.\\
+Desweiteren umfasst das Modell eine Mutationswahrscheinlichkeit. Diese Mutation bezieht sich nicht auf bereits in der Population lebende Wesen, sondern auf neugeborene Individuen. Ein Lebewesen bleibt also w"ahrend seiner Lebenszeit stets
+%Bestimmt wird ein Merkmal durch Todesraten und einer Fortpflanzungsrate (asexuell). Die Todesrate besteht aus einer nat"urliche Todesrate und eine durch Wettbewerb mit jedem anderem Individuum. Das hei"st die wettbewerbliche Todesrate steigt mit der Anzahl der konkurrierenden Individuen.\\
+Jedoch werden wir viele Individuen auf wenigen Merkmalen verteilt simulieren, weshalb die Entwicklung der Population und nicht der Individuen das Ziel der Simulation ist (im Gegensatz zu \cite{fournier2004microscopic}). Deshalb wird man im simulierten Prozess zwar Tode und die Geburten in Merkmalen verfolgen k"onnen, aber nicht welches Individuum dieses Ereignis ausl"ost. Der "Ubergang zu dieser Sichtweise wird n"aher im 2. Kapitel beschrieben.\\
+Haupts"achlich wird in dieser Arbeit beschrieben, wie sich dieses Modell und seine Eigenschaften auftrennen oder zusammenfassen lassen um m"oglichst effizient und sicher ein Programm zur Simulation eines entsprechenden Prozesses zu implementieren. Dabei wird oft auf moderne Methoden zur"uck gegriffen die eine m"oglichst unabh"angige Strukturierung der Schritte w"ahrend eines Ablaufs voraussetzten.\\
+Schlie"slich wird auch beschrieben, was eine Simulation leisten kann, sollte und was diese Simulation tats"achlich tut. Z.B. sollte die graphische Darstellung des Prozesses die M"oglichkeit bieten beobachten zu k"onnen ob sich ein Merkmal unter anderen Durchsetzten kann, es einen stabilen Zustand annimmt, oder sich dem Tod entgegen strebt.
 
-Alle Simulationen basieren auf dem Modell, dass jedes Lebewesen einer Population (z.B. Pflanzen oder Zelle) ein Merkmal tr"agt. Bestimmt wird ein Merkmal durch Todesraten und einer Fortpflanzungsrate (asexuell). Die Todesrate besteht aus einer nat"urliche Todesrate und eine durch Wettbewerb mit jedem anderem Individuum. Das hei"st die wettbewerbliche Todesrate steigt mit der Anzahl der konkurrierenden Individuen.\\
-Schlie"slich ist es jedoch die Entwicklung der Population und nicht der Individuen die simuliert werden soll. Deshalb kann man im simulierten Prozess zwar Tode und die Geburten verfolgen, aber nicht welches Individuum dieses Ereignis ausl"ost. Der "Ubergang zu dieser Sichtweise wird n"aher im 2. Kapitel beschrieben.\\
-
-Das Programm sollte Parameter einlesen k"onnen und eine Oberfl"ache bieten auf der die Simulation graphisch angezeigt wird. Tats"achlich wird das Programm mehr bieten und flexible Erweiterungsm"oglichkeiten beinhalten.\\
-Die graphische Darstellung des Prozesses soll die M"oglichkeit bieten beobachten zu k"onnen ob sich ein Merkmal unter anderen Durchsetzten kann, es einen stabilen Zustand annimmt oder sicher dem Tod entgegen strebt.\\
-\textit{N"aheres zum erwarteten Verhalten der Simulation fehlt noch}\\
-
-Im letzten Teil werde ich noch kurz die Erweiterung auf TSS Prozesse vorstellen. Darin soll nicht nur das besonders interessante Verhalten vom Wechsel des dominanten Merkmals behandelt werden, sondern es wird eine verbesserte Laufzeit durch Interpolation vorgestellt die eine effiziente Simulation trotz sehr gro"ser Zeit und besonders pr"aziser Betrachtung von Aktionsreichen Gebieten anbietet.
-
-
-%Dabei ist das Interesse besonders bei normalisierten BPDL Prozessen und schließlich auch bei TSS (trait subsitution sequence) Prozessen.\\
-%Dabei reicht es nicht einfach eine Implementierung zu machen, denn durch die Zufallseigenschaft lässt sich nicht so einfach die Korrektheit verifizieren. Gerade bei TSS Prozessen ist die Anzahl der Mutationen und deren Abstände und Invasionschancen entscheidend.\\
-%Zu diesem Zweck wird ein Teil der Arbeit diese Problemstellung behandeln.
 
 \clearpage
 \section{Modell}
@@ -364,29 +363,21 @@ In diesem Kapitel werden Eigenschaften des Prozesses n"aher untersucht die sp"at
 		Wenn man die Fitnessfunktion genauer untersucht, bemerkt man dass f"ur ein durchsetzungsfähiges Individuum ($ f(x,y) > 0 $) bereits die Geburtenrate gr"o"ser sein muss als die eigene interne Todesrate zusammen mit der wettbewerblichen Todesrate des konkurrierenden Merkmals. Es muss also erstmal selbstst"andig "uberleben k"onnen ($ b(x) - d(x) > 0 $) und dazu noch dem Konkorruenzdruck widerstehen k"onnen ($ b(x) - d(x) \underline{- c(x,y)\bar{n}_y} > 0 $).\\
 		Hierbei wird $ c(x,x) $ nicht ber"ucksichtigt weil es im Grenzwert mit K immer geringeren Einfluss hat, und gleicherma"sen haben wenige $ x  $ kaum Einfluss auf den Gleichgewichtszustand $ \bar{n}_y $ von $ y $. Damit begr"undet sich der Widerstand gegen den Mutanten durch die eigene Todesrate und die Konkurrenz der nahezu konstanten $ c(x,y)\bar{n}_y $. \\
 		Die Fitness-Funktion ist also die asymptotische Wachstumsrate von x, wenn y sich in einem Gleichgewichtszustand befindet und nur wenige Individuen von Typ x in der Population vorhanden sind.\\
-		Wenn in einer monomorphen Population ein Mutant eine Verdr"angung des bis dahin dominanten Merkmals ausl"ost, so nennt man diesen Vorgang Invasion. N"aheres zur Invasion findet sich im sp"ateren Kapitel "uber TSS Prozesse.
-		\textcolor{blue}{Man kann in dieser Stelle bereits erahnen dass die Fitnessfunktion bzw. die Wachstumsrate eines Mutanten die M"oglichkeit bietet Aussagen "uber die Invasionswahrscheinlichkeit zu machen. Und tats"achlich wird in \cite{Champagnat20061127} eine Konvergenz f"ur $ K \to \infty $ von einer Konvergenz gegen 
-		\[ \frac{\left[ f(y,x)\right]_+ }{b(y)} \]
-		gesprochen. IN TSS PACKEN} \\
-\noindent\rule{\textwidth}{2pt}
-\begin{center}
-	$ <<< \quad \downarrow $ Todo $ \downarrow \quad >>> $
-\end{center}
-		Begr"undet wird das durch [...]\\
+		Wenn in einer monomorphen Population ein Mutant eine Verdr"angung des bis dahin dominanten Merkmals ausl"ost, so nennt man diesen Vorgang Invasion. N"aheres zur Invasion findet sich im sp"ateren Kapitel 7 (TSS Prozesse).
 	
 	\subsection{Dimorphes Gleichgewicht}
-		Wir wissen mittlerweile dass falls $ n_0^K \to n_0 $, eine dimorphe Population $ \nu_0^K = n_0^K(x) \delta_x + n_0^K(y) \delta_y $ für $ K \to \infty $ gegen ein deterministisches System ($ n(x), n(y) $) konvergiert. Angenommen es gibt wieder keine Mutation, dann gilt:\\
+		Wir wissen mittlerweile dass falls $ n_0^K \to n_0 $, eine dimorphe Population $ \nu_0^K = n_0^K(x) \delta_x + n_0^K(y) \delta_y $ ohne Mutation für $ K \to \infty $ gegen ein deterministisches System ($ n(x), n(y) $) konvergiert. F"ur diesen Fall gilt:
 		\begin{align}
 		\begin{split}
-			\dot{n}(x) & = n(x) (b(x) - d(x) - c(x,x)n(x) - c(y,x) n(y)) \quad \textcolor{blue}{n_0(x) = n_{0,x}} \\
-			\dot{n}(y) & = n(y) (b(y) - d(y) - c(y,y)n(y) - c(x,y) n(x)) \quad \textcolor{blue}{n_0(y) = n_{0,y}}
+			\dot{n}(x) & = n(x) (b(x) - d(x) - c(x,x)n(x) - c(y,x) n(y)) \quad n_0(x) = n_{0,x} \\
+			\dot{n}(y) & = n(y) (b(y) - d(y) - c(y,y)n(y) - c(x,y) n(x)) \quad n_0(y) = n_{0,y} \label{DGLdimorph}
 		\end{split}
 		\end{align}
 		Hier sieht man bereits leicht dass $ (\bar{n}(x), 0) $, $ (0, \bar{n}(y)) $ und $ (0,0) $ stabile Zust"ande sind. Jedoch gibt es in diesem Fall auch einen Zustand indem eine Koexistenz beider Merkmale herrschen kann:
 		\begin{align}
 		\begin{split}
 			n_x &= \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)}\\
-			n_y &= \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)}
+			n_y &= \frac{(b(y) - d(y))c(x,x)-(b(x)-d(x))c(y,x)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \label{GleichgewichtDimorph}
 		\end{split}
 		\end{align}
 		Die BPDL Simulationen erkennen dimorphe und monomorphe Populationen und stellen stets einen passenden stabilen Zustand $ n_x $, bzw. $ \bar{n}_x $ dar. \\
@@ -395,13 +386,10 @@ In diesem Kapitel werden Eigenschaften des Prozesses n"aher untersucht die sp"at
 			\item[] Falls $ f(y,x) < 0 $, so ist $ (\bar{n}_x, 0) $ ist ein stabiler Zustand.
 			\item[] Falls jedoch $ f(y,x) > 0 $ und $ f(x,y) < 0 $, so ist $ (0, \bar{n}_y) $ stabil und $ (\bar{n}_x, 0) $ ist instabil. In diesem Fall
 		\end{itemize}
-\noindent\rule{\textwidth}{2pt}
-\begin{center}
-	$ <<< \quad \downarrow $ Todo $ \downarrow \quad >>> $
-\end{center}
-		Die Idee des Beweises ist [...]\\
+		\textcolor{blue}{Der Beweis dazu findet sich in \cite{Silke} und unterscheidet die Konvergenz in einem Linearen Systems (aus \ref{DGLdimorph}) in der N"ahe der kritischen Punkte zu den Gleichgewichtszust"anden}.\\
+
 		
-		Das folgende Bild zeigt sowohl die Konvergenz gegen das eben berechnete Gleichgewicht, als auch das deterministische Verhalten f"ur sehr gro"se K:
+		Das folgende Bild zeigt sowohl die Konvergenz gegen das eben berechnete Gleichgewicht (\ref{GleichgewichtDimorph}), als auch das deterministische Verhalten f"ur sehr gro"se K mit positiver Fitness auf beiden Seiten:
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=1\linewidth]{./Pictures/BigKInstance_Equillibrium}
@@ -410,19 +398,19 @@ In diesem Kapitel werden Eigenschaften des Prozesses n"aher untersucht die sp"at
 		\end{figure}
 	
 	\subsection{Der TSS Grenzwertprozess}
-	Genau wie bei der LPA-Normalisierung ergeben sich TSS-Prozesse(Trait Substitution Sequence) als Grenzprozesse von BPDL-Prozessen mit gro"sen Populationen und seltenen Mutationen. Mit wachsendem K  soll f"ur die Mutationswahrscheinlichkeit durch die Vorschrift:
+	Wie zuvor bei der LPA-Normalisierung erhalten wir TSS-Prozesse(Trait Substitution Sequence) als Grenzprozesse von BPDL-Prozessen mit gro"sen Populationen und seltenen Mutationen. Mit wachsendem K  soll f"ur die Mutationswahrscheinlichkeit durch die Vorschrift:
 	\begin{align}
 		\frac{1}{e^{cK}} \ll \mu_K \ll \frac{1}{K \log(K)}, \qquad \forall c > 0, \label{TSSMutation}
 	\end{align}
 %	\[  \frac{1}{e^{cK}} \ll \mu_K \ll \frac{1}{K log(K)}, \qquad \forall c > 0,  \] 
 	eine schnellere Konvergenz gegen 0 stattfinden, als die Geburten pro fester Zeiteinheit gegen unendlich streben. D.h. mit wachsendem K werden Mutationen zunehmend seltener.\\ 
-	Der TSS Prozess ist ein besonders interessanter Grenzprozess des BPDL Prozesses weil es ihm m"oglich ist von einer monomorphen Population im Merkmal $ x $ zu einer anderen monomorphen Population mit Merkmal $ y $ springen falls $ f(y,x) > 0 $ und $ f(x,y) < 0 $.\\
-	In diesem Fall haben wir zu jeder festen Zeit h"ochstens 2 konkurrierende Merkmale haben. Diese Eigenschaft vereinfacht die Analyse des Prozesses sehr und ist der Wahl von $ \mu_K $ zu verdanken.\\
+	Der TSS Prozess ist ein besonders interessanter Grenzprozess des BPDL Prozesses weil es ihm m"oglich ist von einer monomorphen Population im Merkmal $ x $ zu einer anderen monomorphen Population mit Merkmal $ y $ zu, springen falls $ f(y,x) > 0 $ und $ f(x,y) < 0 $ (mehr dazu im Kapitel 7).\\
+	In diesem Fall haben wir zu jeder festen Zeit h"ochstens 2 konkurrierende Merkmale. Diese Eigenschaft vereinfacht die Analyse des Prozesses sehr und ist der Wahl von $ \mu_K $ zu verdanken.\\
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1 \linewidth]{../BachelorArbeit/Pictures/TSS2_pure_small}
 		\caption[TSS Prozess wechselnder Dominanz]{TSS Prozess mit: K = 1000 und $ 4 \cdot 10^6 $ Spr"ungen}
-		\label{fig:TSS2_pure_small}
+		\label{TSS_mitBPDLSimulator}
 	\end{figure}
 	\textbf{Frage:} Warum bietet $ \mu_K $ im Bereich (\ref{TSSMutation}) diese Eigenschaften?\\
 	
@@ -440,11 +428,12 @@ In diesem Kapitel werden Eigenschaften des Prozesses n"aher untersucht die sp"at
 \section{Simulation}
 In diesem Kapitel wird der Kern der Simulation algorithmisch n"aher untersucht. Dieser Kern besteht im Wesentlich aus einem Sprung des BPDL Prozesses.
 Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil bei der Implementierung sorgf"altig auf die Trennung der Aufgabenbereiche geachtet wurde, welche sp"ater beim Verhaltenstest sehr wichtig werden und im 5. Kapitel weiter verwendet werden.\\
-Die hier verwendete Vorgehensweise unterscheidet sich von der aus \cite{fournier2004microscopic} weil...
+\textcolor{blue}{Die hier verwendete Vorgehensweise unterscheidet sich von der aus \cite{fournier2004microscopic} weil wir ein System mit vielen Individuen und wenigen Merkmalen betrachten, was uns erm"oglicht die Individuellen Raten zu ber"ucksichtigen}.
 	\subsection{Implementierung}
 	Die Simulation durchl"auft mehrere Schritte bis ein vollst"andiger Sprungs von $ \nu_t $ abgeschlossen ist. Hier wird beschrieben in welcher Reihenfolge welche Schritte durchlaufen werden und welche Aufgabe diese erf"ullen.\\
 	Am Ende werden alle Funktionsaufrufe (Schritte) und Zusammenh"ange in Abbildung (\ref{fig:PseudoCodeForBThesis}) als ein Ablauf-Tiefen Diagramm illustriert.\\
 	Im Code wird dabei objektorientiert mit Klassen und Objekten gearbeitet. Da diese Details nicht besonders von Interesse sind wird eher ein heuristischer "Uberblick der Implementation gegeben. So kann hier z.B. angenommen werden dass man mit der Variable "{}Members[i]"{} Zugriff auf die Anzahl der Individuen des i-ten Merkmals hat, was im jedoch Code komplexer realisiert werden musste.\\
+	Obwohl die alle Funktionen mit "{}Algorithm xy"{} betitelt sind, meinen die meisten nur Funktionen und keine echten Algorithmen.
 	
 	\subsubsection{Raten berechnen}	
 	Zun"achst m"ussen wir die Raten wissen nach der die exponentiellen Uhren gestellt werden bevor ein Merkmal und Ereignis ausgew"ahlt werden kann.\\
@@ -714,11 +703,18 @@ Die hier verwendete Vorgehensweise unterscheidet sich von der aus \cite{fournier
 	\begin{itemize}
 		\item [\textbf{1.}] Beim Einlesen der Parameter. Hier wurde unmittelbar nach dem Lesen sowohl die Wettbewerbsrate durch K geteilt als auch die Startpopulation um K hoch skaliert. Auf diese Weise kann der Programmkern ohne Kenntnis eines K die Evolution durchf"uhren.\\ 
 		Dadurch l"asst sich ein Prozess einfach durch wachsendes K verfeinern, ohne R"ucksicht auf anzupassende Parameter zu nehmen und man kann mit wachsendem K die Konvergenz wie in Abbildung \ref{Konvergenz_K=100000} verfolgen.
-		\item [\textbf{2.}] Zuletzt geht es darum dass die Ergebnisse zwar ohne R"ucksicht auf ein vorhandenes K berechnet wurden, aber die Darstellung sollte nat"urlich reskaliert erfolgen ($ \nu_t^K = \frac{\nu_t}{K} $). Deswegen ist es au"serhalb des Programmkerns nur "uber einen sogenannten "{}getter"{}, eine selbstgebaute Zugriffsfunktion, m"oglich auf die Mitglieder eines Merkmals zuzugreifen. Dieser "{}getter"{} liefert stehts den reskalierten Wert zur"uck.\\
+		\item [\textbf{2.}] Zuletzt geht es darum dass die Ergebnisse zwar ohne R"ucksicht auf ein vorhandenes K berechnet wurden, aber die Darstellung sollte nat"urlich reskaliert erfolgen ($ \nu_t^K = \frac{\nu_t}{K} $). Deswegen ist es au"serhalb des Programmkerns nur "uber einen sogenannten "{}getter"{} (eine spezielle Zugriffsfunktion) m"oglich auf die Mitglieder eines Merkmals zuzugreifen. Dieser "{}getter"{} liefert stehts den reskalierten Wert zur"uck.\\
 	\end{itemize}
 	
 	\subsubsection{Sehr viele Spr"unge}
-	Gerade bei der Normalisierung [...]
+	Gerade bei der Normalisierung wird es mit wachsendem K notwendig besonders viele Spr"unge zu machen. Die Anzahl der Spr"unge "ubersteigt schnell das Fassungsverm"ogen eines Arrays.	Um auch mehr als 100 Millionen Punkte speichern zu k"onnen wurden zwei L"osungen implementiert.\\
+	\begin{itemize}
+		\item[\textbf{1.}] Die "{}erweiterten Spr"unge"{} sind eine L"osung die zur Zeit angewendet wird. Entscheidet zu Beginn der Simulation anhand der maximalen Iterationen wie viel Speicher ben"otigt wird, und setzt eine "{}Jumps"{} Variable. Diese "{}Jumps"{} Variable enth"alt die Anzahl der Spr"unge bis ein Punkt gespeichert wird. So wird bei 100 Millionen Iterationen nur jede zehnte Punkte gespeichert. \\
+		\item[\textbf{2.}] Eine weitere L"osung ist die "{}storePoint()"{} Funktion. Sie erstellt zu Beginn der Rechnung eine Datei und h"angt immer weiter Punkte an bis die Berechnung vorbei ist.\\
+		Schlie"slich wird die Graphklasse einzeln jede Punkt am Graphen anh"angen.\\ 
+		Diese Variante ist implementiert und wurde getestet. Sie ist auch in einem Unit Test enthalten, der aber nicht im Kapitel 6 erl"autert wird.
+	\end{itemize}
+
 	
 	
 \clearpage	
@@ -965,7 +961,7 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	Auf diese Weise w"urde nach den obigen 3 Punkten z.B. zun"achst eine Funktion (ein Test) geschrieben werden die unser Modell mit Parametern initialisiert und z.B. pr"uft ob die Geburtenrate f"ur diese Parameter gleich dem erwarteten Wert ist. Erst dann w"urde eine Geburtenraten-Funktion geschrieben werden die den Test bestehen l"asst.\\ 
 	Auf diese Weise l"asst sich oft eine deutlich effizientere Programmstruktur modellieren als man es ursprünglich geplant hatte. Das planen ist nat"urlich trotzdem ein wesentlicher Schritt. Mehr Einzelheiten zur Effizienz findet sich in \cite[The Bowling Game: An example of test-first pair programming]{martin2008clean}.
 	
-	In der Abbildung \ref{Unit Test} ist ein Beispiel für eine Implementation eines einfachen Tests der prüft ob alle Parameter korrekt aus der Datei in die Objekte geschrieben werden.\\
+	In der Abbildung (\ref{Unit Test}) ist ein Beispiel für eine Implementation eines einfachen Tests der prüft ob alle Parameter korrekt aus der Datei in die Objekte geschrieben werden.\\
 	Dazu werden in einer Schleife erst 1.000.000 mal immer wieder von neu die Todesraten berechnet und pr"uft schlie"slich ob alle Raten trotzdem dem erwarteten Wert entsprechen (roter Kasten). Das ist dank der modularen Implementierung die in Kapitel 4 - Simulation vorgestellt wurde m"oglich.
 	\begin{figure}[H]
 		\centering
@@ -981,6 +977,9 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 		\label{Test Results}
 	\end{figure}
 	In blau sieht man dass auch der praktische Aufwand gemessen wurde um Schwachstellen in der Implementierung aufzudecken (z.B. auch beim Ziehen von Zufallsvariablen).\\
+	
+	\subsection{Korrektheit durch Unit Tests}
+	Warum liefern mir die Unit Tests die Korrektheit meiner Implementation? Zufall etc...
 
 	\subsection{Unit Tests des Programmkerns}
 	Hier werden Tests vorgestellt mit denen die korrekte Berechnung der Raten verifiziert werden soll. Dazu wird die folgende Testinstanz mit 3 Merkmalen ($ X = \{x,y,z\} $) verwendet:\\
@@ -1106,72 +1105,153 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	
 	
 \clearpage
-\noindent\rule{\textwidth}{2pt}
-\begin{center}
-	$ <<< \quad \downarrow $ Reserviert $ \downarrow \quad >>> $
-\end{center}
-
-
 \section{TSS Prozesse}
-\textbf{Seite 21 - Invasion}\\
-
-
-\begin{center}
-	$ <<< \quad \uparrow $ Reserviert $ \uparrow \quad >>> $
-\end{center}
-\noindent\rule{\textwidth}{2pt}
-
-Bei TSS Prozessen beobachten wir wie sich Merkmale gegeneinander durchsetzten und sich verdrängen. (Tafelbild)\\
-Genau wie bei der LPA-Normalisierung ergeben sich TSS-Prozesse(Trait Substitution Sequence) als Grenzprozesse von BPDL-Prozessen. Zu der LPA-Normalisierung sollten jedoch mit größer werdendem K die Mutationen seltener werden ($ \frac{1}{e^{VK}} << \mu_K << \frac{1}{K log(K)} $) , also die Mutationswahrscheinlichkeit gegen 0 streben. Skaliert man nun noch zusätzlich die Zeit, so führt dies dazu, dass die Zeit, die ein Merkmal benötigt, um sich gegenüber einem anderen durchzusetzen und dieses zu verdrängen, infinitesimal klein wird. Somit simulieren die TSS-Prozesse eine Population, die zu jedem Zeitpunkt monomorph ist und sich im entsprechenden (für $ K < \infty $ angepassten) Gleichgewicht befindet.\\
-Spätestens jetzt wird die Fitness-Funktion interessant:
-\[ f(x,y) = b(x) - d(x) - c(x,y)\bar{n}_y \]
-Diese Fitness-Funktion gibt an, wie gut sich ein Merkmal gegenüber einem anderen durchsetzen kann. Sie ist die asymptotische Wachstumsrate von y, wenn x sich im Gleichgewichtszustand $ \bar{n}_x $ befindet und nur wenige Individuen von Typ y in der Population vorhanden sind. In der Simulation sieht man die Fitness der Merkmale zueinander in einer Matrix nach dem Laden der Parameter.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_BandMatrix}
-	\caption[Fitness Matrix]{Fitness Bandmatrix}
-	\label{MainWindow mit Fitness Bandmatrix}
-\end{figure}
-Mit der Fitness kann man eine Konvergenz der Wahrscheinlichkeit für das überleben einer Mutation vorhersagen:
-\[ \frac{\left[ f(y,x)\right]_+ }{b(y)} \]
-Da diese Wahrscheinlichkeit gerne bereits beim einlesen der Parameter angezeigt werden will, habe ich vor sie als farblich ansteigenden Akzent den Elementen der Zelle hinzuzufügen. Bisher wird in der Matrix etwas grün oder rot markiert. Rot falls eine Koexistenz vorliegt und grün wenn die Wahrscheinlichkeit für Dominanz des Mutanten über 50\% liegt.
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\linewidth]{./Pictures/MainWindow_red_green_loaded}
-	\caption[MainWindow_redGreenFitness]{Fitness Matrix mit roten und gruenen akzenten}
-	\label{fig:MainWindow_red_green_loaded}
-\end{figure}
-Wenn der einfache BPDL Simulator für die Simulation dieses Prozesses verwendet werden würde, würde durch die seltenen Mutationen
-
-	\subsection{Implementierung}
+In diesem Kapitel geht es um TSS Prozesse und wie eine Ann"aherung dieser durch unsere Simulation gel"ost wurde.
+	\subsection{Invasion}
+	Wie schon in Kapitel 3.4 der Fitnessfunktion angesprochen, beschreibt die Invasion den Vorgang, durch den ein neu auftretendes Merkmal (dank Mutation) ein bis dahin dominantes Merkmal verdr"angt.\\
+	In Kapitel 3.2 haben wir weiterhin gesehen dass der BPDL Prozess f"ur $ K \to \infty $ gegen ein deterministisches System konvergiert. Jedoch soll unser TSS-Prozess ein nicht deterministischer Prozess sein, der eine monomorphe Population simuliert, die zu zuf"alligen Zeiten ihr dominantes Merkmal austauscht.\\
+	Um dies zu erreichen wird der Grenzwert nicht nur mit $ K \to \infty $, sondern gleichzeitig $ \mu \to 0 $ gebildet. Auf diese Weise wird das sonst so deterministische Verhalten aus $ K \to \infty $ durch weiterhin zuf"allige Ereignisse beeinflusst.\\
+	Dabei wird der aus Kapitel 3.6 bekannte Bereich (\ref{TSSMutation}) f"ur die Konvergenz von $ \mu $ gew"ahlt. Er garantiert dass eine Invasion ausreichend Zeit zur Verdr"angung hat bis ein weiterer Mutant entsteht und nicht zu viel Zeit vergeht, so dass das vor der n"achsten Mutation die Population ausstirbt.\\
+	Desweiteren wollen wir auch sicherstellen dass sich auf lange Sicht nur ein Merkmal durchsetzt. Dies k"onnen wir erreichen indem wir ausnutzten dass stets zwei Merkmale um Dominanz streiten und die Aussagen aus Kapitel 3.5 (Dimorphes Gleichgewicht) auf mehrere Merkmale ausweiten.\\
+	Wenn f"ur beliebiges $ x \in X $ und f"ur alle $ y \in (X\backslash x) $ entweder $ f(y,x) < 0 $ oder $ f(y,x) > 0 $ und $ f(x,y) < 0 $, so ist sichergestellt, dass sich auf lange Sicht ein Merkmal in der Population durchsetzten wird und keine zwei Merkmale nebeneinander existieren k"onnen. Unter diesen Umst"anden k"onnen weiterhin die stabilen monomorphen Zust"ande die in Kapitel 3.5 (Dimorphes Gleichgewicht) beschrieben wurden angenommen werden, nur eben f"ur mehrere Merkmale.\\
 	
+	\textbf{Welche Phasen durchl"auft eine Invasion?}\\
+	Damit ein Merkmal y ein dominantes Merkmal x verdr"angen kann, muss nach obigen Erkenntnissen zun"achst einmal $ f(y,x) > 0 $ und $ f(x,y) < 0 $ gelten.\\
+	Wie aus \cite{Silke}, l"asst sich die Invasion in 3 Teilen beschreiben. 
+	\begin{itemize}
+		\item [1.] Fixierung: Zu Beginn einer Invasion werden die Individuen des Merkmals $ x $ kaum von $ y $ beeinflusst, da $ c(x,y)n(y) $ unbedeutend klein ist. Jedoch ist dieser Zustand zeitlich durch die positive Wachstumsrate des Merkmals $ y $ f"ur $ x $ im Gleichgewicht $ \bar{n}_x $ begrenzt. Ab einer bestimmten Populationsgr"o"se $ \eps $, kann der Einfluss des Eindringlings $ x $ von $ y $ nicht mehr ignoriert werden. Die Dauer bis ein ein erster Mutant das Merkmal zu diesem relevanten Niveau bringt ist von der Gr"o"senordnung $ \log K $.
+		\item [2.] Invasion: Hier ereignet sich der rasche Abfall des dominanten Merkmals $ x $ und Anstieg des neuen Merkmals $ y $. Wir beobachten hier die Konvergenz gegen den, dank $ f(x,y) < 0 $ und $ f(y,x) > 0 $, Gleichgewichtszustand $ (0,\bar{n}_y) $.
+		\item [3.] Aussterben: Hier greift der Umgekehrte Fall der Fixierung. Sobald $ n(x) < \eps $ geworden ist, kann zun"achst der Einfluss von $ x $ auf $ y $ vernachl"assigt werden und dank der negativen Wachstumsrate wird das Merkmal $ x $ in einer Zeit von der Ordnung $ \log K $ aussterben.
+	\end{itemize}
+	Beispielhaft kann man das an folgenden Abbildungen beobachten:\\
+	\begin{minipage}{0.7 \textwidth}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1 \linewidth]{./Pictures/Invasion2}
+		\caption[Invasion]{Eine Invasion f"ur K = 1000}
+		\label{Invasionsphasen}
+	\end{figure}
+	\end{minipage}
+	\begin{minipage}{0.3 \textwidth}
+		In Rot sind die Fixierungsphasen gekennzeichnet und in Orange erkennt man die Zeitpunkte an denen die "Uberg"ange beobachtbar sind.
+	\end{minipage}\\
+	
+	\textcolor{blue}{Man kann in dieser Stelle bereits erahnen dass die Fitnessfunktion bzw. die Wachstumsrate eines Mutanten die M"oglichkeit bietet Aussagen "uber die Invasionswahrscheinlichkeit zu machen. Und tats"achlich erhalten wir aus \cite{Champagnat20061127}, dass die Invasionswahrscheinlichkeit mit $ K \to \infty $ gegen
+	\[ \frac{\left[ f(y,x)\right]_+ }{b(y)} \]
+	konvergiert.} 
+	
+	\subsubsection{Praktische Umsetzung}
+	Normalerweise lassen sich die Parameter einer Simulation so w"ahlen, dass bei mindestens drei Merkmalen ein Kreislauf der Invasionen erzwungen werden kann. D.h. es wird nicht dazu kommen dass ein Merkmal nicht verdr"angt werden kann, also: $ x \xleftarrow{verdr"angt} y \xleftarrow{verdr"angt} z \xleftarrow{verdr"angt} x \dots $\\
+	In unserem Modell jedoch haben wir nur Mutationen zu den Nachbarn erlaubt. Auf diese Weise wird dieser Kreislauf unterbrochen. Wenn ein Merkmal $ y $ ein $ x $ verdr"angt, so kann es nicht mehr von selbigem $ x $ verdr"angt werden, sondern muss vom anderen Nachbarn verdr"angt werden.\\
+	Auf diese Weise wandert die Vorherrschaft in der Population bis eine ein Merkmal dominant ist welches keine fitteren Nachbarn hat, oder am Rand angekommen ist, was zwangsl"aufig wieder dem vorherigen Fall entspricht.\\
+	Die Darstellung der Fitnessmatrix im Programm l"asst sich an folgendem Bild leicht nachvollziehen:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{./Pictures/MainWindow_BandMatrix}
+		\caption[Fitness Matrix]{Fitness Bandmatrix}
+		\label{MainWindow mit Fitness Bandmatrix}
+	\end{figure}
+	Da die Fitness nicht die einzige n"utzliche Information bei Invasionen ist, wurde dem Programm noch die M"oglichkeit gegeben farblich darauf hinzuweisen ob ein Invasion m"oglich ist und ob sie besonders wahrscheinlich ist.\\
+	Dazu folgendes Bild:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{./Pictures/MainWindow_red_green_loaded}
+		\caption[MainWindow_redGreenFitness]{Fitness Matrix mit roten und gruenen akzenten}
+		\label{fig:MainWindow_red_green_loaded}
+	\end{figure}
+	Dabei werden drei Farben Unterschieden. 
+	\begin{itemize}
+		\item [\textbf{Rot}] werden beide Merkmale gef"arbt falls wir einen Zustand der Koexistenz erwarten. In diesem Fall sind $ f(x,y) \& f(y,x) > 0 $.
+		\item [\textbf{Wei"s}] wird ein Merkmal gef"arbt wenn es verdr"angen oder verdr"angt werden kann.
+		\item [\textbf{Gr"un}] wird ein Merkmal gef"arbt wenn die Verdrängungswahrscheinlichkeit "uber 60\% ist.
+	\end{itemize}
+
 	\subsection{Optimierung}
-	Hier stelle ich die lineare Interpolation als eine Optimierung vor die "Ubersichtlichkeit, Analyse und Laufzeit deutlich verbessert. Dann beschreibe ich anhand von Bildern wie gut man Mutationen und deren Auswirkungen verfolgen kann und wie ich gepr"uft habe ob auch hier alles Korrekt l"auft.\\
-	Schlie"slich erkl"are ich wie ich die Mutationszeitpunkte ermittelt habe.
+	Einfach den BPDL Simulator zu verwenden um diesen Grenzwertprozess zu approximieren, w"urde darin resultieren dass sehr viel Rechenzeit und im Gleichgewicht eines Merkmals verbracht werden w"urde.\\
+	Die Beobachtung des Prozesses im Gleichgewicht ist nicht besonders interessant und besonders l"asst sich dabei nicht gut nachvollziehen wann vielleicht Mutanten Invasionsversuche gestartet haben die nicht durchgekommen sind. Diese Simulation wurde bereits in Abbildung (\ref{TSS_mitBPDLSimulator}) vorgestellt.\\
+	Alternativ wird hier eine andere Variante dieser Simulation vorgestellt. 
+	Diese nutzt eine lineare Interpolation als eine Optimierung um die "Ubersichtlichkeit, Analysef"ahigkeit und Laufzeit deutlich zu verbessern.\\
+	Diese lineare Interpolation macht es notwendig stets zu wissen in welcher der drei Phasen der Prozess sich zur Zeit bewegt. Sobald er die Aussterben Phase verlassen hat und schlie"slich der Prozess sein Equilibrium erreicht, wird eine Interpolation des Prozesses bis zu seiner n"achsten Mutation durchgef"uhrt.\\
+	Die Spr"unge bis zum n"achsten Mutanten werden nicht berechnet, stattdessen wird anhand der Geburtenrate der toten Nachbarn eine Mutationsrate zusammengefasst, welche uns die Zeit f"ur die n"achste Mutation liefert. Danach wird nach dem selben vorgehen wie in Kapitel 4 beschrieben, entschieden welcher Nachbar die Mutation ausgel"ost hat.\\
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{./Pictures/TSS2_optimierung_small}
+		\caption[MainWindow_redGreenFitness]{Fitness Matrix mit roten und gruenen akzenten}
+		\label{TSS2_optimierung_small}
+	\end{figure}
+	Das sich dadurch die gr"o"ste Rechenzeit auf $ O(1) $ verk"urzt und die "Ubersichtlichkeit verbessert ist sehr deutlich und war zu erwarten. Die Analysem"oglichkeiten jedoch verbessern sich dank des gro"sen Ratenunterschiedes der Merkmale. Der eindringende Mutant bietet dem neuen Merkmal nur eine sehr geringe Ereignisrate. W"ahrend dieser Zeit sind gro"se Bewegungen im dominanten Merkmal zu erwarten. Diese Beobachtung l"asst sich leicht in Abbildung (\ref{TSS2_optimierung_small}) nachvollziehen, wo man in Rot niemals einen Mutanten entdecken w"urde, jedoch dank der Ausschl"age in der gelben Markierung ist es einfach die Mutanten aufzusp"uren.\\
+	Folgend werden beide Effekte gegen"ubergestellt:\\
+	\begin{center}
+	\begin{minipage}{0.6\textwidth}
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{./Pictures/TSS_DomZoomVgl_original}
+		\label{a}
+	\end{minipage}
+	$ \quad $
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{./Pictures/TSS_MutationZoomVgl2_original}
+		\label{b}
+	\end{minipage}
+	\end{minipage}
+	\end{center}	
+	Nat"urlich ist es dank der Beweglichkeit auf dem Graphen auch m"oglich die Entwicklung des Mutanten n"aher zu betrachten:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\linewidth]{./Pictures/TSS_MutationZoom2_original}
+		\caption{Dritte Mutation von Links}
+		\label{TSS_MutationZoom2_original}
+	\end{figure}
 	
-	\subsection{Aufwand}
-	H"angt nicht mehr nur von K ab...
+	\subsection{Implementierung}
+	Welche Form die Implementierung und der Algorithmus annehmen wurde bereits in Kapitel 4 ausreichend erl"autert. Deswegen wird hier nur kurz erkl"art wie sich der Algorithmus "andern w"urde. Die tats"achliche Implementierung weicht etwas ab und verwendet technisch unwichtige Details.\\
 	
-	\subsection{Algorithmus}
+	\textbf{Implementierung}
+	Die Implementierung ben"otigt jetzt bevor es einen gew"ohnlichen Sprung macht zus"atzlich eine "Uberpr"ufung ob wirklich ein Prozesssprung oder eine Mutation ausgef"uhrt werden soll.\\
+	Dazu wird nach jedem Sprung eine Abfrage "isNear()" gestartet die pr"uft ob es nur ein lebendes Merkmal gibt und ob es im Gleichgewicht ist:
+	\begin{algorithm}[H]
+		\caption{isNear()}
+		\begin{algorithmic}[1]
+			\ENSURE{Bedingungen f"ur eine Interpolation}
+			\FOR{ i = 0 < n-1}
+				\IF{i $ \ne $ ChosenTrait \& Members[i] $ > 0$}
+					\RETURN false;
+				\ENDIF
+			\ENDFOR
+			\IF{$ |\text{getKMembersOf[i]} - \text{Expected[ChosenTrait]}| > \frac{0.5}{K} $}
+				\RETURN false;
+			\ENDIF
+			\RETURN true;
+		\end{algorithmic}
+	\end{algorithm}
+	Hier sorgt Zeile 2 in der Schleife daf"ur dass au"ser dem zuletzt aktiven kein weiteres Merkmal aktiv sein k"onnte.\\
+	Danach wird in Zeile 6 sicher gestellt dass der Abstand zum Gleichgewicht minimal ist. Das ist notwendig, denn der Minimale Abstand ist nicht immer $ 0 $. Falls das Gleichgewicht einen Wert ergibt, der kein Vielfaches von $ \frac{1}{K} $ ist, so kann das Gleichgewicht nicht durch den Prozess angenommen werden. In diesem Fall wird der Prozess jedoch stattdessen einen Sprungpunkt im Radius $ \frac{0.5}{K} $ um das Gleichgewicht haben.\\
+	Als Abbruchkriterium wird nicht mehr einfach die maximale Anzahl erlaubter Spr"unge verwendet, sondern auch ein Interpolationspunkt des Merkmals an dem keine fitteren Nachbarn mehr vorhanden sind. Die Implementierung des Abbruchkriteriums sollte intuitiv sein und wird deshalb nicht weiter beschrieben.\\
+	
+	\textbf{Aufwand}\\
+	Eine Besonderheit l"asst sich zum Schluss noch betonen. Durch die Interpolation ist der Aufwand der Berechnung nicht mehr allein von K abh"angig, sondern besonders von der Anzahl der erwarteten Mutationen und der Anzahl der erwarteten Invasionen.
+	
+
 \clearpage
 \section{Ausblick}
 
 \begin{itemize}
 	\item Weiteres Abbruchkriterium = Zeit : sehr einfach zu implementieren.
+	\item Logarithmische Anpassung der Achsen.
 \end{itemize}
-
-\clearpage
-\bibliography{science1}
-
-\clearpage
-
-\section{Fragen}
+\subsection{Fragen}
 \begin{itemize}
 	\item Fast sicheres Aussterben...
 \end{itemize}
-
-\section{Wozu hat es nicht mehr gereicht?}
+\subsection{Wozu hat es nicht mehr gereicht?}
 Instanzbrowser oder Dateisuche.\\
 einfaches Bearbeiten erstellter Instanzen.\\
+\clearpage
+\bibliography{science1}
+
+
+
+
 
 \end{document}

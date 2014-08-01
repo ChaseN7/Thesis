@@ -29,12 +29,11 @@
   Url                      = {http://www.sciencedirect.com/science/article/pii/S0040580997913319}
 }
 
-@Article{breymann2011c++,
+@Book{breymann2011c++,
   Title                    = {Der C++-Programmierer},
   Author                   = {Breymann, Ulrich},
-  Year                     = {2011},
-
-  Publisher                = {Carl Hanser Verlag GmbH \& Co. KG}
+  Publisher                = {Carl Hanser Verlag GmbH \& Co. KG},
+  Year                     = {2011}
 }
 
 @Article{Champagnat20061127,
@@ -166,5 +165,16 @@
 
   Owner                    = {Boris},
   Timestamp                = {2014.07.13}
+}
+
+@MastersThesis{Silke,
+  Title                    = {Stochastische Modelle der Populationsdynamik},
+  Author                   = {Silke Völk},
+  School                   = {Friedrich Wilhelms Universität Bonn},
+  Year                     = {2010},
+  Month                    = {August},
+
+  Owner                    = {Boris},
+  Timestamp                = {2014.08.01}
 }
 
