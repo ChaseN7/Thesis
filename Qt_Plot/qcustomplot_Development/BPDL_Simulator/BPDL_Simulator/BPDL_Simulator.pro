@@ -37,6 +37,7 @@ FORMS    += mainwindow.ui \
     plotwindow.ui
 
 QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++11
 
 OTHER_FILES += \
     ../build-BPDL_Simulator-Desktop_Qt_5_2_1_MinGW_32bit-Debug/RightInstance1

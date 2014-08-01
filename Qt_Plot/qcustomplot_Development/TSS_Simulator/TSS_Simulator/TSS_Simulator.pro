@@ -37,3 +37,4 @@ FORMS    += mainwindow.ui \
     plotwindow.ui
 
 QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++11
