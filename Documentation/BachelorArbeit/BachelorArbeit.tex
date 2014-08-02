@@ -9,8 +9,8 @@
 %\usepackage{algorithmicx}
 %\usepackage[compatible]{algpseudocode}
 \usepackage{algorithm}
-\usepackage{algorithmic}
-%\usepackage{algpseudocode}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{tabularx}
@@ -65,7 +65,7 @@ Das Programm sollte jedoch nicht nur in der Lage sein diesen Prozess zu simulier
 %Ziel dieser Bachelorarbeit ist die Entwickelung eines Programms, das die Dynamik einer Population simulieren kann. 
 %Dar"uber hinaus wird die Erweiterung zu einem zweiten Programm vorgestellt welches besonders interessante Grenz-Prozesse, genannt "{}Trait Substitution Sequences"{}, approximieren kann.\\
 Alle Simulationen sollen auf dem selben Modell basieren.\\
-Jedes Lebewesen einer Population (z.B. Pflanzen, Zelle oder Tier) wird durch ein Merkmal beschrieben. Diese Merkmale erzeugen Dynamik in der Population indem sie z.B. Gr"o"se, Essensaufnahme, Fortpflanzungsrate oder Konkurrenz zu anderen Merkmalen angibt.\\
+Jedes Lebewesen einer Population (z.B. Pflanzen, Zelle oder Tier) wird durch ein Merkmal beschrieben. Diese Merkmale erzeugen Dynamik in der Population indem sie z.B. Gr"o"se, Essensaufnahme, Fortpflanzungsrate oder Konkurrenz zu anderen Merkmalen angeben.\\
 In unserem Modell besteht ein Merkmal aus einer asexuellen Fortpflanzungsrate und zwei Todesraten. Die Todesraten bestehen aus einer nat"urlichen Todesrate und einer Todesrate die durch Wettbewerb zu jedem anderen Lebewesen entsteht. Man bemerkt schon dass ein Individuum in diesem Modell nur sterben, t"oten (durch Wettbewerb) oder sich fortpflanzen kann. Wobei das interessante an der Dynamik ist dass die wettbewerbliche Todesraten der Individuen von den Populationsgr"o"sen abh"angen und damit nicht trivial machen.\\
 Desweiteren umfasst das Modell eine Mutationswahrscheinlichkeit. Diese Mutation bezieht sich nicht auf bereits in der Population lebende Wesen, sondern auf neugeborene Individuen. Ein Lebewesen bleibt also w"ahrend seiner Lebenszeit stets
 %Bestimmt wird ein Merkmal durch Todesraten und einer Fortpflanzungsrate (asexuell). Die Todesrate besteht aus einer nat"urliche Todesrate und eine durch Wettbewerb mit jedem anderem Individuum. Das hei"st die wettbewerbliche Todesrate steigt mit der Anzahl der konkurrierenden Individuen.\\
@@ -433,7 +433,7 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	Die Simulation durchl"auft mehrere Schritte bis ein vollst"andiger Sprungs von $ \nu_t $ abgeschlossen ist. Hier wird beschrieben in welcher Reihenfolge welche Schritte durchlaufen werden und welche Aufgabe diese erf"ullen.\\
 	Am Ende werden alle Funktionsaufrufe (Schritte) und Zusammenh"ange in Abbildung (\ref{fig:PseudoCodeForBThesis}) als ein Ablauf-Tiefen Diagramm illustriert.\\
 	Im Code wird dabei objektorientiert mit Klassen und Objekten gearbeitet. Da diese Details nicht besonders von Interesse sind wird eher ein heuristischer "Uberblick der Implementation gegeben. So kann hier z.B. angenommen werden dass man mit der Variable "{}Members[i]"{} Zugriff auf die Anzahl der Individuen des i-ten Merkmals hat, was im jedoch Code komplexer realisiert werden musste.\\
-	Obwohl die alle Funktionen mit "{}Algorithm xy"{} betitelt sind, meinen die meisten nur Funktionen und keine echten Algorithmen.
+	Obwohl die alle Funktionen mit "{}Algorithm xy"{} betitelt sind, meinen die meisten nur Funktionen und keine echten Algorithmen. Desweiteren sind
 	
 	\subsubsection{Raten berechnen}	
 	Zun"achst m"ussen wir die Raten wissen nach der die exponentiellen Uhren gestellt werden bevor ein Merkmal und Ereignis ausgew"ahlt werden kann.\\
@@ -443,61 +443,61 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	\begin{algorithm}[H]
 		\caption{addTotalIntrinsicDeathRateOf(TraitIndex: i)}
 		\begin{algorithmic}[1]
-			\ENSURE{addiert zur Todesrate die intrinsische-Todesrate}
-			\STATE TotalDeathRate[i] = DeathRate[i] $ \cdot $ Members[i]
+			\Ensure{addiert zur Todesrate die intrinsische-Todesrate}
+			\State TotalDeathRate[i] = DeathRate[i] $ \cdot $ Members[i]
 		\end{algorithmic}
 	\end{algorithm}
 	Diese Funktion addiert die Wettbewerbs-Todesrate zur aktuellen Todesrate.
 	\begin{algorithm}[H]
 		\caption{addTotalCompDeathRateOf(TraitIndex: i)}
 		\begin{algorithmic}[1]
-			\ENSURE{addiert zur Todesrate die Wettbewerbs-Todesrate}
-			\FOR{j=0 \TO n-1}
-				\STATE TotalDeathRate[i] += CompDeathRate[i,j] $ \cdot $ Members[i] $ \cdot $ Members[j];
-			\ENDFOR
+			\Ensure{addiert zur Todesrate die Wettbewerbs-Todesrate}
+			\For{j=0 $ \to $ n-1}
+				\State TotalDeathRate[i] += CompDeathRate[i,j] $ \cdot $ Members[i] $ \cdot $ Members[j];
+			\EndFor
 		\end{algorithmic}
 	\end{algorithm}
-	Auch wenn es vielleicht so erscheint dass man zu stark trennt, so ist doch f"ur das verwendete Programmierkonzept entscheidend dass jede Funktion nach M"oglichkeit eine genau Aufgabe hat, weshalb diese beiden Funktionen getrennt wurden. Wie man vermuten kann werden diese von einer Funktion aufgerufen die f"ur das Berechnen der gesamten Todesrate zust"andig ist.
+	Auch wenn es vielleicht so erscheint dass man zu stark trennt, jedoch ist es f"ur das verwendete Programmierkonzept entscheidend dass jede Funktion nach M"oglichkeit eine genau Aufgabe hat \cite{martin2008clean}, weshalb diese beiden Funktionen getrennt wurden. Darauf wird etwas n"aher im n"achsten Kapitel eingegangen. \\
+	Schlie"slich erfolgt aus obigem die Berechnung der Totalen Todesraten:
 	\begin{algorithm}[H]
 		\caption{calculateTotalDeathRates()}
 		\begin{algorithmic}[1]
-			\ENSURE{berechnet die gesamten Todesraten aller Merkmale}
-			\FOR{i=0 \TO n-1}
-				\STATE TotalDeathRate[i] = 0;
-				\STATE addTotalIntrinsicDeathRateOf(i);
-				\STATE addTotalCompDeathRateOf(i);
-			\ENDFOR
+			\Ensure{berechnet die gesamten Todesraten aller Merkmale}
+			\For{i=0 $ \to $ n-1}
+				\State TotalDeathRate[i] = 0;
+				\State addTotalIntrinsicDeathRateOf(i);
+				\State addTotalCompDeathRateOf(i);
+			\EndFor
 		\end{algorithmic}
 	\end{algorithm}
-	
-	Schlie"slich kommen wir zur Berechnung der Geburtsrate pro Merkmal. Auch hier sollen Mutationen und intrinsische Geburten gesondert berechnet werden. Zusammengefasst:
+	Danach kommen wir zur Berechnung der Geburtsrate pro Merkmal. Auch hier sollten Mutationen und intrinsische Geburten gesondert berechnet werden. Zusammengefasst:
 	\begin{algorithm}[H]
 		\caption{calculateTotalBirthRates()}
 		\begin{algorithmic}[1]
-			\ENSURE{berechnet die gesamten Geburtsraten aller Merkmale}
-			\STATE $ \qquad $ $ \downarrow $ \textbf{intrinsische Geburtenrate} $ \downarrow $
-			\FOR{i=0 \TO n-1}
-				\STATE TotalBirthRate[i] = Members[i] $ \cdot $ BirthRate[i] $ \cdot $ (1 - Mutation);
-			\ENDFOR
-			\STATE $ \qquad $ $ \downarrow $ \textbf{Mutationsraten} $ \downarrow $
-			\FOR{i=1 \TO n-2}
-				\STATE TotalBirthRate[i] += Members[i-1] $ \cdot $ BirthRate[i-1] $ \cdot $ Mutation $ \cdot $ 0.5;
-				\STATE TotalBirthRate[i] += Members[i+1] $ \cdot $ BirthRate[i+1] $ \cdot $ Mutation $ \cdot $ 0.5;
-			\ENDFOR
-			\STATE TotalBirthRate[0] += Members[1] $ \cdot $ BirthRate[1] $ \cdot $ Mutation $ \cdot $ 0.5;
-			\STATE TotalBirthRate[n-1] += Members[n-2] $ \cdot $ BirthRate[n-2] $ \cdot $ Mutation $ \cdot $ 0.5;
+			\Ensure{berechnet die gesamten Geburtsraten aller Merkmale}
+			\State $ \qquad $ $ \downarrow $ \textbf{intrinsische Geburtenrate} $ \downarrow $
+			\For{i=0 $ \to $ n-1}
+				\State TotalBirthRate[i] = Members[i] $ \cdot $ BirthRate[i] $ \cdot $ (1 - Mutation);
+			\EndFor
+			\State $ \qquad $ $ \downarrow $ \textbf{Mutationsraten} $ \downarrow $
+			\For{i=1 $ \to $ n-2}
+				\State TotalBirthRate[i] += Members[i-1] $ \cdot $ BirthRate[i-1] $ \cdot $ Mutation $ \cdot $ 0.5;
+				\State TotalBirthRate[i] += Members[i+1] $ \cdot $ BirthRate[i+1] $ \cdot $ Mutation $ \cdot $ 0.5;
+			\EndFor
+			\State TotalBirthRate[0] += Members[1] $ \cdot $ BirthRate[1] $ \cdot $ Mutation $ \cdot $ 0.5;
+			\State TotalBirthRate[n-1] += Members[n-2] $ \cdot $ BirthRate[n-2] $ \cdot $ Mutation $ \cdot $ 0.5;
 		\end{algorithmic}
 	\end{algorithm}
 	 Jetzt sind wir bereit eine Funktion aufzurufen die aus den vorher berechneten Geburts und Todesraten pro Merkmal durch Superposition eine totale Eventrate berechnet, nach der wir eine exponentielle Uhr stellen k"onnen die schlie"slich das klingeln der ersten aller Merkmalsuhren simuliert.
 	 \begin{algorithm}[H]
  		\caption{calculateTotalEventRate()}
  		\begin{algorithmic}[1]
- 			\ENSURE{berechnet die Total Eventrate}
- 			\STATE TotalEventRate = 0;
- 			\FOR{i=0 \TO n-1}
- 				\STATE TotalTraitRate[i] = TotalBirthRate[i] + TotalDeathRate[i];
- 				\STATE TotalEventRate += TotalTraitRate[i];
- 			\ENDFOR
+ 			\Ensure{berechnet die Total Eventrate}
+ 			\State TotalEventRate = 0;
+ 			\For{i=0 $ \to $ n-1}
+ 				\State TotalTraitRate[i] = TotalBirthRate[i] + TotalDeathRate[i];
+ 				\State TotalEventRate += TotalTraitRate[i];
+ 			\EndFor
  		\end{algorithmic}
  	\end{algorithm}
  	Hier f"allt auf dass wir auch die "{}TotalTraitRate"{} oder Totale Merkmalsrate gespeichert haben. Diese repr"asentiert die gesamte Ereignisrate eines Merkmals.\\
@@ -505,10 +505,10 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
  	\begin{algorithm}[H]
  		\caption{calculateEventRates()}
  		\begin{algorithmic}[1]
- 			\ENSURE{stellt sicher dass alle akutellen Raten berechnet wurden}
- 			\STATE calculateTotalDeathRates();
- 			\STATE calculateTotalBirthRates();
- 			\STATE calculateTotalEventRate();
+ 			\Ensure{stellt sicher dass alle akutellen Raten berechnet wurden}
+ 			\State calculateTotalDeathRates();
+ 			\State calculateTotalBirthRates();
+ 			\State calculateTotalEventRate();
  		\end{algorithmic}
  	\end{algorithm}
 	
@@ -518,9 +518,9 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
  	\begin{algorithm}[H]
  		\caption{sampleEventTime()}
  		\begin{algorithmic}[1]
- 			\ENSURE{Zieht die n"achste Ereigniszeit}
- 			\STATE EventTime = rollExpDist(TotalEventRate);
- 			\STATE Timeline += EventTime;
+ 			\Ensure{Zieht die n"achste Ereigniszeit}
+ 			\State EventTime = rollExpDist(TotalEventRate);
+ 			\State Timeline += EventTime;
  		\end{algorithmic}
  	\end{algorithm}
  	Jetzt bleibt zu bestimmen wem was passiert. Also welches Ereignis welches Merkmal treffen wird. Daf"ur wenden wir das Superpositionsprinzip in anderer Richtung an als bisher:\\
@@ -541,15 +541,15 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	\begin{algorithm}[H]
  		\caption{choseTraitToChange()}
  		\begin{algorithmic}[1]
- 			\ENSURE{w"ahlt ein Merkmal zum "Andern aus}
- 			\STATE X = rollUnifDist(TotalEventRate);
- 			\FOR{i=0 \TO n-1}
- 				\IF{X $ \le $ TotalTraitRate[i]}
- 					\STATE ChosenTrait = i;
- 					\STATE return;
- 				\ENDIF
- 				\STATE X -= TotalTraitRate[i];
- 			\ENDFOR
+ 			\Ensure{w"ahlt ein Merkmal zum "Andern aus}
+ 			\State X = rollUnifDist(TotalEventRate);
+ 			\For{i=0 $ \to $ n-1}
+ 				\If{X $ \le $ TotalTraitRate[i]}
+ 					\State ChosenTrait = i;
+ 					\State return;
+ 				\EndIf
+ 				\State X -= TotalTraitRate[i];
+ 			\EndFor
  		\end{algorithmic}
  	\end{algorithm}
  	Auf die selbe Weise wird entschieden welches Ereignis eintrifft und speichern diese Entscheidung in "{}isBirth"{}. Da wir hier jedoch nur Geburt und Tod zur Auswahl haben w"urde sich nat"urlich eine Bernoulli verteilte Zufallsvariable ergeben mit, 
@@ -558,37 +558,37 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	\begin{algorithm}[H]
  		\caption{choseEventType()}
  		\begin{algorithmic}[1]
- 			\ENSURE{w"ahlt ein Ereignis f"ur das entsprechende Merkmal aus}
- 			\STATE X = rollUnifDist(TotalTraitRate[ChosenTrait]);
- 			\IF{X $ \le $ TotalBirthRate[ChosenTrait]}
- 				\STATE isBirth = true;
- 			\ELSE
- 				\STATE isBirth = false;
- 			\ENDIF
+ 			\Ensure{w"ahlt ein Ereignis f"ur das entsprechende Merkmal aus}
+ 			\State X = rollUnifDist(TotalTraitRate[ChosenTrait]);
+ 			\If{X $ \le $ TotalBirthRate[ChosenTrait]}
+ 				\State isBirth = true;
+ 			\Else
+ 				\State isBirth = false;
+ 			\EndIf
  		\end{algorithmic}
  	\end{algorithm}
  	Danach muss noch das Ereignis aus Alg. 9 auf das Merkmal aus Alg. 8 angewendet werden.
 	\begin{algorithm}[H]
  		\caption{executeEventTypeOnTrait()}
  		\begin{algorithmic}[1]
- 			\ENSURE{wendet das gew"ahlte Ereignis auf das gew"ahlte Merkmal an}
- 			\STATE X = rollUnifDist(TotalTraitRate[ChosenTrait]);
- 			\IF{isBirth}
- 				\STATE Members[ChosenTrait] += 1;
- 			\ENDIF
- 			\IF{$ \neg \text{isBirth} $ \& Members[ChosenTrait] $ > $ 0}
- 				\STATE Members[ChosenTrait] -= 1;
- 			\ENDIF
+ 			\Ensure{wendet das gew"ahlte Ereignis auf das gew"ahlte Merkmal an}
+ 			\State X = rollUnifDist(TotalTraitRate[ChosenTrait]);
+ 			\If{isBirth}
+ 				\State Members[ChosenTrait] += 1;
+ 			\EndIf
+ 			\If{$ \neg \text{isBirth} $ \& Members[ChosenTrait] $ > $ 0}
+ 				\State Members[ChosenTrait] -= 1;
+ 			\EndIf
  		\end{algorithmic}
  	\end{algorithm} 	
  	Zum Schluss wir noch eine Funktion erstellt welches das Ausf"uhren eines Ereignisses in richtiger Reihenfolge ausf"uhrt und in einem Schritt aus gegebenen Raten die eine Ver"anderung der Population durchf"uhrt.
  	\begin{algorithm}[H]
  		\caption{changeATrait()}
  		\begin{algorithmic}[1]
- 			\ENSURE{l"asst ein Ereignis ein Merkmal treffen}
- 			\STATE choseTraitToChange();
- 			\STATE choseEventType();
- 			\STATE executeEventTypeOnTrait();
+ 			\Ensure{l"asst ein Ereignis ein Merkmal treffen}
+ 			\State choseTraitToChange();
+ 			\State choseEventType();
+ 			\State executeEventTypeOnTrait();
  		\end{algorithmic}
  	\end{algorithm} 
 	Aus diesen 3 wesentlichen Schritten
@@ -601,10 +601,10 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	\begin{algorithm}[H]
  		\caption{makeEvolutionStep()}
  		\begin{algorithmic}[1]
- 			\ENSURE{l"asst ein Ereignis ein Merkmal treffen}
- 			\STATE calculateEventRates();
- 			\STATE sampleEventTime();
- 			\STATE changeATrait();
+ 			\Ensure{l"asst ein Ereignis ein Merkmal treffen}
+ 			\State calculateEventRates();
+ 			\State sampleEventTime();
+ 			\State changeATrait();
  		\end{algorithmic}
  	\end{algorithm}
 	 	
@@ -623,53 +623,61 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	Im Pseudocode finden sich in blau einige Verweise auf die zuvor beschriebene Implementierung.
 	
 	\begin{algorithm}[H]
-		\caption{makeEvolutionStep()}
+		\caption{makeEvolutionStep() - Part 1}
 		\begin{algorithmic}[1]
-			\ENSURE{A full evolution Step happened}
-			\REQUIRE $ t, X = \{0,\dots, n-1\} $
-			\STATE $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{calculateEventRates}() $ \downarrow $
-			\FOR{ $ x \in X $ }
-				\STATE $  D(x) := n_t(x) \cdot \left( d(x) + \sum_{y \in X} c(x,y) \cdot n_t(y) \right) $
-				\STATE $ B(x) := \underbrace{b(x) \cdot (1 - \mu) \cdot n_t(x)}_{arteigene}  $
-				\IF{$ x > 0 $}
-					\STATE $ B(x) += \underbrace{b(x-1)\cdot n_t(x-1)}_{Mutation Links} \cdot \frac{\mu}{2} $
-				\ENDIF
-				\IF{$ x < n-1 $}
-					\STATE $ B(x) += \underbrace{b(x+1)\cdot n_t(x+1)}_{Mutation Rechts} \cdot \frac{\mu}{2} $
-				\ENDIF
-				\STATE $ TotalTraitRate(x) = B(x) + D(x) $
-			\ENDFOR
-			\STATE $ TotalEventRate := \sum_{x \in X} TotalTraitRate(x) $
-			\STATE $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{sampleEventTime}() $ \downarrow $
-			\STATE sample $ Z \sim exp(TotalEventRate) $
-			\STATE $ t += Z $
+			\Ensure{A full evolution Step happened}
+			\Require $ t, X = \{0,\dots, n-1\} $
+			\State $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{calculateEventRates}() $ \downarrow $
+			\For{ $ x \in X $ }
+				\State $  D(x) := n_t(x) \cdot \left( d(x) + \sum_{y \in X} c(x,y) \cdot n_t(y) \right) $
+				\State $ B(x) := \underbrace{b(x) \cdot (1 - \mu) \cdot n_t(x)}_{arteigene}  $
+				\If{$ x > 0 $}
+					\State $ B(x) += \underbrace{b(x-1)\cdot n_t(x-1)}_{Mutation Links} \cdot \frac{\mu}{2} $
+				\EndIf
+				\If{$ x < n-1 $}
+					\State $ B(x) += \underbrace{b(x+1)\cdot n_t(x+1)}_{Mutation Rechts} \cdot \frac{\mu}{2} $
+				\EndIf
+				\State $ TotalTraitRate(x) = B(x) + D(x) $
+			\EndFor
+			\State $ TotalEventRate := \sum_{x \in X} TotalTraitRate(x) $
+			\State $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{sampleEventTime}() $ \downarrow $
+			\State sample $ Z \sim exp(TotalEventRate) $
+			\State $ t += Z $
 			
-			\STATE $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{choseTraitToChange}() $ \downarrow $
-			\STATE sample $ Y \sim U(0,TotalEventRate) $
-			\FOR{$ x \in X $}
-				\IF{$ Y \le TotalTraitRate(x) $}
-					\STATE $ ChosenTrait := x $
-					\STATE break
-				\ENDIF
-				\STATE $ Y -= TotalTraitRate(x) $
-			\ENDFOR
+			\State $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{choseTraitToChange}() $ \downarrow $
+			\State sample $ Y \sim U(0,TotalEventRate) $
+			\For{$ x \in X $}
+				\If{$ Y \le TotalTraitRate(x) $}
+					\State $ ChosenTrait := x $
+					\State break
+				\EndIf
+				\State $ Y -= TotalTraitRate(x) $
+			\EndFor
 			
-			\STATE $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{choseEventType()} $ \downarrow $
-			\STATE sample $ Y \sim U(0,TotalTraitRate(ChosenTrait)) $
-			\IF{$ Y \le B(ChosenTrait) $}
-				\STATE isBirht := true
-			\ELSE
-				\STATE isBirth := false
-			\ENDIF
-			
-			\STATE $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{executeEventTypeOnTrait()} $ \downarrow $
-			\IF{isBirth}
-				\STATE $ n_t(ChosenTrait) += 1 $
-			\ELSE
-				\IF{$ n_t(ChosenTrait) \ge 0 $}
-					\STATE $ n_t(ChosenTrait) -= 1 $
-				\ENDIF
-			\ENDIF
+			\State $ \qquad \downarrow $ \textcolor[rgb]{0,0,0.55}{choseEventType()} $ \downarrow $
+			\State sample $ Y \sim U(0,TotalTraitRate(ChosenTrait)) $
+			\If{$ Y \le B(ChosenTrait) $}
+				\State isBirht := true
+			\Else
+				\State isBirth := false
+			\EndIf
+			\algstore{bkbreak}
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}[H]
+		\caption{makeEvolutionStep() - Part 2}
+		\begin{algorithmic}[1]
+			\algrestore{bkbreak}
+			\State $ \qquad \downarrow $
+			\textcolor[rgb]{0,0,0.55}{executeEventTypeOnTrait()} $ \downarrow $
+			\If{isBirth}
+				\State $ n_t(ChosenTrait) += 1 $
+			\Else
+				\If{$ n_t(ChosenTrait) \ge 0 $}
+					\State $ n_t(ChosenTrait) -= 1 $
+				\EndIf
+			\EndIf
 		\end{algorithmic}
 	\end{algorithm}
 	
@@ -679,7 +687,7 @@ Dabei wird zwischen der Implementierung und dem Pseudocode unterschieden, weil b
 	In unserer Situation werden wir immer eine "uberschaubare Menge an Merkmalen haben, aber der Nutzten meiner Optimierung ist bereits ab einem Merkmal sp"urbar sein (praktisch wurde er erst ab 2 gemessen vgl. Abb. \ref{Test Results}).\\
 	Nach meinen Tests, die ich sp"ater im Kapitel "{}Verhaltenstest"{} einf"uhre, ergab sich der gr"o"ste zeitliche Aufwand in der Berechnung der Raten (genauer der Todesraten), was auch zu erwarten war.\\
 	Diese Optimierung vermeidet es die Raten komplett neu zu berechnen und m"ochte sie stattdessen anpassen. \\
-	Dazu werden die Raten nicht zu Beginn berechnet wie zuvor in Algorithmus 12 "{}makeEvolutionStep()"{} in der 1. Zeile. Als erstes wird mit den aktuellen Raten eine Ereigniszeit gezogen "{}sampleEventTime()"{} und anschlie"send ein Ereignis ausgel"ost "{}changeATrait()"{}, welches es erm"oglicht die n"achsten Raten anzupassen "{}adjustNewEventRates"{}.\\
+	Dazu werden die Raten nicht zu Beginn berechnet wie zuvor in Algorithmus 12 "{}makeEvolutionStep()"{} in der 1. Zeile. Als erstes wird mit den aktuellen Raten eine Ereigniszeit gezogen "{}sampleEventTime()"{} und anschlie"send ein Ereignis ausgel"ost "{}changeATrait()"{}, welches es erm"oglicht die n"achsten Raten anzupassen "{}adjustNewEventRates()"{}.\\
 	Daf"ur wird zun"achst unterschieden ob ein Tod oder eine Geburt eingetreten ist. Das l"asst sich leicht mit der in Algorithmus 9 erw"ahnten "{}isBirth"{} Variable entscheiden.\\
 	Angenommen es ereignet sich eine Geburt. Damit kann zusammen mit dem ausgew"ahlten Merkmal "{}chosenTrait"{} folgende Anpassungen gemacht werden:
 	\begin{itemize}
@@ -1213,16 +1221,16 @@ In diesem Kapitel geht es um TSS Prozesse und wie eine Ann"aherung dieser durch 
 	\begin{algorithm}[H]
 		\caption{isNear()}
 		\begin{algorithmic}[1]
-			\ENSURE{Bedingungen f"ur eine Interpolation}
-			\FOR{ i = 0 < n-1}
-				\IF{i $ \ne $ ChosenTrait \& Members[i] $ > 0$}
-					\RETURN false;
-				\ENDIF
-			\ENDFOR
-			\IF{$ |\text{getKMembersOf[i]} - \text{Expected[ChosenTrait]}| > \frac{0.5}{K} $}
-				\RETURN false;
-			\ENDIF
-			\RETURN true;
+			\Ensure{Bedingungen f"ur eine Interpolation}
+			\For{ i = 0 < n-1}
+				\If{i $ \ne $ ChosenTrait \& Members[i] $ > 0$}
+					\Return false;
+				\EndIf
+			\EndFor
+			\If{$ |\text{getKMembersOf[i]} - \text{Expected[ChosenTrait]}| > \frac{0.5}{K} $}
+				\Return false;
+			\EndIf
+			\Return true;
 		\end{algorithmic}
 	\end{algorithm}
 	Hier sorgt Zeile 2 in der Schleife daf"ur dass au"ser dem zuletzt aktiven kein weiteres Merkmal aktiv sein k"onnte.\\
