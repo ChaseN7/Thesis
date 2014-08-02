@@ -8,7 +8,8 @@
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{color}
-\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+\usepackage{bm}
+\usepackage[colorlinks=true, pdfborder={0 0 0}, linkcolor=blue, citecolor=magenta]{hyperref}
 
 \bibliographystyle{unsrt}
 
@@ -23,110 +24,132 @@
 \begin{document}
 
 \maketitle
-
-Um die Konvergenz zeigen zu k"onnen verwenden wir das folgende Theorem:
-
-\begin{satz}
-	Angenommen f"ur jedes kompakte $ K \subset E $,
-	\begin{align}
-		\sum_l |l| \sup_{x \in K} \beta_l(x) < \infty
-	\end{align}
-	und es existiert ein $ M_K > 0 $, so dass
-	\begin{align}
-		|F(x) - F(y)| \le M_K|y-x|,	\qquad x,y \in K
-	\end{align}
-	Angenommen $ X_n $ erf"ullt (2.3), $ \lim_{n \to \infty} X_n(0) = x_0 $, und $ X $ erf"ullt 
-	\begin{align}
-		X(t) = x_0 + \int_{0}^{t} F(X(s)) ds, \qquad t \ge 0.
-	\end{align}
-	Dann gilt f"ur jedes $ t > 0 $,
-	\begin{align}
-		\lim_{n\to \infty} \sup_{s\le t} |X_n(s) - X(s)| = 0 \qquad a.s.
-	\end{align}
-\end{satz}
-	
-\begin{satz}[\cite{ethier2009markov}, Theorem 2.1]
-	Angenommen f"ur jedes $ K \subset E $ kompakt, gilt
-	\begin{align}
-		\sum_{x \in X} |l| \sup_{n_s(x) \in K}\beta_l(n_s(x)) < \infty, \quad s \in T \subset \mathbb{R}_+
-	\end{align}
-	und es existiert ein $ M_K $, so dass:
-	\begin{align}
-		\left| F(n_s) - F(\tilde{n}_s) \right| \overset{!}{<} M_K \left| n_s - \tilde{n}_s \right|, \quad M_K \in \mathbb{R}_{+}
-	\end{align} 
-	Angenommen 
-\end{satz}
-
-
-
-
-
-
-Falls aus $ K \to \infty $ auch $ n_0^K \to n_0 $ folgt, dann l"asst sich beweisen, dass das mutationsfreie System $ \nu_t^K $ mit $ K \to \infty $ gegen ein deterministisches System konvergiert. Ein solches deterministisches System muss folgende Differentialgleichung erf"ullen:
+\section{LPA f"ur zwei Merkmale ohne Mutation}
+Falls mit $ K \to \infty $ auch $ n_0^K \to n_0 $ folgt, dann l"asst sich beweisen, dass das System gegen ein deterministisches System konvergiert $ \nu_t^K \xrightarrow{K} n_t $. Exemplarisch gehen wir von einem Fall von zwei Merkmalen ohne Mutation aus, jedoch l"asst es sich auf d Merkmale auch mit Mutation erweitern. Dieses Beispiel ist f"ur den TSS-Fall besonders interessant.\\
+Ein solches deterministisches System muss folgende Differentialgleichung erf"ullen:
 \begin{align}
 \begin{split}
-	\trvec{\dot{n}(x)}{\dot{n}(y)}{\vdots} &= \trvec{n(x) \cdot ( b(x) - d(x) - \sum_{y \in X}c(x,y)\cdot n(y)}{\dots}{\dots},\\
-	n(0) &= n_0 
+	\dot{n}(x) &= n(x) \left( b(x) - d(x) - c(x,x) n(x) - c(x,y) n(y) \right), \quad n_0(x) = n_{0,x}\\
+	\dot{n}(y) &= n(y) \left( b(y) - d(y) - c(y,y) n(y) - c(y,x) n(x) \right), \quad n_0(y) = n_{0,y} \label{Differentialgleichung}
 \end{split}
 \end{align}
 
-Die Konvergenz folgt unmittelbar aus \cite[\textbf{Thm 2.1}]{ethier2009markov}, also reicht es die Bedingungen (2.6) und (2.7) in \cite[\textbf{Thm 2.1}]{ethier2009markov} zu pr"ufen:
+Um die Konvergenz zeigen zu k"onnen verwenden wir das \cite[Kapitel 11, Thm 2.1]{ethier2009markov}. \\
+Daf"ur wird zun"achst erl"autert, ob unser Modell die Bedingungen aus \cite{ethier2009markov} erf"ullt. Zu diesem Zweck wird unser mutationsfreies Modell in eine passende Notation aus \cite{ethier2009markov} "ubersetzt.\\
+Sei $ l \in \mathbb{Z}^2 $ und $ \beta_l : \mathbb{R}^2 \to \mathbb{R}_+ $. Mit $ l $ kann man das Merkmal und Ereignis auffassen, w"ahrend $ \beta_l $ eine Ratenfunktion ist, welche die Raten eines Merkmals und Ereignissen einer Population darstellt.\\
+Nat"urlich kann bei uns nur einem Merkmal, ein Ereignis wiederfahren. Deswegen werden unsere $ l $ stets Einheitsvektoren sein die auf das Merkmal verweisen und Vorzeichen die auf das Ereignis deuten.\\
+Z.B. $ l = \tvec{0}{-1} $ meint einen Tod im zweiten Merkmal.\\
+Da $ \beta_l $ eine Population als Vektor erwartet, werden wir unsere Population mit $ n_t = \tvec{n_t(x)}{n_t(y)} $ beschreiben. Daraus ergibt sich f"ur das $ \beta $ mit obigem Beispiel:
+\[ \beta_{\binom{0}{-1}}(n_t)  = \beta_{\binom{0}{-1}}\tvec{n_t(x)}{n_t(y)} = d(y) \cdot n(y) + \left(\sum_{x \in X} c(y,x)n(x)\right) \cdot n(y) \]
+dementsprechend ist:
+\[ \beta_{\binom{1}{0}}(n_t)  = b(x)n(x) \]
+Diese Raten lassen sich mit einer Funktion $ q_L $ auch f"ur $ \nu_t^K $ formulieren \cite[Kapitel 11 - (1.12)]{ethier2009markov}:
+\begin{align*}
+	q_l: \frac{\mathbb{N}}{K} &\longrightarrow \mathbb{R}_+\\
+	q_l: \nu_t^K &\longmapsto K\beta_l\left(\frac{\nu_t}{K}\right)
+\end{align*}
+Daran erkennt man, dass sich auch die Wettbewerbsrate zu unserer ver"andert:
+\begin{align*}
+	K\beta_{\binom{-1}{0}}\left(\frac{\nu_t}{K}\right) &= K \cdot d(y)\frac{\nu_t(y)}{K} +  K \cdot \left(\sum_{x \in X} c(y,x) \cdot \frac{n(x)}{K}\right) \cdot \frac{n(y)}{K}\\
+	&= d(y) \nu_t(y) + \left(\sum_{x \in X} \frac{c(y,x)}{K} \cdot n(x)\right) \cdot n(y)\\
+	&= d(y) \nu_t(y) + \left(\sum_{x \in X} \bm{c^K(y,x)} \cdot n(x)\right) \cdot n(y)
+\end{align*}
+Die vorherigen "Ubersetzungen lassen sich leicht anhand des Generators nachvollziehen, wobei unser Generator (\ref{GeneratorDiskret}), nur ohne Mutation, das selbe ergeben soll wie: 
+\[ \sum_l \beta_l(n_t)(f(n_t + l) - f(n)) \]
+Als n"achstes kommen wir zur Definition des $ F $ welche sich aus der Gleichung \cite[Kapitel 6 - (2.2)]{ethier2009markov} ergibt:
+\[ F(n_t) = \sum_l l \beta_l (n_t) \]
+Wenn man die Summe f"ur $ l = \tvec{1}{0}, l = \tvec{-1}{0} $ betrachtet, so beschr"ankt man sich auf die erste Zeile der Funktion, also:
+\[ F(n_t)_1 = 1 \cdot \underbrace{b(x)n(x)}_{\beta_{\binom{1}{0}} (n_t)} +  (-1) \cdot ( \underbrace{d(x)n(x) + \sum_{y \in X} c(x,y)n(x))}_{\beta_{\binom{-1}{0}} (n_t)} \]
+was mit (\ref{Differentialgleichung}) "ubereinstimmt. Also gilt $ F_k(n_t) = \dot{n}_t(x_k) $, wobei $ x_k \hat{=} \text{k-te Merkmal} $.\\
+Kommen wir nun zu dem eigentlich Theorem.
+
+\begin{satz}[\cite{ethier2009markov}, Kapitel 11 - Theorem 2.1]\label{Konvegenzsatz}
+	Sei $ V \subset \mathbb{R}^2 $ kompakt,
+	\begin{align}
+		\sum_l |l| \sup_{n_t \in V} \beta_l(n_t) < \infty \label{RatenEndlich}
+	\end{align}
+	und es existiert ein $ M_V > 0 $, so dass
+	\begin{align}
+		|F(n_t) - F(\tilde{n}_t)| \le M_V|n_t - \tilde{n}_t|, \qquad n_t, \tilde{n}_t \in V \label{Lipschitz}
+	\end{align}
+	Angenommen $ \nu_t^K $ erf"ullt \cite[Kapitel 11 - (2.3)]{ethier2009markov} und $ \lim\limits_{K \to \infty} \nu_0^K = n_0 $, und n erf"ullt
+	\begin{align}
+		n_t = n_0 + \int_{0}^{t} F(n_s) ds, \qquad t \ge 0 \label{Integralgleichung}
+	\end{align}
+	F"ur jedes $ t > 0 $,
+	\begin{align}
+		\lim\limits_{K \to \infty} \sup_{s \le t} | \nu_t^K - n_t | = 0 \quad f.s. \label{Kovergenzbehauptung}
+	\end{align}
+\end{satz}
+
+Es bleibt also zu zeigen, dass unser Modell die Bedingungen aus Satz \ref{Konvegenzsatz}, bzw. aus \cite[Kap. 11 - \textbf{Theorem 2.1}]{ethier2009markov} erf"ullt.
 
 \begin{satz}
-	Unser Modell erf"ullt die Bedingungen von \cite[\textbf{Theorem 2.1}]{ethier2009markov}.
+	Unser mutationsfreies Modell erf"ullt die Bedingungen von \cite[Kap. 11 - \textbf{Theorem 2.1}]{ethier2009markov}.
 \end{satz}
 
 \begin{proof}
-	Wir gehen zun"achst von einer dimorphen Population $ X = \{x,y\} $ aus. Dann sind:\\ 
-	\[ n_1 = \tvec{n_1^x}{n_1^y}, \quad n_2 = \tvec{n_2^x}{n_2^y} \]
+	Wir gehen zun"achst von einer dimorphen Population $ X = \{x,y\} $ aus. Seien
+	\[ n_1 = \tvec{n_1(x)}{n_1(y)}, \quad n_2 = \tvec{n_2(x)}{n_2(y)} \]
 	zwei L"osungen der Differentialgleichung
 	\begin{align}
-		F\tvec{n^x}{n^y} = \tvec{\dot{n}^x}{\dot{n}^y} =  \tvec{n^x(b(x)-d(x)-c(x,x)n^x-c(x,y)n^y)}{n^y(b(y)-d(y)-c(y,y)n^y-c(y,x)n^x)}
-		\label{nDGL}
-	\end{align}
-	ausgewertet zu einem Zeitpunkt $ s \in \mathbb{R}_{+} $.\\
-	\textbf{Endliche Raten:}\\
-	Bedingung 2.6 aus \cite[\textbf{Thm 2.1}]{ethier2009markov} zu pr"ufen ist in unserem Fall sehr einfach. Unser Merkmalsraum und die verwendeten Raten sind endlich. Damit haben wir stets eine endliche Summe "uber endliche Raten, welche nat"urlich wieder endlich ist.\\
-	\textbf{Lipschitz-Stetigkeit:}\\
-	Bedingung 2.7 aus \cite[\textbf{Thm 2.1}]{ethier2009markov} fordert die Lipschitz-Stetigkeit f"ur 
-	\[ \left| F\tvec{n_1^x}{n_1^y} - F\tvec{n_2^x}{n_2^y} \right| \overset{!}{<} M_K \left| \tvec{n_1^x}{n_1^y} - \tvec{n_2^x}{n_2^y} \right|, \quad M_K \in \mathbb{R}_{+} \]
-	Zun"achst w"ahlen wir $ \eps := |n_1 - n_2| = \sqrt{|n_1^x - n_2^x|^2 + |n_1^y - n_2^y|^2} $, daraus folgt:
-	\begin{align}
 	\begin{split}
-		|n_1^x - n_2^x| \le \eps\\
-		|n_1^y - n_2^y| \le \eps \label{epsAbsch}
+	F\tvec{n(x)}{n(y)} = \tvec{\dot{n}(x)}{\dot{n}(y)} =  \tvec{n(x)(b(x)-d(x)-c(x,x)n(x)-c(x,y)n(y))}{n(y)(b(y)-d(y)-c(y,y)n(y)-c(y,x)n(x))}\label{nDGL}
 	\end{split}
 	\end{align}
-	Falls es ein $ c \in \mathbb{R}_{+} $ gibt mit
+	ausgewertet zu einem Zeitpunkt $ s \in \mathbb{R}_{+} $.\\
+
+	\textbf{Bedingung (\ref{RatenEndlich})} bzw. \cite[Kapitel 11 - \textbf{Thm 2.1} (2.6)]{ethier2009markov} zu pr"ufen ist in unserem Fall sehr einfach.
+	Unser Merkmalsraum und die verwendeten Raten sind endlich. Damit haben wir stets eine endliche Summe "uber endliche Raten, welche nat"urlich wieder endlich ist. Das gilt f"ur jedes $ n_t \in V $, da wir wie in \cite{fournier2004microscopic}, nur endliche Raten zulassen.\\
+
+	\textbf{Bedingung (\ref{Lipschitz})} bzw. \cite[Kapitel 11 - \textbf{Thm 2.1} (2.7)]{ethier2009markov} fordert
+	\[ \left| F\tvec{n_1(x)}{n_1(y)} - F\tvec{n_2(x)}{n_2(y)} \right| < M_V \left| \tvec{n_1(x)}{n_1(y)} - \tvec{n_2(x)}{n_2(y)} \right|, \quad M_V \in \mathbb{R}_{+} \]
+	f"ur $ n_1, n_2 \in V $. Es ist klar dass
 	\begin{align}
 	\begin{split}
-		|F(n_1)_1 - F(n_2)_1| &\le \eps \cdot c\\
-		|F(n_1)_2 - F(n_2)_2| &\le \eps \cdot c \label{BeweisLipschitz}
+		|n_1(x) - n_2(x)| \le |n_1 - n_2|\\
+		|n_1(y) - n_2(y)| \le |n_1 - n_2| \label{epsAbsch}
+	\end{split}
+	\end{align}
+	Falls es ein $ c_V \in \mathbb{R}_{+} $ gibt mit
+	\begin{align}
+	\begin{split}
+		|F(n_1)_1 - F(n_2)_1| &\le |n_1 - n_2| \cdot c_V\\
+		|F(n_1)_2 - F(n_2)_2| &\le |n_1 - n_2| \cdot c_V \label{BeweisLipschitz}
 	\end{split}
 	\end{align}
 	So folgt wegen 
 	\begin{align}
 	\begin{split}
 		|F(n_1) - F(n_2)| &= \sqrt{(F(n_1)_1 - F(n_2)_1)^2 + (F(n_1)_2 - F(n_2)_2)^2}\\
-		&\le \sqrt{(\eps \cdot c)^2 + (\eps \cdot c)^2}\\
-		&= \sqrt{2} \cdot \eps \cdot c < \infty \Rightarrow \text{Behauptung}
+		&\le \sqrt{(|n_1 - n_2| \cdot c_V)^2 + (|n_1 - n_2| \cdot c_V)^2}\\
+		&= |n_1 - n_2| \cdot \underbrace{\sqrt{2} \cdot c_V}_{< \infty} = |n_1 - n_2| \cdot M_V \Rightarrow (\ref{Lipschitz})
 		\label{epsBehauptung}
 	\end{split}
 	\end{align}
-	Also bleibt nur noch (\ref{BeweisLipschitz}) zu pr"ufen. F"ur $ F_1 $ und $ F_2 $ ist dabei das Vorgehen analog, daher wird nur $ F_1 $ vorgestellt:\\
+	Also bleibt nur noch (\ref{BeweisLipschitz}) zu pr"ufen. Dabei ben"otigen wir, dass $ |n_1(x)| + |n_2(x)| $ beschr"ankt ist. Das ergibt sich aus der Voraussetzung, dass $ V $ kompakt ist und wir $ n_1, n_2 \in V $ w"ahlen. Diese Wahl ist f"ur unser Modell sinnvoll, weil unsere Population mit einer endlichen Anfangsbedingung startet und bis zu einem festen Zeitpunkt $ t > 0 $ stets endliche Werte annimmt. Dass unsere Population durch die selbe ohne Todesraten zu jedem Zeitpunkt endlich beschr"ankt ist (also $ n_t(x) = b(x) \cdot t $) begr"undet diese Endlichkeit.\\
+	F"ur $ F_1 $ und $ F_2 $ ist dabei das Vorgehen analog, daher wird nur $ F_1 $ vorgestellt:\\
 	\begin{align*}
-		|F(n_1)_1 - F(n_2)_1| & = |(n_1^x - n_2^x)(b(x) - d(x)) - ((n_1^x)^2 - (n_2^x)^2) \cdot c(x,x)\\
-		&  - ((n_1^y)^2 - (n_2^y)^2) \cdot c(x,y) |\\
-		& \le  |\underbrace{\textcolor{blue}{(n_1^x - n_2^x)}}_{ \le \eps}(b(x) - d(x)) |\\
-		& + | \textcolor{blue}{(n_1^x - n_2^x)}(n_1^x + n_2^x) \cdot c(x,x) | \\
-		& + | \textcolor{blue}{(n_1^y - n_2^y)}(n_1^y + n_2^y) \cdot c(x,y) |\\
-		& \le \eps \cdot (| b(x) - d(x) | +  |\underbrace{n_1^x + n_2^x}_{\text{beschr"ankt}}| c(x,x) + | n_1^y + n_2^y | \cdot c(x,y))\\
-		& \le \eps \cdot ( c_1 + c_2 \cdot c(x,x) + c_3 \cdot c(x,y) )\\
-		& = \eps \cdot c
+		|F(n_1)_1 - F(n_2)_1| & = |(n_1(x) - n_2(x))(b(x) - d(x)) \\
+		& - ((n_1(x))^2 - (n_2(x))^2) \cdot c(x,x)\\
+		& - ((n_1(y))^2 - (n_2(y))^2) \cdot c(x,y) |\\
+		& \le  |\underbrace{(n_1(x) - n_2(x))}_{ \le |n_1 - n_2|}(b(x) - d(x)) |\\
+		& + | (n_1(x) - n_2(x))(n_1(x) + n_2(x)) \cdot c(x,x) | \\
+		& + | (n_1(y) - n_2(y))(n_1(y) + n_2(y)) \cdot c(x,y) |\\
+		& \le |n_1 - n_2| \cdot | b(x) - d(x) | \\
+		& +  |n_1 - n_2| \cdot |\underbrace{n_1(x) + n_2(x)}_{\text{beschr"ankt}}| c(x,x) \\
+		& + |n_1 - n_2| \cdot | n_1(y) + n_2(y) | \cdot c(x,y)\\
+		& \le |n_1 - n_2| \cdot ( c_1 + c_{2,V} \cdot c(x,x) + c_{3,V} \cdot c(x,y) )\\
+		& = |n_1 - n_2| \cdot c_V
 	\end{align*}
 	wie schon erw"ahnt folgt durch analoges Vorgehen f"ur $ y $, dass (\ref{epsAbsch}) f"ur unser Modell gilt.\\ 
-	Tats"achlich kann f"ur F"alle mit mehr als 2 Merkmalen durch analoges Vorgehen die selben Absch"atzungen gemacht werden die alle zum gleichen Ergebnis f"uhren.\\
-	Schlie"slich folgt f"ur alle F"alle durch (\ref{epsBehauptung}) die Behauptung.
+	Tats"achlich kann f"ur F"alle mit mehr als 2 Merkmalen durch analoges Vorgehen die selben Absch"atzungen gemacht werden, die ebenso (\ref{Lipschitz}) best"atigen.\\
+	
+	\cite[Kapitel 11 - \textbf{(2.3)}]{ethier2009markov} bleibt dem Leser "uberlassen, folgt aber aus \cite[Kapitel 6 - (2.1)]{ethier2009markov}.\\
+	Und \textbf{Bedingung (\ref{Integralgleichung})} folgt direkt aus unserer Definition
+	\[ n_t = n_0 + \int_{0}^{t} \dot{n}_s ds = n_0 + \int_{0}^{t} F(n_s) ds \]
+	womit alle Bedingungen f"ur (\ref{Konvegenzsatz}) erf"ullt sind und wir die Konvergenz (\ref{Kovergenzbehauptung}) nachgewiesen haben.
 \end{proof}
+	
 \bibliography{science1}
 \end{document}
