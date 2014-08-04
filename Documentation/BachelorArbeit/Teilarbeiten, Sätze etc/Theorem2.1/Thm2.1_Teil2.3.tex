@@ -1,0 +1,42 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{bm}
+\usepackage[colorlinks=true, pdfborder={0 0 0}, linkcolor=blue, citecolor=magenta]{hyperref}
+
+\bibliographystyle{unsrt}
+
+\title{Theorem 2.1}
+
+\theoremstyle{plain}
+\newtheorem{satz}{Satz}
+\newcommand{\eps}{\ensuremath{\varepsilon}}
+\newcommand{\tvec}[2]{\begin{pmatrix}#1\\#2\end{pmatrix}}
+\newcommand{\trvec}[3]{\begin{pmatrix}#1\\#2\\#3\end{pmatrix}}
+
+\begin{document}
+
+\maketitle
+\section*{Teil 2.3}
+Um Teil (2.3) aus \cite[Kapitel 11]{ethier2009markov} nachzuweisen, verwenden wir zun"achst aus dem selben Abschnitt die Darstellung von $ \nu_t^K $ als unskalierten Prozess $ K\cdot \nu_t^K = \hat{\nu_t}^K \in \mathbb{N}^2 $ durch
+\begin{align}
+	\hat{\nu_t}^K = \hat{\nu}_0^K + \sum_{l} l Y \left( n \int_{0}^{t} \beta_l\left(\frac{\hat{\nu_s}^K}{K}\right) ds \right)
+\end{align}
+Dabei sind die $ Y_l $ unabh"angige standard Poisson Prozesse, die unsere Tode und Geburten auf jedem Merkmal bestimmen. Wir erkennen dass die Summe tats"achlich den Verlauf unseres Markov Prozesses darstellt.\\
+Schlie"slich wird f"ur Teil (2.3) aus \cite[Kapitel 11]{ethier2009markov} lediglich gefordert, dass unser Prozess $ \nu_t^K $ durch $ \nu_t^K = \frac{\hat{\nu_t}^K}{K} $ die Gleichung
+\begin{align}
+	\nu_t^K = \nu_0^K + \sum_{l} \frac{l}{K} \widetilde{Y}_l \left( n \int_{0}^{t} \beta_l(\nu_s^K) ds \right) + \int_{0}^{t} F(\nu_s^K) ds,
+\end{align}
+wobei $ \widetilde{Y}_l(u) = Y_l(u) - u $ ein am Erwartungswert zentrierter Poisson Prozess ist, erf"ullt.\\
+Wir bemerken, dass hier neben der Skalierung $ \frac{1}{K} $, nur das Superpositionsprinzip Anwendung gefunden hat. Statt mit dem Poisson Prozess die Entwicklung der Geburten und Tode zu beschreiben, wird hier die skalierte Abweichung der Geburten und Tode beschrieben und zum erwarteten Wert erg"anzt. Also ist die Annahme (2.3) f"ur unseren Prozess zutreffend.
+
+	
+\bibliography{science1}
+\end{document}
