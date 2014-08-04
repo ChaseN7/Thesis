@@ -161,16 +161,16 @@ int GraphClass::makeTSSIterations(const int maxIt)
         iterateGraphPoint(time, chosen);
         if(isNearTSS(chosen)){
             iterateMutationPoint(time, chosen);
-            if(chosen == 1)
-                qDebug()<<"1. Invasion:"<<time;
-            if(chosen == 2)
-                qDebug()<<"2. Invasion:"<<time;
+//            if(chosen == 1)
+//                qDebug()<<"1. Invasion:"<<time;
+//            if(chosen == 2)
+//                qDebug()<<"2. Invasion:"<<time;
         }
         if(Manager.getKMembers(2) >= ExpectedMonomorph[2] - jumpedSteps/TraitClass::K ){
-            for(int i = 0; i < TraitClass::Size; ++i){
-                qDebug()<< i+1 <<". Birthrate"<< Manager.Trait[i].TotalBirthRate;
-            }
-            qDebug()<<"Terminated after:"<<time;
+//            for(int i = 0; i < TraitClass::Size; ++i){
+//                qDebug()<< i+1 <<". Birthrate"<< Manager.Trait[i].TotalBirthRate;
+//            }
+//            qDebug()<<"Terminated after:"<<time;
             return i*jumpedSteps;
         }
     }

@@ -167,14 +167,16 @@
   Timestamp                = {2014.07.13}
 }
 
-@MastersThesis{Silke,
+@Standard{Silke,
   Title                    = {Stochastische Modelle der Populationsdynamik},
+  Institution              = {Universität Bonn},
   Author                   = {Silke Völk},
-  School                   = {Friedrich Wilhelms Universität Bonn},
-  Year                     = {2010},
   Month                    = {August},
+  Type                     = {Bachelorarbeit},
+  Year                     = {2010},
 
   Owner                    = {Boris},
+  School                   = {Friedrich Wilhelms Universität Bonn},
   Timestamp                = {2014.08.01}
 }
 
