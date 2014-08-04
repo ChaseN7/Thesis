@@ -732,6 +732,7 @@ Zunächst sei gesagt, dass die Programme zum Zeitpunkt der Erstellung der Bachel
 		Der zweite Bereich organisiert alle Daten, die die Simulation anfragen kann. Hier liegen der eigentliche Speicher und die Kommunikation zwischen GUI und Algorithmus.\\
 		Es ist eine Art Hilfsklasse, die eine Kommunikation zwischen den Modulen ermöglicht. Zu diesem Zweck wurde hier bereits die Qt-Bibliothek verwendet, um Daten für die GUI abholbereit anzubieten.\\
 		Sie erhält die Wünsche des Users in Form von Anweisungen aus der "{}GUI"{} und verwendet die Möglichkeiten des "{}Population Kernel"{}, um entsprechende Daten abrufbereit zu erstellen.
+		\newpage
 		\item [\textbf{3.}] "{}GUI"{}\\
 		Das letzte und unflexibelste Modul umfasst die grafische Benutzungsoberfläche. Hier kommen zwei wichtige Klassen zum Einsatz.\\
 		Die erste, "{}MainWindow"{}, ist das Hauptfenster, in dem der Nutzer die Parameter festlegen und, wenn alles stimmt, auch die Simulation starten kann. Für eine möglichst große Übersicht bei der Analyse der Ergebnisse, verwendet das Hauptfenster eine weitere Klasse, "{}PlotWindow"{}, welche ein extra Fenster mit Graphen öffnet (Plot-Fenster).\\
@@ -780,9 +781,9 @@ Zunächst sei gesagt, dass die Programme zum Zeitpunkt der Erstellung der Bachel
 	\begin{minipage}{0.15\textwidth}
 		\begin{figure}[H]
 			\centering
-			\includegraphics[width=1\linewidth]{./Pictures/Parameter}
-			\caption[Parameter]{Datei}
-			\label{Parameter}
+			\includegraphics[width=0.9\linewidth]{./Pictures/Parameter}
+%			\caption[Parameter]{Datei}
+%			\label{Parameter}
 		\end{figure}
 	\end{minipage}
 	$ \quad $
@@ -798,7 +799,7 @@ Zunächst sei gesagt, dass die Programme zum Zeitpunkt der Erstellung der Bachel
 	
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\linewidth]{./Pictures/MainWindow_Start}
+		\includegraphics[width=0.92\linewidth]{./Pictures/MainWindow_Start}
 		\caption[Startwindow]{MainWindow nach dem Start}
 		\label{MainWindow_Start}
 	\end{figure}
@@ -903,14 +904,14 @@ Zunächst sei gesagt, dass die Programme zum Zeitpunkt der Erstellung der Bachel
 	Als Beispiel dient Abbildung \ref{PlotWindow_zoomedBPDLmaximized}, welche durch Heranzoomen und Bewegen sowie maximierte Fenstergröße (vgl. kleine Legende) erstellt wurde.
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\linewidth]{./Pictures/PlotWindow_zoomedBPDLmaximized}
+		\includegraphics[width=0.9\linewidth]{./Pictures/PlotWindow_zoomedBPDLmaximized}
 		\caption[PlotWindow]{PlotWindow mit Dimorpher Population}
 		\label{PlotWindow_zoomedBPDLmaximized}
 	\end{figure}
 	Man kann sogar soweit skalieren, bis die Ereignisse lokal zählbar werden und der Plot eine Größe hat, in der das Messgitter eine Sprungmaschenweite hat:
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=1\linewidth]{./Pictures/PlotWindow_zoomedBPDL_Stepview}
+		\includegraphics[width=0.9\linewidth]{./Pictures/PlotWindow_zoomedBPDL_Stepview}
 		\caption[PlotWindow]{PlotWindow mit Dimorpher Population}
 		\label{PlotWindow_zoomedBPDL_Stepview}
 	\end{figure}	
@@ -1009,7 +1010,7 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	
 	\begin{tabular}{c l}
 		\underline{Erwartet}: 		& $ D(y) =  d(y) \cdot n(y) + n_0(y) \cdot \sum_{w \in X} c(y,w) \cdot n_0(w) $\\
-						& $ = 500 + 25000 = 25500$\\\\
+						& $ = 500 + 25000 = 25500$\\
 		\underline{Testergebnis}: 	& $ \trvec{30500}{25500}{40500} $
 	\end{tabular}\\\\
 	Wie erwartet bestätigt sich das Ergebnis für $ y $. In Abbildung \ref{Test Results} kann man die Ausführung aller drei Tests verfolgen.\\
@@ -1020,7 +1021,7 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	
 	\begin{tabular}{c l}
 		\underline{Erwartet}: 		& $ B(y) = (1-\mu) \cdot b(y) \cdot n_0(y) + \frac{\mu}{2} \cdot \left( \sum_{w \in X} b(w) \cdot n_0(w) \right) $\\
-						& $ = 10 \cdot 100 + 0.05 \cdot (10 \cdot 100 + 10 \cdot 100) = 1000$\\\\
+						& $ = 10 \cdot 100 + 0.05 \cdot (10 \cdot 100 + 10 \cdot 100) = 1000$\\
 		\underline{Testergebnis}: 	& $ \trvec{950}{1000}{950} $
 	\end{tabular}\\\\
 	Die Geburtenraten unterscheiden sich nur zwischen Rand und Innerem um  $ 50 $, da wir die mutative Geburtenrate $ 0.05 \cdot 10 \cdot 100 = 50 $ von links und rechts an Randmerkmalen natürlich nur einmal erhalten.\\
@@ -1030,13 +1031,13 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	
 	\begin{tabular}{c l}
 		\underline{Erwartet}: 		& $ B(y) + D(y) = $\\
-						& $ 1000 + 25500 $, bzw. $ \trvec{950}{1000}{950} + \trvec{30500}{25500}{40500} = \trvec{31450}{26500}{41450} $\\\\
+						& $ 1000 + 25500 $, bzw. $ \trvec{950}{1000}{950} + \trvec{30500}{25500}{40500} = \trvec{31450}{26500}{41450} $\\
 		\underline{Testergebnis}: 	& $ \trvec{31450}{26500}{41450} $
 	\end{tabular}\\\\
 	Schließlich folgt daraus auch die Totale Ereignisrate:\\
 	
 	\begin{tabular}{c l}
-		\underline{Erwartet}: 		& $ 31450 + 26500 + 41450 = 99400 $\\\\
+		\underline{Erwartet}: 		& $ 31450 + 26500 + 41450 = 99400 $\\
 		\underline{Testergebnis}: 	& $ 99400 $
 	\end{tabular}\\\\
 	Das beendet die wesentlichen Tests zur Berechnung der Raten.
@@ -1061,7 +1062,8 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	Nach der Schleife wird das Mittel gezogen und auf eine absolute Genauigkeit von $ 99.95\% $ geprüft. Die Testergebnisse lagen in der Regel bei einem Fehler um $ 0.002\% $.\\
 	
 	\subsubsection{Veränderung der Population}
-	Ich komme nun zum letzten Bereich der Aufteilung aus Abbildung \ref{fig:PseudoCodeForBThesis}, Ebene 1.\\
+	Hier wird der letzte Bereich aus Abbildung \ref{fig:PseudoCodeForBThesis}, Ebene 1, vorgestellt.\\
+%	Ich komme nun zum letzten Bereich der Aufteilung aus Abbildung \ref{fig:PseudoCodeForBThesis}, Ebene 1.\\
 	
 	\textbf{Merkmal auswählen}\\
 	Um zu verifizieren, dass die Merkmale korrekt den Ereignissen zugeteilt werden, wurde ein Histogramm der Wahlen erstellt. Genau gesagt wurde 100.000 mal entschieden, welches Merkmal ein Ereignis auslösen wird.\\
@@ -1078,7 +1080,7 @@ Das Konzept des TDD kann durch die Zusammenarbeit dreier Punkte aus \cite{martin
 	Hier wurde zunächst geprüft, ob das vom Programm ermittelte Gleichgewicht wirklich richtig berechnet wurde.\\
 	Schließlich wurde für dimorphe und monomorphe Populationen getestet, ob und wie gut die Konvergenz für wachsende K zum Gleichgewicht abläuft. Hierzu wurden 1.000.000 Sprünge des Prozesses mit $ K = 10 $ und $ K = 10.000 $ gemacht. Für $ K = 10 $ bewegt sich der Fehler um $ 0.1\% $ und für $ K = 10.000 $ um $ 0.001\% $. Besonders bei großem $ K $ konnte man beobachten, dass der Fehler oft mit der dimorphen Population korreliert, d.h. beide vergleichbar gering oder hoch sind.
 	
-	
+\clearpage	
 \section{TSS-Prozesse}
 In diesem Kapitel geht es um TSS-Prozesse und wie eine Annäherung dieser durch unsere Simulation gelöst wurde.
 	\subsection{Invasion}
@@ -1206,9 +1208,9 @@ In diesem Kapitel geht es um TSS-Prozesse und wie eine Annäherung dieser durch 
 	\textbf{Aufwand}\\
 	Eine Besonderheit lässt sich zum Schluss noch betonen. Durch die Interpolation ist der Aufwand der Berechnung nicht mehr allein von K abhängig, sondern besonders von der Anzahl der erwarteten Mutationen und der Anzahl der erwarteten Invasionen.
 	
-
+\newpage
 \section{Schlusswort}
-\subsection{Ausblick}
+%\subsection{Ausblick}
 Schon früh war klar, dass noch viele Möglichkeiten offen bleiben werden, wie die Simulation erweitert werden kann. Einige größere Anpassungen, von denen auch welche nach dem Erstellen dieser Arbeit umgesetzt werden, werden hier kurz vorgestellt:
 \begin{itemize}
 	\item[1.] Dank der hier verwendeten Art der Implementierung ist das Erweitern des Programmkerns auf alternative Modelle denkbar einfach. So wäre es sehr einfach die Mutationswahrscheinlichkeit nicht nur mit gleichen Teilen auf die Nachbarn zu verteilen, sondern eine individuelle Wahrscheinlichkeit auf beliebige Merkmale. Dazu müssen nur die Einlesefunktion der Parameter und die Berechnung der mutativen Geburtenrate verändert werden. Alle anderen Teile des Programms wären davon unbeeinflusst. Insbesondere garantieren die bereits geschriebenen Tests, dass bei einer Veränderung am Programmkern keine unbemerkten negativen Effekte auftreten. Natürlich wäre damit das Abbruchkriterium der TSS-Simulation hinfällig, aber es würde keine Fehler verursachen.
