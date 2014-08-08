@@ -6,10 +6,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{color}
-%\usepackage{algorithmicx}
-%\usepackage[compatible]{algpseudocode}
 \usepackage{algorithm}
-%\usepackage{algorithmic}
 \usepackage{algpseudocode}
 \usepackage{makeidx}
 \usepackage{graphicx}
@@ -97,7 +94,7 @@ Ziel ist es, zwei spezielle BPDL-Grenzwert-Prozesse zu simulieren.
 	
 	\begin{tabular}{ r p{18em} }
 		$ b(x) \cdot (1 - \mu) $ & Ist die arteigene Geburtenrate eines Individuums mit Merkmal $ x $, also mutationsfreie Geburten.\\
-		$ d(x) + \sum_{i=1}^{N_t} c(x, x_i) $ & Ist die gesamte Todesrate eines Individuums mit Merkmal x (mit $ N_t \hat{=} $ \#Individuen zur Zeit t mit Merkmal $ x $ und $ x_i $ das Merkmal des i-ten Individuums).\\
+		$ d(x) + \sum_{i=1}^{N_t} c(x, x_i) $ & Ist die gesamte Todesrate eines Individuums mit Merkmal $ x $ (mit $ N_t \hat{=} $ \#Individuen zur Zeit t und $ x_i $ das Merkmal des i-ten Individuums).\\
 		$ d(x) + \sum_{y \in X} c(x,y) \cdot n_t(y) $ & Ist auch die gesamte Todesrate, diesmal jedoch über die Merkmale summiert, mit $ n_t(x) \hat{=} \text{\#Individuen}$ zur Zeit t mit Merkmal $ x $.
 	\end{tabular}\\
 	
@@ -303,7 +300,7 @@ In diesem Kapitel werden Eigenschaften des Prozesses näher untersucht, die spä
 		\end{split}
 		\end{align}
 		Also bleibt nur noch (\ref{BeweisLipschitz}) zu prüfen. Dabei wird benötigt, dass $ |n_1(x)| + |n_2(x)| $ beschränkt ist. Das ergibt sich aus der Voraussetzung, dass $ V $ kompakt ist und $ n_1, n_2 \in V $ gewählt wurden. Diese Wahl ist für unser Modell sinnvoll, weil unsere Population mit einer endlichen Anfangsbedingung startet und bis zu einem festen Zeitpunkt $ t > 0 $ stets endliche Werte annimmt. Die Endlichkeit zu jedem Zeitpunkt $ t > 0 $ kann dadurch begründet werden, dass unsere Population durch eine identische ohne Todesraten zu jedem Zeitpunkt von dieser beschränkt wäre (also $ n_t(x) = b(x) \cdot t $).\\
-		Für $ F_1 $ und $ F_2 $ ist dabei das Vorgehen analog, daher wird nur $ F_1 $ vorgestellt:\\
+		Für $ F_1 $ und $ F_2 $ ist dabei das Vorgehen analog, daher wird nur $ F_1 $ vorgestellt:
 		\begin{align*}
 			|F(n_1)_1 - F(n_2)_1| & = |(n_1(x) - n_2(x))(b(x) - d(x)) \\
 			& - ((n_1(x))^2 - (n_2(x))^2) \cdot c(x,x)\\
