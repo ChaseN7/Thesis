@@ -161,17 +161,29 @@
 		Die LPA Normalisierung erweitert die Betrachtung auf die Ebene der Population. 
 		\pause
 		Dazu:
-%		\[ \nu_t^K := \frac{1}{K} \nu_t \]
-%		\pause
-%		Mit Anpassungen:
 		\begin{itemize}
-			\item $ \nu_t^K := \frac{1}{K} \nu_t $ \pause
-			\item $ n_0^K $ wird proportional zu K gewählt \pause
-%			\pause
-%			\item Raten für Geburten und natürliche Tode der Individuen bleiben unverändert
-			\item Jedoch: $ c^K = \frac{c}{K} $\pause
-			\item proportionale Anpassung von $ \mu $
+			\item $ \nu_t^K := \frac{1}{K} \nu_t $. \pause
+			\item $ n_0^K $ wird proportional zu K gewählt. \pause
+			\item $ b(x), d(x) $ bleiben nat"urlich unver"andert. \pause
+			\item Jedoch $ c^K(x,y) = \frac{c(x,y)}{K} $.
 		\end{itemize}
+	\begin{center}
+	\end{center}
+	\end{minipage}\\
+\end{frame}
+
+\begin{frame}
+	\frametitle{Normalisierung}
+\begin{minipage}{0.49\textwidth}
+		\begin{figure}
+		\centering		
+		\includegraphics[width=1\linewidth]<1->{./Pictures/LPANormalisierungK100}%
+		\\\includegraphics[width=1\linewidth]<2->{./Pictures/LPANormalisierungK10000}%
+		\end{figure}
+	\end{minipage}
+	\begin{minipage}{0.49\textwidth}
+		Eine Simulation eines normalisierten BPDL-Prozesses mit zwei Merkmalen w"urde somit deutlich flacher werden, so dass sich die Auswirkungen der einzelnen Ereignisse nicht mehr verfolgen lassen.
+		\pause
 	\begin{center}
 	\end{center}
 	\end{minipage}\\
