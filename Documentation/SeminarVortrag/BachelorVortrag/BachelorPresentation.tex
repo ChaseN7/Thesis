@@ -127,10 +127,7 @@
 				\item<4-> Auf diese selbe Weise lassen sich weitere Ereignisraten formulieren.
 		\end{itemize}
 	\end{center}
-	\end{minipage}\\
-%	\visible<4>{\rule{0.3\textwidth}{0.4pt}\\
-%		Auf diese selbe Weise lassen sich weitere Ereignisraten formulieren.}
-	
+	\end{minipage}
 \end{frame}
 
 \begin{frame}
@@ -148,7 +145,7 @@
 \end{frame}
 
 \section{Eigenschaften des BPDL-Prozesses}
-
+\subsection{LPA-Normalisierung}
 \begin{frame}
 	\frametitle{Normalisierung}
 \begin{minipage}{0.49\textwidth}
@@ -158,7 +155,7 @@
 		\end{figure}
 	\end{minipage}
 	\begin{minipage}{0.49\textwidth}
-		Die LPA Normalisierung erweitert die Betrachtung auf die Ebene der Population. 
+		Die LPA Normalisierung erweitert die Betrachtung auf die Ebene der Population.
 		\pause
 		Dazu:
 		\begin{itemize}
@@ -169,7 +166,7 @@
 		\end{itemize}
 	\begin{center}
 	\end{center}
-	\end{minipage}\\
+	\end{minipage}
 \end{frame}
 
 \begin{frame}
@@ -177,16 +174,60 @@
 \begin{minipage}{0.49\textwidth}
 		\begin{figure}
 		\centering		
-		\includegraphics[width=1\linewidth]<1->{./Pictures/LPANormalisierungK100}%
-		\\\includegraphics[width=1\linewidth]<2->{./Pictures/LPANormalisierungK10000}%
+		\includegraphics[width=1\linewidth]{./Pictures/LPANormalisierungK100}%
+		\\\includegraphics[width=1\linewidth]{./Pictures/LPANormalisierungK10000}%
 		\end{figure}
 	\end{minipage}
 	\begin{minipage}{0.49\textwidth}
-		Eine Simulation eines normalisierten BPDL-Prozesses mit zwei Merkmalen w"urde somit deutlich flacher werden, so dass sich die Auswirkungen der einzelnen Ereignisse nicht mehr verfolgen lassen.
-		\pause
+		Bsp. einer LPA-Normalisierung mit $ K = 100 \text{ und } K = 10000 $:
+		\begin{itemize}
+			\item Flacherer Verlauf der zeitlichen Entwicklung.\pause
+			\item Einzelne Ereignisse lassen sich nicht mehr nachvollziehen.\pause
+			\item Mit wachsendem K wird der Prozess zunehmend deterministisch und weicht immer weniger von anderen Simulationen ab.
+		\end{itemize}
 	\begin{center}
 	\end{center}
 	\end{minipage}\\
 \end{frame}
+
+\begin{frame}{Konvergenz}
+	Tats"achlich konvergiert der Prozess mit $ K \to \infty $.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Gleichgewicht}
+	Im stabilen Zustand ändert sich die Populationsgröße nicht mehr:
+	\pause
+	\begin{itemize}
+		\item Für Monomorphe Population:
+			\begin{align*}
+			0 & = \dot{n} = (b(x) - d(x) - \bar{n}c(x,x))\bar{n}\\
+			\bar{n}_x &= \frac{\left[ b(x)-d(x) \right]_+}{c(x,x)}
+			\end{align*}
+			\pause
+		\item Für Dimorphe Population:
+			\[ n_x = \frac{(b(x) - d(x))c(y,y)-(b(y)-d(y))c(x,y)}{c(y,y)c(x,x) - c(y,x)c(x,y)} \]
+			oder $ (\bar{n}_x, 0)$, $ (0, \bar{n}_y)$ bzw. $ (0,0) $
+	\end{itemize}
+\end{frame}
+
+\subsection{Fitness}
+\begin{frame}
+	\frametitle{Fitness-Funktion}
+	\[ f(x,y) = b(x) - d(x) - c(x,y)\bar{n}_y \]\pause
+	\begin{itemize}
+		\item Sie gibt an wie gut sich ein Merkmal durchsetzten kann
+		\item Asymptotische Wachstumsrate von y, wenn x im Zustand $ \bar{n}_x $ ist und y nur wenige Individuen hat
+		\item Ermöglicht Aussagen über die Überlebenswahrscheinlichkeit einer Mutation
+		\item Ermöglicht Aussagen über die angenommenen stabilen Zustände.
+	\end{itemize}
+	\pause
+	Da wir nur eine Mutation zu den Nachbarn berücksichtigen, ist unsere Fitness Matrix eine Bandmatrix
+\end{frame}
+
+\begin{frame}{TSS-Prozesse}
+	Ein besonderer Grenzwert Prozess ist der TSS-Prozess.
+\end{frame}
+
 \end{document}
 % ä Ä ö Ö ü Ü
