@@ -269,11 +269,11 @@
 
 \section{Simulation}
 \begin{frame}{Was und wie wird simuliert?}
-	\begin{itemize}
-		\item Ein Sprung des BPDL-Prozesses (evolution step).
+	\begin{itemize}\pause
+		\item Ein Sprung des BPDL-Prozesses (evolution step).\pause
 		\item Implementation: Sorgf"altige Trennung der Aufgaben.\\
-			Pseudocode: Gesamter Arbeitsablauf.
-		\item "Ubersichtlich und mit transparentem Ablauf.\pause
+			Pseudocode: Gesamter Arbeitsablauf.\pause
+%		\item "Ubersichtlich und mit transparentem Ablauf.\pause
 	\end{itemize}
 	Folgend ist ein Diagramm zur kompakten Darstellung der Implementierung und anschlie"send der Pseudocode in zwei Teilen.
 \end{frame}
@@ -306,14 +306,14 @@
 \begin{frame}{Viele Merkmale?}
 Bisher ist der Aufwand linear in der Anzahl der Spr"unge, doch quadratisch in Abh"angigkeit der Merkmale.\pause Daf"ur wurde in der BA eine Optimierung vorgestellt:
 	\begin{itemize}
-		\item Gr"o"ster zeitlicher Aufwand in Berechnung der Raten (Ursache f"ur Aufwand). Idee: Vermeidung der Neuberechnung.\pause
+		\item Den gr"o"sten zeitlichen Aufwand fordert die Berechnung der Raten. Idee: Vermeidung der Neuberechnung.\pause
 		\item Anpassung der Raten nach eintreten eines Ereignisses! Schritt beginn mit Ausf"uhrung der aktuellen Raten.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Viele Spr"unge und Normalisierung?}
 Gerade mit gro"sem K werden viele Spr"unge notwendig. Diese werden schnell den Speicher "uberfluten.\pause\bigskip\\
-Daf"ur habe ich zwei L"osungen entwickelt und implementiert:\\
+Daf"ur wurden zwei L"osungen entwickelt und implementiert:\\
 $ \rhd $ "{}erweiterte Spr"unge"{} - Speicherung von Messpunkten\\
 $ \rhd $ "{}Storage"{} - Eine ausgelagerte tempor"are Datei\bigskip\\\pause
 Wo wird eigentlich die Normalisierung angewendet?\\\pause
@@ -322,23 +322,23 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 \end{frame}
 
 \section{Programm}
-\begin{frame}
-	\frametitle{Flexibilität}
-	Um Flexibilität aufrecht zu erhalten werden die Arbeitsbereiche im Code getrennt gehalten.\\
-	\pause
-	Grund der Idee:
-	\begin{itemize}
-		\item Möglichst viel Unabhängigkeit
-		\pause
-		\item verhindert "{}Coderot"{} - faulen Code
-		\pause
-		\item steigende Komplexität führt nicht zu undefiniertem Verhalten
-		\pause
-		\item "{}Single Responsibility Principle"{}. Es darf nur einen Grund zur "Anderung geben.
-		\pause
-		\item 
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{Flexibilität}
+%	Um Flexibilität aufrecht zu erhalten werden die Arbeitsbereiche im Code getrennt gehalten.\\
+%	\pause
+%	Grund der Idee:
+%	\begin{itemize}
+%		\item Möglichst viel Unabhängigkeit.
+%		\pause
+%		\item verhindert "{}Coderot"{} - faulen Code.
+%		\pause
+%		\item steigende Komplexität führt nicht zu undefiniertem Verhalten.
+%		\pause
+%		\item "{}Single Responsibility Principle"{}. Es darf nur einen Grund zur "Anderung geben.
+%		\pause
+%		\item 
+%	\end{itemize}
+%\end{frame}
 \begin{frame}
 	\frametitle{Arbeitsmodule}
 	Die Architektur besteht aus 3 Modulen
@@ -390,28 +390,30 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 \begin{frame}{Graphische Darstellung}
 	An die graphische Darstellung wurden folgende Anforderungen gesetzt:
 	\begin{itemize}
-		\item Man soll den zeitlichen Verlauf der Populationsgrößen beobachten \- können.
-		\item Um die Prozesse besser analysieren zu können, soll es möglich sein, Stellen des Graphen näher betrachten zu können (zoom).
-		\item Um Simulationen vergleichen zu können, sollen außerdem Ausschnitte als Bilder gespeichert werden können.
+		\item Man soll den zeitlichen Verlauf der Populationsgrößen beobachten \- können.\pause
+		\item Um die Prozesse besser analysieren zu können, soll es möglich sein, Stellen des Graphen näher betrachten zu können (zoom).\pause
+		\item Um Simulationen vergleichen zu können, sollen außerdem Ausschnitte als Bilder gespeichert werden können.\pause
 		\item Und natürlich soll das Programm bei der Berechnung nicht abstürzen.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Multithreading}
-	Der letzte Punkt ist bei der Ereignisgesteuerten Programmierung tats"achlich eine nicht triviale H"urde. Daf"ur m"ussen Threads verwendet werden. Dabei muss auf einige Punkte geachtet werden, z.B.:\smallskip\\
+	Der letzte Punkt ist bei der Ereignisgesteuerten Programmierung tats"achlich eine nicht triviale H"urde. Daf"ur m"ussen Threads verwendet werden.
+	\visible<2->{Dabei muss auf einige Punkte geachtet werden, z.B.:}\smallskip\\
 	\begin{minipage}{0.49\textwidth}
 	\begin{itemize}
-		\item Konfliktfreies Arbeiten (nicht Ereignisgesteuert).
-		\item Race Conditions.
-		\item Deadlocks (Endlos warteschleife).
+		\visible<3->{\item Konfliktfreies Arbeiten (nicht Ereignisgesteuert).}
+		\visible<4->{\item Race Conditions.}
+		\visible<5->{\item Deadlocks (Endlos warteschleife).}
 	\end{itemize}
 	\end{minipage}
 	\begin{minipage}{0.49\textwidth}
 	\begin{figure}[H]
-		\includegraphics[width=1\linewidth]{./Pictures/KeineRueckmeldung}
+		\includegraphics[width=1\linewidth]<1->{./Pictures/KeineRueckmeldung}
 	\end{figure}
 	\end{minipage}\\\smallskip
-	Die L"osungen sind sogar bei erkanntem Problem nicht immer einfach zu finden. Bsp. Philosophenproblem.
+	\visible<6->{Die L"osungen sind sogar bei erkanntem Problem nicht immer einfach zu finden. Bsp. Philosophenproblem.}
+	
 \end{frame}
 
 \begin{frame}{Plot}
@@ -431,7 +433,7 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 \end{frame}
 
 \begin{frame}{Optionen}
-	Was bietet die graphische Darstellung?\smallskip\\
+	Was bietet die graphische Darstellung?\smallskip\\\pause
 	\begin{minipage}{0.42\textwidth}
 	\begin{itemize}
 		\item zeitliche Entwicklung.
@@ -444,10 +446,10 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 	\begin{minipage}{0.56\textwidth}
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{./Pictures/PlotWindow_zoomedBPDLmaximized}
-	\end{figure}
+		\includegraphics[width=0.9\linewidth]<4->{./Pictures/PlotWindow_zoomedBPDLmaximized}
+	\end{figure}\pause
 	\end{minipage}\smallskip\\
-	Des weiteren lasst sich das Bild manipulieren:
+	Des weiteren lasst sich das Bild manipulieren:\pause
 	\begin{itemize}
 		\item Zoom mit automatisch anpassbarem Messgitter.
 		\item Bewegung durch Ziehbewegungen.
@@ -457,7 +459,7 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 
 \section{Verhaltenstests}
 \begin{frame}{Testgetriebene Entwicklung}
-Korrektheit der Implementation ist zunehmend schwer zu pr"ufen (zufallsbedingt). Deswegen habe ich mich zu Beginn der BA viel mit TDD besch"aftigt.\\\pause
+Die Korrektheit der Implementation ist zunehmend schwer zu pr"ufen (zufallsbedingt). Deswegen habe ich mich zu Beginn der BA viel mit TDD besch"aftigt.\\\pause
 Was ist TDD und was tut ein Unit Test?
 \begin{itemize}
 	\item Eine Funktion die erwartetes Verhalten mit der Implementierung vergleicht.
