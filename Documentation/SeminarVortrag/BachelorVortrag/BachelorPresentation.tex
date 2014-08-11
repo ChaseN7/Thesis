@@ -10,7 +10,9 @@
 \usepackage{bm}
 \usepackage{bbm}
 \usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage{algpseudocode}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
 \usepackage{tikz}
 \usepackage{colortbl}
 
@@ -276,7 +278,7 @@
 	Folgend ist ein Diagramm zur kompakten Darstellung der Implementierung und anschlie"send der Pseudocode in zwei Teilen.
 \end{frame}
 
-\subsection{Implemen\- tierung}
+\subsection{Implementierung}
 \begin{frame}
 	\begin{figure}[H]
 		\centering
@@ -453,43 +455,88 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 	\end{itemize}
 \end{frame}
 
-\section{Verhaltens- tests}
+\section{Verhaltenstests}
 \begin{frame}{Testgetriebene Entwicklung}
-Die Korrektheit der Implementation ist mit zunehmender Komplexität des Codes schwerer zu prüfen (ganz besonders bei Zufallsbedingten Simulationen). Deswegen habe ich mich zu Beginn der BA mit TDD besch"aftigt.\\
+Korrektheit der Implementation ist zunehmend schwer zu pr"ufen (zufallsbedingt). Deswegen habe ich mich zu Beginn der BA viel mit TDD besch"aftigt.\\\pause
 Was ist TDD und was tut ein Unit Test?
 \begin{itemize}
-	\item eine Funktion die erwartetes Verhalten mit der Implementierung vergleicht.
+	\item Eine Funktion die erwartetes Verhalten mit der Implementierung vergleicht.
 	\item gew"ahrleisten Bedingungen um "Anderungen und Funktionalit"at so souver"an wie m"oglich zu gestalten.
-\end{itemize}
+\end{itemize}\pause
 Aber warum sollten solche Tests Korrektheit des Programms gew"ahrleisten?
 \end{frame}
 
 \begin{frame}{Korrektheit}
-Die Korrektheit eines Programmkerns nachzuweisen kann sich als schwierig
-herausstellen, weil man die Korrektheit nicht für eine spezifische Instanz,
-sondern flexibel für alle nachweisen möchte. Doch ist es nicht notwendig
-die Flexibilität des Programms zu testen, wenn man stattdessen versucht,
-die Korrektheit jedes Arbeitsschrittes zu prüfen. Ein Arbeitsschritt erhebt
-in unserem Fall keinen Anspruch auf Komplexität. Tatsächlich sind unsere
-Arbeitsschritte alle möglichst einfach und erfüllen nur eine Aufgabe. D.h.
-die Korrektheit der Arbeitsschritte zu verifizieren lässt sich denkbar einfach mit einem Test abdecken.
+$ \rhd $ Korrektheit und Flexibilität, f"ur alle Instanzen nachzuweisen ist schwierig.\smallskip\\\pause
+$ \rhd $ Stattdessen die jedes kleinen Arbeitsschrittes, ist sehr einfach.\smallskip\\\pause
+$ \rhd $ Sie sind sehr einfach und erf"ullen nur eine Aufgabe. Sie zu testen ist denkbar simpel.\smallskip\\\pause
+$ \rhd $ Bei erfolgreichen Tests, wird durch richtige Verwendung der Arbeitsschritte das erwartete Verhalten eintreten.\smallskip\\\pause
+$ \rhd $ Die richtige Verwendung l"asst sich leicht anhand des Algorithmus pr"ufen.\smallskip\\\pause
+$ \rhd $ Unabh"angigkeit der Schritte liefert die Gewissheit f"ur Folgeschritte. \smallskip\\\pause
+Schlie"slich ist die Komplexit"at der Simulation vereinfacht auf die der Ablaufpunkte.
 \end{frame}
 
 \section{TSS}
 \begin{frame}{Invasion}
-
+	\begin{itemize}
+		\item Wie bereits erw"ahnt bildet sich der TSS-Prozess im Grenzwert mit $ K\to \infty $ und $ \mu \to 0 $. Dadurch wird das sonst deterministische Verhalten stets durch zuf"allige Mutationen beeinflusst.
+		\item Die zuf"alligen Mutationen k"onnen eine Invasion ausl"osen. (Richtungsbedingt)
+		\item Der Bereich f"ur $ \mu $ garantiert Zeit zum Sterben und mutieren.
+		\item Invasionswahrscheinlichkeit resultiert aus der Fitnessfunktion: $ \frac{\left[ f(y,x)\right]_+ }{b(y)} $ (Anteil der Ereignisse)
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Phasen einer Invasion}
-
+	Sei $ f(y,x) > 0 $ und $ f(x,y) < 0 $.\smallskip\pause\\
+	\begin{minipage}{0.49\textwidth}
+		\begin{itemize}
+			\item Fixierung: Kaum Auswirkung bis zu einer Populationsgr"o"se $ \varepsilon $
+			\item Invasion: Verdr"angungsphase
+			\item Aussterben: Unterschreitung der Populationsgr"o"se
+		\end{itemize}
+	\end{minipage}
+	\begin{minipage}{0.49 \textwidth}
+	\begin{figure}[H]
+		\includegraphics[width=1 \linewidth]<1>{./Pictures/Invasion2}
+		\includegraphics[width=1\linewidth]<2->{./Pictures/MainWindow_red_green_loaded}
+	\end{figure}
+	\end{minipage}
 \end{frame}
 
 \begin{frame}{Optimierung}
-Inhalt...
+	Normalerweise verbringt die Simulation der TSS-Approx\-imation viel Zeit im monomorphen Gleichgewicht.\\
+	Dabei l"asst sich nicht gut nachvollziehen ob sich etwas ereignet.\bigskip\pause\\
+\begin{minipage}{0.59\textwidth}
+	\includegraphics[width=1\textwidth]<2>{./Pictures/TSS2_pure_small}
+	\includegraphics[width=1\textwidth]<3>{./Pictures/TSS2_optimierung_small}
+	\includegraphics[width=0.35\textwidth]<4>{./Pictures/TSS_DomZoomVgl_original}
+	\includegraphics[width=0.35\textwidth]<4>{./Pictures/TSS_MutationZoomVgl2_original}	
+	\includegraphics[width=1\linewidth]<5>{./Pictures/TSS_MutationZoom2_original}	
+\end{minipage}	
+\begin{minipage}{0.39\textwidth}
+\begin{itemize}
+	\item Lineare Interpolation in g"unstigen Bereichen.\pause
+	\item Verbessert "Ubersichtlichkeit, Analyse und Laufzeit.
+\end{itemize}
+\end{minipage}\\
 \end{frame}
 
 \begin{frame}{Implementierung}
-Inhalt...
+	\begin{algorithm}[H]
+		\caption{isNear()}
+		\begin{algorithmic}[1]
+			\Ensure{Bedingungen für eine Interpolation}
+			\For{ i = 0 $ < $ n-1}
+				\If{i $ \ne $ ChosenTrait \& Members[i] $ > 0 $}
+					\State \Return false;
+				\EndIf
+			\EndFor
+			\If{$ |\text{getKMembersOf[i]} - \text{Expected[ChosenTrait]}| > \frac{0.5}{K} $}
+				\State \Return false;
+			\EndIf
+			\State \Return true;
+		\end{algorithmic}
+	\end{algorithm}
 \end{frame}
 
 \end{document}
