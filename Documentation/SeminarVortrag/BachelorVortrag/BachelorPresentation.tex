@@ -55,33 +55,32 @@
   \tableofcontents
 \end{frame}
 \section{Einleitung}
-\begin{frame}
-	\frametitle{Was wird simuliert?}
+\begin{frame}{Einleitung - Was wird simuliert?}
 	\begin{minipage}{0.49\textwidth}
 		\begin{figure}
 		\centering	
-		\includegraphics[width=0.8\linewidth]<4>{./Lizenzbilder/Okosystem1}%
-		\visible<4>{\caption{\tiny\textregistered Kai Niemeyer  / pixelio.de}}
-		\includegraphics[width=1\linewidth]<1,2,3>{./Lizenzbilder/Zelle1}%
-		\visible<1,2,3>{\caption{\tiny\textregistered Harald Häck  / pixelio.de}}
+		\includegraphics[width=1\linewidth]<3->{./Lizenzbilder/Okosystem1}%
+		\includegraphics[width=1\linewidth]<1,2>{./Lizenzbilder/Zelle1}%
 		\end{figure}
 	\end{minipage}	
 	\begin{minipage}{0.49\textwidth}
+		\visible<1,2>{{\tiny\textregistered Harald Häck  / pixelio.de}}\\	
+		\visible<3->{{\tiny\textregistered Kai Niemeyer  / pixelio.de}}		
 		\begin{itemize}
 			\item Ein Beute-Beute System mit asexueller Fortpflanzung.\pause
-			\item Die Populationsgr"o"se.\pause
-			\item[] Die Populationsdynamik.\pause
-			\item Ein abgeschlossenes System.
+			\item Die Populationsgr"o"se nach Zeit.\pause
+			\item Mit abgeschlossenem Ökosystem.\pause
+			\item Dabei ist die Populationsdynamik von besonderem Interesse.
 		\end{itemize}
 	\end{minipage}
 \end{frame}
 \begin{frame}
-	\frametitle{Dynamik durch Wechselwirkung}\pause
+	\frametitle{Einleitung - Dynamik durch Wechselwirkung}\pause
 	\begin{minipage}{0.49\textwidth}
 		\begin{figure}
 %		\centering
-		\includegraphics[width=1\linewidth]<2>{./Lizenzbilder/Tier2}%
-		\visible<2>{\caption{\tiny\textregistered Joachim Reisig  / pixelio.de}}
+		\includegraphics[width=1\linewidth]<2>{./Lizenzbilder/Tier5}%
+		\visible<2>{\caption{\tiny\textregistered Schnobby / wikimedia.org}}
 		\includegraphics[width=1\linewidth]<3>{./Lizenzbilder/Lebensraum1}%
 		\visible<3>{\caption{\tiny\textregistered Albedo  / pixelio.de}}
 		\includegraphics[width=1\linewidth]<4>{./Lizenzbilder/Pilz2}%
@@ -98,15 +97,19 @@
 \end{frame}	
 	
 \section{Modell}
-\begin{frame}{Was beschreibt also das Modell?}
+\begin{frame}{Was enth"alt das Modell?}
+\visible<1->{Es enth"alt Individuen mit Merkmalen $ x \in X $.\\}
 	\begin{itemize}	
-		\item Individuen durch ihre Merkmale, $ x \in X $.
-		\item Intrinsische und extrinsische Geburten.\pause
-		\item Natürliche Tode und solche, die durch Wettbewerb zu anderen Individuen entstehen.\pause
-		\item Jedem Ereignis kommt eine Ereignisrate zu, welche das Merkmal charakterisieren.\pause
-		\item Diese dienen exponentiellen Ereignisuhren als Parameter.\pause
+		\item<2-> Arteigene und mutative Geburten.
+		\item<3-> Natürliche und wettbewerbliche Tode.
+%		\item<4-> Jedem Ereignis kommt eine Ereignisrate zu, welche das Merkmal charakterisieren.
+%		\item<5> Diese dienen exponentiellen Ereignisuhren als Parameter.
 	\end{itemize}
-	\begin{center}
+	\visible<4->{Jedem Ereignis kommt eine Ereignisrate zu, welche das Merkmal charakterisieren.}
+	\begin{itemize}
+		\item<5-> Diese dienen exponentiellen Ereignisuhren als Parameter.
+	\end{itemize}
+	\begin{center}\pause\pause\pause\pause\pause
 		\begin{tabular}{l | c c | c c}\hline
 			direkte Raten: & $ b(x) $ & $ \mu $ \cellcolor{yellow} & $ d(x) $ & $ c(x,y) $\\\pause
 			Ereignisraten: & \multicolumn{2}{c|}{$ B(x) $} & \multicolumn{2}{c}{D(x)}\\\hline
@@ -127,8 +130,8 @@
 	\begin{minipage}{0.49\textwidth}
 	\begin{center}
 		\begin{itemize}
-				\item<2-> Gesamte Geburtenrate aus intrinsischer pro Individuum und gesamter mutativer.
-				\item<3-> Gesamte Todesrate aus individueller und wettbewerblicher Rate pro Individuum.
+				\item<2-> Gesamte Geburtenrate aus arteigenen und mutativen Raten.
+				\item<3-> Gesamte Todesrate aus nat"urlicher und wettbewerblicher Rate pro Individuum.
 				\item<4-> Auf diese selbe Weise lassen sich weitere Ereignisraten formulieren.
 		\end{itemize}
 	\end{center}
@@ -156,9 +159,9 @@
 \begin{minipage}{0.49\textwidth}
 		\begin{figure}
 		\centering		
-		\includegraphics[width=1\linewidth]<2->{./Lizenzbilder/Normalisierung1}%
+		\includegraphics[width=1\linewidth]<6->{./Lizenzbilder/Normalisierung1}%
 		\end{figure}
-		\includegraphics[width=1\linewidth]<2->{./Lizenzbilder/Normalisierung3}%
+		\includegraphics[width=1\linewidth]<6->{./Lizenzbilder/Normalisierung3}%
 	\end{minipage}
 	\begin{minipage}{0.49\textwidth}
 		Die LPA Normalisierung erweitert die Betrachtung auf die Ebene der Population.
@@ -170,7 +173,7 @@
 			\item<4-> $ b(x), d(x) $ bleiben nat"urlich unver"andert. 
 			\item<5-> Jedoch $ c^K(x,y) = \frac{c(x,y)}{K} $.
 		\end{itemize}
-		\visible<2->{{\tiny \textregistered kaibara87 \\ flickr.com/photos/kaibara/3839720754/\\
+		\visible<6->{{\tiny \textregistered kaibara87 \\ flickr.com/photos/kaibara/3839720754/\\
 		\textregistered Boris Prochnau \\ 
 		Moosteppich um Bonsai}
 		}	
@@ -208,7 +211,7 @@
 	\dot{n}(y) = n(y) \left( b(y) - d(y) - c(y,y) n(y) - c(y,x) n(x) \right)\\
 	n_0(y) = n_{0,y}, n_0(x) = n_{0,x}
 	\end{align*}\pause
-	Mit Theorem 2.1 aus Ethier und Kurtz; Markov Processes: characterization and convergence - Kapitel 11 erhalten wir die Konvergenz $ \nu_t^K \xrightarrow{K\to \infty} n_t $.
+	Mit Theorem 2.1 aus [Ethier und Kurtz; Markov Processes: characterization and convergence - Kapitel 11] erhalten wir die Konvergenz $ \nu_t^K \xrightarrow{K\to \infty} n_t $.
 \end{frame}
 
 \subsection{Gleichgewicht}
@@ -243,13 +246,15 @@
 	\[ f(x,y) = b(x) - d(x) - c(x,y)\bar{n}_y \]\pause
 	\end{minipage}
 	\begin{minipage}{0.49\textwidth}
-	\includegraphics[width=1\linewidth]{./Pictures/Mutation_posFitness}
+	\centering
+	\includegraphics[width=1\linewidth]<3,4,5,6>{./Pictures/Mutation_posFitness}
+	\includegraphics[width=0.5\linewidth]<7->{./Pictures/MainWindow_BandMatrix2}
 	\end{minipage}	
 	\begin{itemize}
 		\item Sie gibt an wie gut sich ein Merkmal durchsetzten kann.\pause
 		\item Asymptotische Wachstumsrate von y, wenn x im Zustand $ \bar{n}_x $ ist und y nur wenige Individuen hat.\pause
 		\item Ermöglicht Aussagen über die Überlebenswahrscheinlichkeit einer Mutation.\pause
-		\item Ermöglicht Aussagen über die angenommenen stabilen Zustände.\pause
+		\item Ermöglicht Aussagen über die angenommenen stabilen Zustände. $ (f(x,y), f(y,x) \to (n_x, n_y), (\bar{n}_x, 0), (0, \bar{n}_y)) $\pause
 	\end{itemize}
 	Da wir nur eine Mutation zu den Nachbarn berücksichtigen, ist unsere Fitness Matrix eine Bandmatrix.
 \end{frame}
@@ -259,17 +264,18 @@
 	\begin{itemize}
 		\item Wie bei LPA-Normalisierung ergeben sich TSS-Prozesse als Grenzprozesse von BPDL-Prozessen.
 		\pause
-		\item Jedoch mit wachsendem K schrumpft $ \mu $ mit der Ordnung:
+		\item Jedoch mit wachsendem K schrumpft $ \mu $:
 		\[ \frac{1}{e^{VK}} << \mu_K << \frac{1}{K log(K)} \]
 		\pause
 		\item Mit skalierter Zeit, wird die Dauer der Verdr"angung infinitesimal klein.
 		\pause
-		\item Spr"unge zwischen monomorphen Zust"anden, falls stets $ f(x,y) < 0 \text{ \& } f(y,x) > 0 $. H"ochstens zwei Merkmale vereinfachen die Analyse des Prozesses sehr.
+		\item Spr"unge zwischen monomorphen Zust"anden, falls stets $ f(x,y) < 0 \text{ \& } f(y,x) > 0 $.\\
+		Vereinfachte Analyse des Prozesses.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{TSS-Approximation}
-	F"ur die Simulation w"urde das insbesondere bedeuten dass viele Spr"unge im Gleichgewicht zu erwarten sind.\pause
+	F"ur die Simulation w"urde das insbesondere bedeuten dass viele Spr"unge im Gleichgewicht zu erwarten sind.\\\pause
 	Eine Simulation würde bisher so aussehen (K = 1000):
 	\begin{figure}[H]
 		\centering
@@ -279,14 +285,15 @@
 \end{frame}
 
 \section{Simulation}
-\begin{frame}{Was und wie wird simuliert?}
+\begin{frame}{Simulation - Was und wie wird simuliert?}
 	\begin{itemize}\pause
 		\item Ein Sprung des BPDL-Prozesses (evolution step).\pause
 		\item Implementation: Sorgf"altige Trennung der Aufgaben.\\
 			Pseudocode: Gesamter Arbeitsablauf.\pause
 %		\item "Ubersichtlich und mit transparentem Ablauf.\pause
 	\end{itemize}
-	Folgend ist ein Diagramm zur kompakten Darstellung der Implementierung und anschlie"send der Pseudocode in zwei Teilen.
+	Zun"achst wird die Implementation durch ein Diagramm verdeutlicht.
+%	Folgend ist ein Diagramm zur kompakten Darstellung der Implementierung und anschlie"send der Pseudocode in zwei Teilen.
 \end{frame}
 
 \subsection{Implementierung}
