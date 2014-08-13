@@ -325,8 +325,9 @@
 Bisher ist der Aufwand linear in der Anzahl der Spr"unge, doch quadratisch in Abh"angigkeit der Merkmale.\pause Daf"ur wurde in der BA eine Optimierung vorgestellt:
 	\begin{itemize}
 		\item Den gr"o"sten zeitlichen Aufwand fordert die Berechnung der Raten. Idee: Vermeidung der Neuberechnung.\pause
-		\item Anpassung der Raten nach eintreten eines Ereignisses! Schritt beginn mit Ausf"uhrung der aktuellen Raten.
+		\item Anpassung der Raten nach eintreten eines Ereignisses! Schritt beginn mit Ausf"uhrung der aktuellen Raten.\pause
 	\end{itemize}
+Dadurch l"asst sich linearer Aufwand erzielen.
 \end{frame}
 
 \begin{frame}{Viele Spr"unge und Normalisierung?}
@@ -340,23 +341,6 @@ $ \rhd $ Beim Einlesen und bei Zugriffen.\\
 \end{frame}
 
 \section{Programm}
-%\begin{frame}
-%	\frametitle{Flexibilität}
-%	Um Flexibilität aufrecht zu erhalten werden die Arbeitsbereiche im Code getrennt gehalten.\\
-%	\pause
-%	Grund der Idee:
-%	\begin{itemize}
-%		\item Möglichst viel Unabhängigkeit.
-%		\pause
-%		\item verhindert "{}Coderot"{} - faulen Code.
-%		\pause
-%		\item steigende Komplexität führt nicht zu undefiniertem Verhalten.
-%		\pause
-%		\item "{}Single Responsibility Principle"{}. Es darf nur einen Grund zur "Anderung geben.
-%		\pause
-%		\item 
-%	\end{itemize}
-%\end{frame}
 \begin{frame}
 	\frametitle{Arbeitsmodule}
 	Die Architektur besteht aus 3 Modulen
@@ -562,5 +546,8 @@ Schlie"slich kommen wir nochmal zu den TSS-Prozessen und unserer Approximation.\
 	\end{algorithm}
 \end{frame}
 
+\begin{frame}{Ende}
+\includegraphics[width=1\textwidth]{./Pictures/TSS2_optimierung_small_original}
+\end{frame}
 \end{document}
 % ä Ä ö Ö ü Ü
