@@ -1,0 +1,14 @@
+INPUT(
+./release\tst_simulationunitteststest.o
+./release\eventclass.o
+./release\filestreaming.o
+./release\graphclass.o
+./release\main.o
+./release\mainwindow.o
+./release\plotwindow.o
+./release\randomdice.o
+./release\traitclass.o
+./release\traiteventmanager.o
+./release\moc_mainwindow.o
+./release\moc_plotwindow.o
+);

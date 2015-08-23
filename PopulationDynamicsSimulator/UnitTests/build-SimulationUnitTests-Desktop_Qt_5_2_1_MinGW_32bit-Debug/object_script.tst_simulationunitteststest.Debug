@@ -1,0 +1,14 @@
+INPUT(
+./debug\tst_simulationunitteststest.o
+./debug\eventclass.o
+./debug\filestreaming.o
+./debug\graphclass.o
+./debug\main.o
+./debug\mainwindow.o
+./debug\plotwindow.o
+./debug\randomdice.o
+./debug\traitclass.o
+./debug\traiteventmanager.o
+./debug\moc_mainwindow.o
+./debug\moc_plotwindow.o
+);

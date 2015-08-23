@@ -1,0 +1,15 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\plotwindow.o
+./debug\qcustomplot.o
+./debug\eventclass.o
+./debug\filestreaming.o
+./debug\randomdice.o
+./debug\traitclass.o
+./debug\traiteventmanager.o
+./debug\graphclass.o
+./debug\moc_mainwindow.o
+./debug\moc_plotwindow.o
+./debug\moc_qcustomplot.o
+);

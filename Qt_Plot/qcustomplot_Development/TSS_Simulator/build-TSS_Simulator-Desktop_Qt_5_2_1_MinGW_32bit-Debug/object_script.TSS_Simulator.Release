@@ -1,0 +1,15 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\eventclass.o
+./release\filestreaming.o
+./release\graphclass.o
+./release\plotwindow.o
+./release\qcustomplot.o
+./release\randomdice.o
+./release\traitclass.o
+./release\traiteventmanager.o
+./release\moc_mainwindow.o
+./release\moc_plotwindow.o
+./release\moc_qcustomplot.o
+);
